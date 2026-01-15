@@ -1,0 +1,84 @@
+{
+    "description": "POAS Hesaplayıcı - Örnek Hesaplama",
+    "scenario": "E-ticaret Black Friday Kampanyası",
+    "inputs": {
+        "revenue": 50000,
+        "revenue_description": "KDV hariç, indirimler sonrası tahsil edilen gelir (₺)",
+        "adSpend": 10000,
+        "adSpend_description": "Toplam reklam harcaması (₺)",
+        "variableCosts": {
+            "cogs": 20000,
+            "cogs_description": "Ürün maliyeti - Cost of Goods Sold (₺)",
+            "shippingCost": 5000,
+            "shippingCost_description": "Kargo giderleri (₺)",
+            "paymentFees": 1000,
+            "paymentFees_description": "Ödeme komisyonları (₺)",
+            "handlingCost": 500,
+            "handlingCost_description": "Birim başı operasyon maliyeti (₺)"
+        }
+    },
+    "calculations": {
+        "step1_variableOrderCosts": {
+            "formula": "COGS + Kargo + Komisyon + Operasyon",
+            "calculation": "20000 + 5000 + 1000 + 500",
+            "result": 26500,
+            "unit": "₺"
+        },
+        "step2_grossProfit": {
+            "formula": "Gelir - Değişken Sipariş Maliyetleri",
+            "calculation": "50000 - 26500",
+            "result": 23500,
+            "unit": "₺"
+        },
+        "step3_poas": {
+            "formula": "Brüt Kâr / Reklam Harcaması",
+            "calculation": "23500 / 10000",
+            "result": 2.35,
+            "unit": "x",
+            "interpretation": "Mükemmel - Her 1₺ reklam için 2.35₺ brüt kâr"
+        },
+        "step4_poasPercentage": {
+            "formula": "POAS × 100",
+            "calculation": "2.35 × 100",
+            "result": 235,
+            "unit": "%"
+        },
+        "step5_contributionMargin": {
+            "formula": "Brüt Kâr - Reklam Harcaması",
+            "calculation": "23500 - 10000",
+            "result": 13500,
+            "unit": "₺"
+        },
+        "step6_roas_comparison": {
+            "formula": "Gelir / Reklam Harcaması",
+            "calculation": "50000 / 10000",
+            "result": 5.0,
+            "unit": "x",
+            "note": "ROAS 5x görünse de gerçek kârlılık POAS 2.35x"
+        }
+    },
+    "outputs": {
+        "variableOrderCosts": 26500,
+        "grossProfit": 23500,
+        "poas": 2.35,
+        "poasPercentage": 235,
+        "contributionMargin": 13500,
+        "roas": 5.0
+    },
+    "targetPoasAnalysis": {
+        "currentPoas": 2.35,
+        "target": 2.0,
+        "maxAdSpend": {
+            "formula": "Brüt Kâr / Hedef POAS",
+            "calculation": "23500 / 2.0",
+            "result": 11750,
+            "interpretation": "Bu brüt kârla hedef POAS 2.0 için max 11.750₺ harcayabilirsiniz"
+        },
+        "minGrossProfit": {
+            "formula": "Reklam Harcaması × Hedef POAS",
+            "calculation": "10000 × 2.0",
+            "result": 20000,
+            "interpretation": "Mevcut harcamayla POAS 2.0 için min 20.000₺ brüt kâr gerekli"
+        }
+    }
+}
