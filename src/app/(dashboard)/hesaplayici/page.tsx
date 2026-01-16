@@ -163,7 +163,14 @@ export default function HesaplayiciPage() {
     const interpretation = outputs ? interpretPOAS(outputs.poas) : null;
 
     return (
-        <div>
+        <div
+            style={{
+                width: '100%',
+                maxWidth: '100%',
+                overflowX: 'hidden',
+                boxSizing: 'border-box',
+            }}
+        >
             {/* Page Header */}
             <div className="calculator-header" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
@@ -196,7 +203,14 @@ export default function HesaplayiciPage() {
                 className="calculator-grid"
             >
                 {/* Left Column - Inputs */}
-                <div>
+                <div
+                    style={{
+                        width: '100%',
+                        maxWidth: '100%',
+                        minWidth: 0,
+                        overflowX: 'hidden',
+                    }}
+                >
                     {/* Currency & Channel */}
                     <div className="glass-card" style={{ padding: '1rem', marginBottom: '1rem' }}>
                         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
@@ -507,7 +521,14 @@ export default function HesaplayiciPage() {
                 </div>
 
                 {/* Right Column - Results */}
-                <div>
+                <div
+                    style={{
+                        width: '100%',
+                        maxWidth: '100%',
+                        minWidth: 0,
+                        overflowX: 'hidden',
+                    }}
+                >
                     {outputs ? (
                         <>
                             {/* Main POAS Result */}
