@@ -62,11 +62,11 @@ export default function POASTargets() {
                     </div>
 
                     <h2 className="section-title">
-                        <span className="text-gradient">Hedef POAS</span> Nedir?
+                        <span className="text-gradient">Örnek Hedefler</span> (Sektöre Göre Değişir)
                     </h2>
                     <p className="section-subtitle">
-                        İş hedeflerinize göre doğru POAS değerini belirleyin.
-                        Her strateji için farklı bir hedef gerekir.
+                        Marjınız ve operasyon giderleriniz hedefi belirler.
+                        Break-even POAS = 1.0 (başabaş noktası).
                     </p>
                 </div>
 

@@ -11,13 +11,14 @@ datasource db {
 }
 
 model User {
-  id           String     @id @default(cuid())
-  email        String     @unique
+  id           String            @id @default(cuid())
+  email        String            @unique
   passwordHash String
   name         String?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
   scenarios    Scenario[]
+  subscription UserSubscription?
 }
 
 model Scenario {
@@ -34,4 +35,27 @@ model Scenario {
   updatedAt DateTime @updatedAt
 
   @@index([userId])
+}
+
+model UserSubscription {
+  id                   String    @id @default(cuid())
+  userId               String    @unique
+  user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?   @unique
+  stripePriceId        String?
+
+  plan                 String    @default("free") // free, solo, pro, agency
+  billingCycle         String?   // monthly, yearly
+  status               String    @default("inactive") // active, canceled, past_due, trialing
+
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+
+  scenarioCount        Int       @default(0)
+  scenarioResetDate    DateTime?
+
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 }

@@ -1,41 +1,30 @@
-import { Calculator, ArrowDown, Check } from 'lucide-react';
+import { Calculator, Target, Layers, FileText, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function HowItWorks() {
-    const steps = [
+    const benefits = [
         {
-            number: '01',
-            title: 'Gelir (Revenue)',
-            description: 'KDV hariç, indirimler sonrası müşteriden tahsil edilen tutar. ⚠️ Müşteriden kargo ücreti alıyorsanız gelire dahil edin.',
-            example: '10.000₺',
+            icon: Calculator,
+            title: 'Gerçek brüt kârı gör',
+            description: 'Kargo, komisyon ve operasyon dahil tüm maliyetleri hesaba kat.',
             color: 'var(--color-info)',
         },
         {
-            number: '02',
-            title: 'Değişken Maliyetler',
-            items: [
-                { label: 'COGS (Ürün Maliyeti)', value: '4.000₺' },
-                { label: 'Kargo Gideri', value: '1.500₺' },
-                { label: 'Ödeme Komisyonları', value: '500₺' },
-                { label: 'Paketleme & Operasyon', value: '500₺' },
-            ],
-            total: '6.500₺',
-            color: 'var(--color-warning)',
-        },
-        {
-            number: '03',
-            title: 'Brüt Kâr (Gross Profit)',
-            description: 'Gelir − Değişken Maliyetler',
-            calculation: '10.000₺ − 6.500₺',
-            result: '3.500₺',
+            icon: Target,
+            title: 'Hedef POAS\'a göre bütçe öğren',
+            description: 'Maksimum reklam harcaman ne kadar olmalı? Anında hesapla.',
             color: 'var(--color-success)',
         },
         {
-            number: '04',
-            title: 'POAS Hesaplama',
-            description: 'Brüt Kâr / Reklam Harcaması',
-            calculation: '3.500₺ / 2.000₺',
-            result: '1.75x',
-            resultLabel: 'POAS',
+            icon: Layers,
+            title: 'Senaryoları karşılaştır',
+            description: 'Farklı kampanya senaryolarını kaydet ve yan yana karşılaştır.',
+            color: 'var(--color-warning)',
+        },
+        {
+            icon: FileText,
+            title: 'Profesyonel raporla',
+            description: 'PDF ve CSV export ile yönetim ve müşterilerine sunumlar hazırla.',
             color: 'var(--color-primary)',
         },
     ];
@@ -50,7 +39,7 @@ export default function HowItWorks() {
         >
             <div className="container">
                 {/* Section Header */}
-                <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+                <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
                     <div
                         style={{
                             display: 'inline-flex',
@@ -64,201 +53,144 @@ export default function HowItWorks() {
                     >
                         <Calculator size={16} style={{ color: 'var(--color-primary-light)' }} />
                         <span style={{ color: 'var(--color-primary-light)', fontSize: '0.875rem', fontWeight: 600 }}>
-                            Hesaplama Mantığı
+                            Nasıl Çalışır
                         </span>
                     </div>
 
                     <h2 className="section-title">
-                        <span className="text-gradient">POAS</span> Nasıl Hesaplanır?
+                        Kârlı kampanyayı <span className="text-gradient">30 saniyede</span> ayır.
                     </h2>
-                    <p className="section-subtitle">
-                        POAS hesabı, brüt kârınızı reklam harcamanıza bölerek gerçek reklam verimliliğinizi ölçer.
+                    <p className="section-subtitle" style={{ maxWidth: '600px', margin: '0 auto' }}>
+                        Hesaplama değil, asıl değer: senaryo, hedef, rapor ve zaman kazancı.
                     </p>
                 </div>
 
-                {/* Steps */}
+                {/* Formula Box */}
                 <div
                     style={{
                         maxWidth: '700px',
-                        margin: '0 auto',
-                    }}
-                >
-                    {steps.map((step, index) => (
-                        <div key={index}>
-                            <div
-                                className="glass-card"
-                                style={{
-                                    padding: '1.5rem',
-                                    marginBottom: index < steps.length - 1 ? '0' : '0',
-                                    borderColor: step.color + '40',
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'flex-start',
-                                        gap: '1.5rem',
-                                    }}
-                                >
-                                    {/* Step Number */}
-                                    <div
-                                        style={{
-                                            width: '48px',
-                                            height: '48px',
-                                            borderRadius: 'var(--radius-lg)',
-                                            background: step.color + '20',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            fontWeight: 700,
-                                            color: step.color,
-                                            fontSize: '0.875rem',
-                                            flexShrink: 0,
-                                        }}
-                                    >
-                                        {step.number}
-                                    </div>
-
-                                    {/* Content */}
-                                    <div style={{ flex: 1 }}>
-                                        <h4 style={{ marginBottom: '0.5rem', color: step.color }}>
-                                            {step.title}
-                                        </h4>
-
-                                        {step.description && (
-                                            <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.9375rem', marginBottom: '0.75rem' }}>
-                                                {step.description}
-                                            </p>
-                                        )}
-
-                                        {step.items && (
-                                            <div style={{ marginBottom: '0.75rem' }}>
-                                                {step.items.map((item, i) => (
-                                                    <div
-                                                        key={i}
-                                                        style={{
-                                                            display: 'flex',
-                                                            justifyContent: 'space-between',
-                                                            fontSize: '0.875rem',
-                                                            padding: '0.25rem 0',
-                                                            color: 'var(--color-text-secondary)',
-                                                        }}
-                                                    >
-                                                        <span>{item.label}</span>
-                                                        <span style={{ fontWeight: 600 }}>{item.value}</span>
-                                                    </div>
-                                                ))}
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        justifyContent: 'space-between',
-                                                        fontSize: '0.875rem',
-                                                        padding: '0.5rem 0',
-                                                        borderTop: '1px solid var(--color-border)',
-                                                        marginTop: '0.5rem',
-                                                        color: step.color,
-                                                        fontWeight: 600,
-                                                    }}
-                                                >
-                                                    <span>Toplam</span>
-                                                    <span>{step.total}</span>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {step.calculation && (
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '1rem',
-                                                    flexWrap: 'wrap',
-                                                }}
-                                            >
-                                                <span style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
-                                                    {step.calculation}
-                                                </span>
-                                                <span style={{ color: 'var(--color-text-muted)' }}>=</span>
-                                                <span
-                                                    style={{
-                                                        padding: '0.5rem 1rem',
-                                                        background: step.color + '20',
-                                                        borderRadius: 'var(--radius-md)',
-                                                        color: step.color,
-                                                        fontWeight: 700,
-                                                        fontSize: '1.25rem',
-                                                    }}
-                                                >
-                                                    {step.result} {step.resultLabel && <span style={{ fontSize: '0.875rem' }}>({step.resultLabel})</span>}
-                                                </span>
-                                            </div>
-                                        )}
-
-                                        {step.example && (
-                                            <span
-                                                style={{
-                                                    padding: '0.5rem 1rem',
-                                                    background: step.color + '20',
-                                                    borderRadius: 'var(--radius-md)',
-                                                    color: step.color,
-                                                    fontWeight: 700,
-                                                    fontSize: '1.25rem',
-                                                }}
-                                            >
-                                                {step.example}
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Connector */}
-                            {index < steps.length - 1 && (
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        padding: '0.5rem 0',
-                                    }}
-                                >
-                                    <ArrowDown size={20} style={{ color: 'var(--color-border-light)' }} />
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
-
-                {/* Formula Summary */}
-                <div
-                    style={{
-                        maxWidth: '700px',
-                        margin: '3rem auto 0',
-                        padding: '2rem',
+                        margin: '0 auto 3rem',
+                        padding: '1.5rem 2rem',
                         background: 'var(--gradient-primary)',
                         borderRadius: 'var(--radius-xl)',
                         textAlign: 'center',
                     }}
                 >
-                    <div style={{ fontSize: '0.875rem', opacity: 0.8, marginBottom: '0.5rem' }}>
+                    <div style={{ fontSize: '0.875rem', opacity: 0.9, marginBottom: '0.5rem' }}>
                         POAS Formülü
                     </div>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 700 }}>
-                        POAS = (Gelir − Değişken Maliyetler) / Reklam Harcaması
+                    <div style={{ fontSize: '1.25rem', fontWeight: 700 }}>
+                        POAS = Brüt Kâr / Reklam Harcaması
                     </div>
-                    <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
-                            <Check size={16} />
-                            <span>Gerçek kârlılık</span>
+                    <div style={{ fontSize: '0.875rem', opacity: 0.8, marginTop: '0.5rem' }}>
+                        Brüt Kâr = Gelir − (COGS + Kargo + Komisyon + Operasyon)
+                    </div>
+                </div>
+
+                {/* Benefits Grid */}
+                <div
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                        gap: '1.5rem',
+                        maxWidth: '1000px',
+                        margin: '0 auto',
+                    }}
+                >
+                    {benefits.map((benefit, index) => {
+                        const Icon = benefit.icon;
+                        return (
+                            <div
+                                key={index}
+                                className="glass-card"
+                                style={{
+                                    padding: '1.5rem',
+                                    borderColor: benefit.color + '30',
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        width: '48px',
+                                        height: '48px',
+                                        borderRadius: 'var(--radius-lg)',
+                                        background: benefit.color + '20',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        marginBottom: '1rem',
+                                    }}
+                                >
+                                    <Icon size={24} style={{ color: benefit.color }} />
+                                </div>
+                                <h4 style={{ marginBottom: '0.5rem', fontSize: '1rem' }}>
+                                    {benefit.title}
+                                </h4>
+                                <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.875rem', lineHeight: 1.6 }}>
+                                    {benefit.description}
+                                </p>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {/* ROAS vs POAS Comparison */}
+                <div
+                    style={{
+                        maxWidth: '700px',
+                        margin: '3rem auto 0',
+                        textAlign: 'center',
+                    }}
+                >
+                    <h3 style={{ marginBottom: '1.5rem', fontSize: '1.25rem' }}>
+                        Neden ROAS değil POAS?
+                    </h3>
+                    <div
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: '1fr 1fr',
+                            gap: '1rem',
+                        }}
+                        className="comparison-grid"
+                    >
+                        <div
+                            className="glass-card"
+                            style={{
+                                padding: '1.25rem',
+                                borderColor: 'var(--color-error)',
+                                background: 'rgba(239, 68, 68, 0.05)',
+                            }}
+                        >
+                            <div style={{ fontWeight: 600, marginBottom: '0.5rem', color: 'var(--color-error)' }}>
+                                ❌ ROAS
+                            </div>
+                            <p style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
+                                Sadece gelire bakar. 5x ROAS ile zarar edebilirsin.
+                            </p>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
-                            <Check size={16} />
-                            <span>Tüm maliyetler dahil</span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
-                            <Check size={16} />
-                            <span>Doğru karar</span>
+                        <div
+                            className="glass-card"
+                            style={{
+                                padding: '1.25rem',
+                                borderColor: 'var(--color-success)',
+                                background: 'rgba(16, 185, 129, 0.05)',
+                            }}
+                        >
+                            <div style={{ fontWeight: 600, marginBottom: '0.5rem', color: 'var(--color-success)' }}>
+                                ✅ POAS
+                            </div>
+                            <p style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
+                                Tüm maliyetleri hesaba katar. 1.5x POAS ile kâr edersin.
+                            </p>
                         </div>
                     </div>
+                </div>
+
+                {/* CTA */}
+                <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+                    <Link href="#pricing" className="btn btn-primary btn-lg">
+                        Planları Gör
+                        <ArrowRight size={18} />
+                    </Link>
                 </div>
             </div>
         </section>
