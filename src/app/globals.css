@@ -423,6 +423,16 @@ h4 {
 
   .main-content {
     margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  .page-content {
+    padding: 1rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .mobile-header {
@@ -457,6 +467,15 @@ h4 {
 
   .mobile-menu-btn {
     display: block !important;
+  }
+
+  /* Fix all glass cards on mobile */
+  .glass-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 }
 

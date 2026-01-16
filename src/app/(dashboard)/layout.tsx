@@ -226,6 +226,10 @@ export default async function DashboardLayout({
                     flex: 1,
                     marginLeft: '260px',
                     minHeight: '100vh',
+                    width: 'calc(100% - 260px)',
+                    maxWidth: '100%',
+                    overflowX: 'hidden',
+                    boxSizing: 'border-box',
                 }}
                 className="main-content"
             >
@@ -234,7 +238,7 @@ export default async function DashboardLayout({
                     className="mobile-header"
                     style={{
                         display: 'none',
-                        padding: '1rem 1.5rem',
+                        padding: '1rem',
                         borderBottom: '1px solid var(--color-border)',
                         background: 'var(--color-bg-secondary)',
                     }}
@@ -245,6 +249,9 @@ export default async function DashboardLayout({
                             border: 'none',
                             color: 'var(--color-text-primary)',
                             cursor: 'pointer',
+                            padding: '0.5rem',
+                            minWidth: '44px',
+                            minHeight: '44px',
                         }}
                     >
                         <Menu size={24} />
@@ -252,7 +259,16 @@ export default async function DashboardLayout({
                 </header>
 
                 {/* Page Content */}
-                <div style={{ padding: '2rem' }}>
+                <div
+                    className="page-content"
+                    style={{
+                        padding: '1.5rem',
+                        width: '100%',
+                        maxWidth: '100%',
+                        boxSizing: 'border-box',
+                        overflowX: 'hidden',
+                    }}
+                >
                     {children}
                 </div>
             </main>
