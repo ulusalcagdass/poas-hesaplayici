@@ -103,6 +103,9 @@ export default function HesaplayiciPage() {
     // Ref for results section (for PDF capture)
     const resultsRef = useRef<HTMLDivElement>(null);
 
+    // Usage limit message
+    const [limitMessage, setLimitMessage] = useState<string | null>(null);
+
     // Handle input change
     const handleInputChange = (field: keyof CalculatorInputs, value: string) => {
         const numValue = parseFloat(value) || 0;
@@ -137,16 +140,38 @@ export default function HesaplayiciPage() {
     };
 
     // Calculate results
-    const handleCalculate = useCallback(() => {
+    const handleCalculate = useCallback(async () => {
         // FREE MODEL: Check login before showing results
         if (!isLoggedIn) {
             setShowLoginPrompt(true);
             return;
         }
 
+        // Clear previous limit message
+        setLimitMessage(null);
+
+        // Check usage limit
+        try {
+            const usageRes = await fetch('/api/usage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: 'calculation' }),
+            });
+
+            if (!usageRes.ok) {
+                const data = await usageRes.json();
+                if (data.limitReached) {
+                    setLimitMessage(data.message);
+                    return;
+                }
+            }
+        } catch {
+            // Continue if API fails
+        }
+
         // Validate adSpend > 0
         if (inputs.adSpend === 0) {
-            setValidationErrors({ adSpend: 'Reklam harcamas\u0131 0 olamaz.' });
+            setValidationErrors({ adSpend: 'Reklam harcaması 0 olamaz.' });
             return;
         }
         setValidationErrors({});
@@ -202,6 +227,25 @@ export default function HesaplayiciPage() {
         if (!isLoggedIn) {
             setShowLoginPrompt(true);
             return;
+        }
+
+        // Check PDF export limit
+        try {
+            const usageRes = await fetch('/api/usage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: 'pdf' }),
+            });
+
+            if (!usageRes.ok) {
+                const data = await usageRes.json();
+                if (data.limitReached) {
+                    setLimitMessage(data.message);
+                    return;
+                }
+            }
+        } catch {
+            // Continue if API fails
         }
 
         if (!resultsRef.current) {

@@ -248,10 +248,10 @@ export default function Footer() {
                     }}
                 >
                     <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
-                        © {new Date().getFullYear()} POAS Hesaplayıcı. Tüm hakları saklıdır.
+                        Bu araç Ulusal Çağdaş Çalım tarafından ücretsiz sunulmaktadır.
                     </p>
                     <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
-                        Made with 💜 in Türkiye
+                        Herkes için açık ve ücretsizdir.
                     </p>
                 </div>
             </div>

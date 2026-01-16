@@ -59,3 +59,17 @@ model UserSubscription {
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
 }
+
+// Daily usage tracking for free model limits
+model UserUsage {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  
+  // Daily limits
+  calculationsToday   Int      @default(0)
+  pdfExportsToday     Int      @default(0)
+  lastResetDate       DateTime @default(now())
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
