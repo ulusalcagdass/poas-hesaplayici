@@ -274,38 +274,78 @@ export default function HesaplayiciPage() {
                 format: 'a4',
             });
 
-            // Calculate dimensions to fill page width
+            // Calculate dimensions
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
-            const margin = 10; // Small margin on sides
+            const margin = 10;
             const availableWidth = pdfWidth - (margin * 2);
+            const headerHeight = 20; // Space for title
+            const footerHeight = 15; // Space for footer
+            const availableHeight = pdfHeight - headerHeight - footerHeight;
+
             const imgWidth = canvas.width;
             const imgHeight = canvas.height;
 
-            // Scale to fill available width
+            // Scale to fit width
             const ratio = availableWidth / imgWidth;
             const scaledHeight = imgHeight * ratio;
-            const imgY = 20; // Space for title
 
-            // Add title
-            pdf.setFontSize(14);
-            pdf.setTextColor(99, 102, 241);
-            pdf.text('POAS Hesaplayici - Senaryo Raporu', pdfWidth / 2, 12, { align: 'center' });
+            // Calculate number of pages needed
+            const pageContentHeight = availableHeight;
+            const totalPages = Math.ceil(scaledHeight / pageContentHeight);
 
-            // Add screenshot - full width
-            pdf.addImage(imgData, 'PNG', margin, imgY, availableWidth, scaledHeight);
+            // Add content across pages
+            for (let page = 0; page < totalPages; page++) {
+                if (page > 0) {
+                    pdf.addPage();
+                }
 
-            // Add footer
-            pdf.setFontSize(8);
-            pdf.setTextColor(150, 150, 150);
-            const footerY = Math.min(imgY + scaledHeight + 8, pdfHeight - 8);
-            pdf.text(`Tarih: ${new Date().toLocaleDateString('tr-TR')} | Kanal: ${channel} | poas-hesaplayici.onrender.com`, pdfWidth / 2, footerY, { align: 'center' });
+                // Add title on first page
+                if (page === 0) {
+                    pdf.setFontSize(14);
+                    pdf.setTextColor(99, 102, 241);
+                    pdf.text('POAS Hesaplayıcı - Senaryo Raporu', pdfWidth / 2, 12, { align: 'center' });
+                }
+
+                // Calculate the portion of image to show on this page
+                const sourceY = (page * pageContentHeight) / ratio;
+                const sourceHeight = Math.min(pageContentHeight / ratio, imgHeight - sourceY);
+                const destHeight = sourceHeight * ratio;
+
+                // Create a temporary canvas for this page's portion
+                const pageCanvas = document.createElement('canvas');
+                pageCanvas.width = imgWidth;
+                pageCanvas.height = sourceHeight;
+                const ctx = pageCanvas.getContext('2d');
+
+                if (ctx) {
+                    ctx.drawImage(
+                        canvas,
+                        0, sourceY, imgWidth, sourceHeight,
+                        0, 0, imgWidth, sourceHeight
+                    );
+
+                    const pageImgData = pageCanvas.toDataURL('image/png');
+                    const yPosition = page === 0 ? headerHeight : margin;
+                    pdf.addImage(pageImgData, 'PNG', margin, yPosition, availableWidth, destHeight);
+                }
+
+                // Add footer on each page
+                pdf.setFontSize(8);
+                pdf.setTextColor(150, 150, 150);
+                pdf.text(
+                    `Tarih: ${new Date().toLocaleDateString('tr-TR')} | Kanal: ${channel} | Sayfa ${page + 1}/${totalPages}`,
+                    pdfWidth / 2,
+                    pdfHeight - 8,
+                    { align: 'center' }
+                );
+            }
 
             // Save
             pdf.save(`poas-rapor-${new Date().toISOString().split('T')[0]}.pdf`);
         } catch (error) {
             console.error('PDF export error:', error);
-            alert('PDF olusturulurken bir hata olustu. Lutfen tekrar deneyin.');
+            alert('PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
         }
     };
 
