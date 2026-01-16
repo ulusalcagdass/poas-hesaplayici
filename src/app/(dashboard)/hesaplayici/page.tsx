@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import {
     Calculator,
     Target,
@@ -88,6 +88,9 @@ export default function HesaplayiciPage() {
 
     // Subscription check
     const [hasActiveSubscription, setHasActiveSubscription] = useState<boolean | null>(null);
+
+    // Ref for results section (for PDF capture)
+    const resultsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const checkSubscription = async () => {
@@ -190,7 +193,7 @@ export default function HesaplayiciPage() {
 
     const interpretation = outputs ? interpretPOAS(outputs.poas) : null;
 
-    // PDF Export Function
+    // PDF Export Function - Visual Capture
     const handleExportPDF = async () => {
         if (!outputs) {
             alert('Önce hesaplama yapın.');
@@ -203,94 +206,57 @@ export default function HesaplayiciPage() {
             return;
         }
 
+        if (!resultsRef.current) {
+            alert('Sonuç bölümü bulunamadı.');
+            return;
+        }
+
         try {
-            // Dynamically import jsPDF to reduce bundle size
+            // Dynamic imports
+            const html2canvas = (await import('html2canvas')).default;
             const { jsPDF } = await import('jspdf');
-            const doc = new jsPDF();
 
-            // Title
-            doc.setFontSize(20);
-            doc.setTextColor(99, 102, 241); // Primary color
-            doc.text('POAS Hesaplayıcı - Senaryo Raporu', 20, 20);
+            // Capture the results section as canvas
+            const canvas = await html2canvas(resultsRef.current, {
+                scale: 2, // Higher quality
+                backgroundColor: '#0f172a', // Match dark background
+                logging: false,
+                useCORS: true,
+            });
 
-            // Metadata
-            doc.setFontSize(10);
-            doc.setTextColor(100, 100, 100);
-            doc.text(`Tarih: ${new Date().toLocaleDateString('tr-TR')}`, 20, 30);
-            doc.text(`Kanal: ${channel} | Para Birimi: ${currency}`, 20, 36);
+            // Create PDF
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4',
+            });
 
-            // Divider
-            doc.setDrawColor(200, 200, 200);
-            doc.line(20, 42, 190, 42);
+            // Calculate dimensions to fit A4
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight) * 0.9;
+            const imgX = (pdfWidth - imgWidth * ratio) / 2;
+            const imgY = 15;
 
-            // Inputs Section
-            doc.setFontSize(14);
-            doc.setTextColor(50, 50, 50);
-            doc.text('Girdiler', 20, 52);
+            // Add title
+            pdf.setFontSize(16);
+            pdf.setTextColor(99, 102, 241);
+            pdf.text('POAS Hesaplayici - Senaryo Raporu', pdfWidth / 2, 10, { align: 'center' });
 
-            doc.setFontSize(11);
-            doc.setTextColor(80, 80, 80);
-            let y = 62;
-            doc.text(`Gelir: ${formatCurrency(inputs.revenue, currencySymbol)}`, 25, y);
-            doc.text(`Reklam Harcamasi: ${formatCurrency(inputs.adSpend, currencySymbol)}`, 25, y + 7);
-            doc.text(`Urun Maliyeti (COGS): ${formatCurrency(inputs.cogs, currencySymbol)}`, 25, y + 14);
-            doc.text(`Kargo Gideri: ${formatCurrency(inputs.shippingCost, currencySymbol)}`, 25, y + 21);
-            doc.text(`Odeme Komisyonu: ${formatCurrency(inputs.paymentFees, currencySymbol)}`, 25, y + 28);
-            doc.text(`Paketleme/Operasyon: ${formatCurrency(inputs.handlingCost, currencySymbol)}`, 25, y + 35);
+            // Add screenshot
+            pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
 
-            // Results Section
-            doc.setFontSize(14);
-            doc.setTextColor(50, 50, 50);
-            doc.text('Sonuclar', 20, y + 52);
+            // Add footer
+            pdf.setFontSize(8);
+            pdf.setTextColor(150, 150, 150);
+            const footerY = Math.min(imgY + imgHeight * ratio + 10, pdfHeight - 10);
+            pdf.text(`Tarih: ${new Date().toLocaleDateString('tr-TR')} | Kanal: ${channel} | poas-hesaplayici.onrender.com`, pdfWidth / 2, footerY, { align: 'center' });
 
-            doc.setFontSize(11);
-            doc.setTextColor(80, 80, 80);
-            y = y + 62;
-            doc.text(`Degisken Maliyet: ${formatCurrency(outputs.variableOrderCosts, currencySymbol)}`, 25, y);
-            doc.text(`Brut Kar: ${formatCurrency(outputs.grossProfit, currencySymbol)}`, 25, y + 7);
-
-            // POAS highlight
-            doc.setFontSize(16);
-            doc.setTextColor(99, 102, 241);
-            doc.text(`POAS: ${formatNumber(outputs.poas)}x`, 25, y + 18);
-
-            doc.setFontSize(11);
-            doc.setTextColor(80, 80, 80);
-            doc.text(`ROAS: ${formatNumber(outputs.roas)}x`, 25, y + 28);
-            doc.text(`Katki Payi: ${formatCurrency(outputs.contributionMargin, currencySymbol)}`, 25, y + 35);
-
-            // Target POAS section (if exists)
-            if (targetOutputs && targetPoas) {
-                y = y + 50;
-                doc.setFontSize(14);
-                doc.setTextColor(50, 50, 50);
-                doc.text('Hedef POAS Analizi', 20, y);
-
-                doc.setFontSize(11);
-                doc.setTextColor(80, 80, 80);
-                doc.text(`Hedef POAS: ${formatNumber(targetPoas)}x`, 25, y + 10);
-                doc.text(`Maks. Reklam Harcamasi: ${formatCurrency(targetOutputs.maxAdSpend, currencySymbol)}`, 25, y + 17);
-                doc.text(`Min. Brut Kar Gereksinimi: ${formatCurrency(targetOutputs.minGrossProfit, currencySymbol)}`, 25, y + 24);
-            }
-
-            // Notes (if exists)
-            if (notes) {
-                y = targetOutputs ? y + 40 : y + 50;
-                doc.setFontSize(12);
-                doc.setTextColor(50, 50, 50);
-                doc.text('Notlar:', 20, y);
-                doc.setFontSize(10);
-                doc.setTextColor(80, 80, 80);
-                doc.text(notes.substring(0, 80), 25, y + 8);
-            }
-
-            // Footer
-            doc.setFontSize(9);
-            doc.setTextColor(150, 150, 150);
-            doc.text(`POAS Hesaplayici - ${new Date().getFullYear()} | poas-hesaplayici.onrender.com`, 20, 280);
-
-            // Save PDF
-            doc.save(`poas-rapor-${new Date().toISOString().split('T')[0]}.pdf`);
+            // Save
+            pdf.save(`poas-rapor-${new Date().toISOString().split('T')[0]}.pdf`);
         } catch (error) {
             console.error('PDF export error:', error);
             alert('PDF olusturulurken bir hata olustu. Lutfen tekrar deneyin.');
@@ -657,6 +623,7 @@ export default function HesaplayiciPage() {
 
                 {/* Right Column - Results */}
                 <div
+                    ref={resultsRef}
                     style={{
                         width: '100%',
                         maxWidth: '100%',
