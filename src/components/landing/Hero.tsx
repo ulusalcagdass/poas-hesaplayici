@@ -83,7 +83,7 @@ export default function Hero() {
                             <span style={{ color: 'var(--color-text-primary)' }}>ROAS değil, </span>
                             <span className="text-gradient">POAS</span>
                             <br />
-                            <span style={{ color: 'var(--color-text-primary)' }}>ile kârlılığı yönet.</span>
+                            <span style={{ color: 'var(--color-text-primary)' }}>ile gerçek kârlılığı ölç.</span>
                         </h1>
 
                         {/* Subtitle */}
@@ -92,15 +92,15 @@ export default function Hero() {
                                 fontSize: '1.25rem',
                                 color: 'var(--color-text-secondary)',
                                 marginBottom: '2rem',
-                                maxWidth: '500px',
+                                maxWidth: '540px',
                                 lineHeight: 1.7,
                             }}
                         >
-                            <strong style={{ color: 'var(--color-text-primary)' }}>POAS = Brüt Kâr / Reklam Harcaması</strong>
+                            <strong style={{ color: 'var(--color-text-primary)', fontSize: '1.1rem' }}>POAS = Brüt Kâr / Reklam Harcaması</strong>
                             <br />
-                            <span style={{ fontSize: '1rem' }}>ROAS gelir odaklıdır, POAS kârlılık odaklıdır.</span>
-                            <br />
-                            Gerçek kârlılığınızı ölçün, reklam bütçenizi optimize edin.
+                            <span style={{ fontSize: '1rem', display: 'block', marginTop: '0.75rem' }}>
+                                Kargo, komisyon ve operasyon maliyetlerini yok sayan ROAS yerine gerçek kârlılığa odaklan.
+                            </span>
                         </p>
 
                         {/* CTA Buttons */}
@@ -112,11 +112,11 @@ export default function Hero() {
                             }}
                         >
                             <Link href="/signup" className="btn btn-primary btn-lg">
-                                Ücretsiz Başla
+                                Ücretsiz Hesapla
                                 <ArrowRight size={18} />
                             </Link>
                             <a href="#how-it-works" className="btn btn-secondary btn-lg">
-                                Nasıl Çalışır?
+                                Örnek Hesaplamayı Gör
                             </a>
                         </div>
 

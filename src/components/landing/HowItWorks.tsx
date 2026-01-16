@@ -5,7 +5,7 @@ export default function HowItWorks() {
         {
             number: '01',
             title: 'Gelir (Revenue)',
-            description: 'KDV hariç, indirimler sonrası müşteriden tahsil edilen tutar.',
+            description: 'KDV hariç, indirimler sonrası müşteriden tahsil edilen tutar. ⚠️ Müşteriden kargo ücreti alıyorsanız gelire dahil edin.',
             example: '10.000₺',
             color: 'var(--color-info)',
         },
@@ -16,7 +16,7 @@ export default function HowItWorks() {
                 { label: 'COGS (Ürün Maliyeti)', value: '4.000₺' },
                 { label: 'Kargo Gideri', value: '1.500₺' },
                 { label: 'Ödeme Komisyonları', value: '500₺' },
-                { label: 'Birim Başı Operasyon', value: '500₺' },
+                { label: 'Paketleme & Operasyon', value: '500₺' },
             ],
             total: '6.500₺',
             color: 'var(--color-warning)',

@@ -308,7 +308,16 @@ export default function HesaplayiciPage() {
                             </div>
 
                             <div className="input-group">
-                                <label className="input-label">Birim Başı Operasyon</label>
+                                <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    Paketleme & Operasyon
+                                    <span
+                                        className="tooltip"
+                                        data-tooltip="Kutu, etiket, dolgu, sipariş hazırlama"
+                                        style={{ cursor: 'help' }}
+                                    >
+                                        <Info size={14} style={{ color: 'var(--color-text-muted)' }} />
+                                    </span>
+                                </label>
                                 <input
                                     type="number"
                                     className="input"
