@@ -133,9 +133,9 @@ export default function Hero() {
                         >
                             <div>
                                 <div style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--color-primary-light)' }}>
-                                    %100
+                                    30sn
                                 </div>
-                                <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>Ücretsiz</div>
+                                <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>Hızlı Hesaplama</div>
                             </div>
                             <div>
                                 <div style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--color-primary-light)' }}>
