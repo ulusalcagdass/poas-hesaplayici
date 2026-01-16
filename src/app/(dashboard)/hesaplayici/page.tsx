@@ -165,7 +165,7 @@ export default function HesaplayiciPage() {
     return (
         <div>
             {/* Page Header */}
-            <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div className="calculator-header" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                     <h1 style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>
                         POAS Hesaplayıcı

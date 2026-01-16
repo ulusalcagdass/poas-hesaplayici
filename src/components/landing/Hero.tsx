@@ -105,6 +105,7 @@ export default function Hero() {
 
                         {/* CTA Buttons */}
                         <div
+                            className="hero-cta-group"
                             style={{
                                 display: 'flex',
                                 gap: '1rem',
