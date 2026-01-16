@@ -232,27 +232,31 @@ export default function HesaplayiciPage() {
                 format: 'a4',
             });
 
-            // Calculate dimensions to fit A4
+            // Calculate dimensions to fill page width
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
+            const margin = 10; // Small margin on sides
+            const availableWidth = pdfWidth - (margin * 2);
             const imgWidth = canvas.width;
             const imgHeight = canvas.height;
-            const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight) * 0.9;
-            const imgX = (pdfWidth - imgWidth * ratio) / 2;
-            const imgY = 15;
+
+            // Scale to fill available width
+            const ratio = availableWidth / imgWidth;
+            const scaledHeight = imgHeight * ratio;
+            const imgY = 20; // Space for title
 
             // Add title
-            pdf.setFontSize(16);
+            pdf.setFontSize(14);
             pdf.setTextColor(99, 102, 241);
-            pdf.text('POAS Hesaplayici - Senaryo Raporu', pdfWidth / 2, 10, { align: 'center' });
+            pdf.text('POAS Hesaplayici - Senaryo Raporu', pdfWidth / 2, 12, { align: 'center' });
 
-            // Add screenshot
-            pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+            // Add screenshot - full width
+            pdf.addImage(imgData, 'PNG', margin, imgY, availableWidth, scaledHeight);
 
             // Add footer
             pdf.setFontSize(8);
             pdf.setTextColor(150, 150, 150);
-            const footerY = Math.min(imgY + imgHeight * ratio + 10, pdfHeight - 10);
+            const footerY = Math.min(imgY + scaledHeight + 8, pdfHeight - 8);
             pdf.text(`Tarih: ${new Date().toLocaleDateString('tr-TR')} | Kanal: ${channel} | poas-hesaplayici.onrender.com`, pdfWidth / 2, footerY, { align: 'center' });
 
             // Save
