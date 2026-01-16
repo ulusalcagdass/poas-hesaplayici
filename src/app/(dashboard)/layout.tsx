@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { auth, signOut } from '@/lib/auth';
-import { Calculator, FileText, LogOut, User, Menu } from 'lucide-react';
+import { Calculator, FileText, LogOut, User } from 'lucide-react';
+import MobileMenu from '@/components/dashboard/MobileMenu';
 
 export default async function DashboardLayout({
     children,
@@ -233,30 +234,8 @@ export default async function DashboardLayout({
                 }}
                 className="main-content"
             >
-                {/* Mobile Header */}
-                <header
-                    className="mobile-header"
-                    style={{
-                        display: 'none',
-                        padding: '1rem',
-                        borderBottom: '1px solid var(--color-border)',
-                        background: 'var(--color-bg-secondary)',
-                    }}
-                >
-                    <button
-                        style={{
-                            background: 'transparent',
-                            border: 'none',
-                            color: 'var(--color-text-primary)',
-                            cursor: 'pointer',
-                            padding: '0.5rem',
-                            minWidth: '44px',
-                            minHeight: '44px',
-                        }}
-                    >
-                        <Menu size={24} />
-                    </button>
-                </header>
+                {/* Mobile Menu - Client Component */}
+                <MobileMenu userName={session.user.name || null} userEmail={session.user.email || null} />
 
                 {/* Page Content */}
                 <div

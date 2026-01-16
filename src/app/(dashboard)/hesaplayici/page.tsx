@@ -358,7 +358,7 @@ export default function HesaplayiciPage() {
                             </div>
                         )}
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                        <div className="variable-costs-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                             <div className="input-group">
                                 <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                     COGS
