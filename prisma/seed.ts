@@ -88,12 +88,36 @@ async function main() {
 
     console.log('✅ Scenario 2 created:', scenario2.name);
 
+    // Create Pro subscription for demo user
+    const subscription = await prisma.userSubscription.upsert({
+        where: { userId: demoUser.id },
+        update: {
+            plan: 'pro',
+            billingCycle: 'monthly',
+            status: 'active',
+            currentPeriodStart: new Date(),
+            currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        },
+        create: {
+            userId: demoUser.id,
+            plan: 'pro',
+            billingCycle: 'monthly',
+            status: 'active',
+            currentPeriodStart: new Date(),
+            currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+            scenarioCount: 0,
+        },
+    });
+
+    console.log('✅ Pro subscription created for demo user');
+
     console.log('');
     console.log('🎉 Seeding completed!');
     console.log('');
-    console.log('Demo hesabı:');
+    console.log('Demo hesabı (PRO ABONELİKLİ):');
     console.log('  Email: demo@poas.app');
     console.log('  Şifre: demo1234');
+    console.log('  Plan: Pro (Aktif)');
 }
 
 main()
