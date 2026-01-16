@@ -1,13 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { Eye, EyeOff, LogIn, AlertCircle } from 'lucide-react';
 
-export default function LoginPage() {
+function LoginForm() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl') || '/hesaplayici';
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -29,7 +32,7 @@ export default function LoginPage() {
             if (result?.error) {
                 setError('E-posta veya şifre hatalı');
             } else {
-                router.push('/hesaplayici');
+                router.push(callbackUrl);
                 router.refresh();
             }
         } catch {
@@ -147,20 +150,6 @@ export default function LoginPage() {
                     </div>
                 </div>
 
-                {/* Forgot Password Link */}
-                <div style={{ textAlign: 'right', marginBottom: '1.5rem' }}>
-                    <Link
-                        href="/sifre-sifirla"
-                        style={{
-                            color: 'var(--color-primary-light)',
-                            textDecoration: 'none',
-                            fontSize: '0.875rem',
-                        }}
-                    >
-                        Şifremi Unuttum
-                    </Link>
-                </div>
-
                 {/* Submit Button */}
                 <button
                     type="submit"
@@ -182,6 +171,20 @@ export default function LoginPage() {
                     )}
                 </button>
             </form>
+
+            {/* Forgot Password */}
+            <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                <a
+                    href="#"
+                    style={{
+                        color: 'var(--color-text-muted)',
+                        fontSize: '0.875rem',
+                        textDecoration: 'none',
+                    }}
+                >
+                    Şifremi Unuttum
+                </a>
+            </div>
 
             {/* Sign Up Link */}
             <p
@@ -205,5 +208,13 @@ export default function LoginPage() {
                 </Link>
             </p>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={<div className="spinner" style={{ margin: '2rem auto' }} />}>
+            <LoginForm />
+        </Suspense>
     );
 }

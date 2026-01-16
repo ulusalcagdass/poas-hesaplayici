@@ -8,7 +8,6 @@ import { Eye, EyeOff, UserPlus, AlertCircle, CheckCircle } from 'lucide-react';
 export default function SignupPage() {
     const router = useRouter();
     const [formData, setFormData] = useState({
-        name: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -153,23 +152,6 @@ export default function SignupPage() {
 
             {/* Form */}
             <form onSubmit={handleSubmit}>
-                {/* Name */}
-                <div className="input-group" style={{ marginBottom: '1rem' }}>
-                    <label className="input-label" htmlFor="name">
-                        Ad Soyad
-                    </label>
-                    <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        className="input"
-                        placeholder="Ahmet Yılmaz"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        autoComplete="name"
-                    />
-                </div>
 
                 {/* Email */}
                 <div className="input-group" style={{ marginBottom: '1rem' }}>
