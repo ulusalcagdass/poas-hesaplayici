@@ -9,18 +9,23 @@ import {
     Download,
     Info,
     Lightbulb,
-    AlertTriangle
+    AlertTriangle,
+    ChevronDown,
+    ChevronUp,
+    Lock
 } from 'lucide-react';
 import {
     calculateAll,
     calculateTargetPOAS,
+    calculateROASTargets,
     interpretPOAS,
     POAS_PRESETS,
     DEFAULT_VALUES,
     suggestDefaults,
     type CalculatorInputs,
     type CalculatorOutputs,
-    type TargetPOASOutputs
+    type TargetPOASOutputs,
+    type ROASTargets
 } from '@/lib/calculations';
 import { CHANNELS, CURRENCIES } from '@/types';
 import SaveScenarioModal from '@/components/calculator/SaveScenarioModal';
@@ -81,13 +86,18 @@ export default function HesaplayiciPage() {
     // Results
     const [outputs, setOutputs] = useState<CalculatorOutputs | null>(null);
     const [targetOutputs, setTargetOutputs] = useState<TargetPOASOutputs | null>(null);
+    const [roasTargets, setRoasTargets] = useState<ROASTargets | null>(null);
 
     // Modals
     const [showSaveModal, setShowSaveModal] = useState(false);
     const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
+    // ROAS Targets Accordion
+    const [showRoasTargets, setShowRoasTargets] = useState(false);
+
     // Subscription check
     const [hasActiveSubscription, setHasActiveSubscription] = useState<boolean | null>(null);
+    const [subscriptionPlan, setSubscriptionPlan] = useState<string>('free');
 
     // Ref for results section (for PDF capture)
     const resultsRef = useRef<HTMLDivElement>(null);
@@ -99,11 +109,14 @@ export default function HesaplayiciPage() {
                 if (res.ok) {
                     const data = await res.json();
                     setHasActiveSubscription(data.plan !== 'free' && data.status === 'active');
+                    setSubscriptionPlan(data.plan || 'free');
                 } else {
                     setHasActiveSubscription(false);
+                    setSubscriptionPlan('free');
                 }
             } catch {
                 setHasActiveSubscription(false);
+                setSubscriptionPlan('free');
             }
         };
         checkSubscription();
@@ -159,6 +172,10 @@ export default function HesaplayiciPage() {
 
         const result = calculateAll(inputs);
         setOutputs(result);
+
+        // Calculate ROAS targets based on POAS/GrossProfit
+        const roasResult = calculateROASTargets(inputs.revenue, result.grossProfit);
+        setRoasTargets(roasResult);
 
         if (targetPoas && targetPoas > 0) {
             const targetResult = calculateTargetPOAS({
@@ -836,6 +853,124 @@ export default function HesaplayiciPage() {
                                     </div>
                                 </div>
                             )}
+
+                            {/* ROAS Hedefleri - Pro/Agency Only Accordion */}
+                            <div className="glass-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
+                                <button
+                                    onClick={() => {
+                                        if (subscriptionPlan === 'solo' || subscriptionPlan === 'free') {
+                                            setShowUpgradeModal(true);
+                                        } else {
+                                            setShowRoasTargets(!showRoasTargets);
+                                        }
+                                    }}
+                                    style={{
+                                        width: '100%',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        background: 'transparent',
+                                        border: 'none',
+                                        color: 'var(--color-text-primary)',
+                                        cursor: 'pointer',
+                                        padding: 0,
+                                    }}
+                                >
+                                    <h3 style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                                        <TrendingUp size={20} style={{ color: 'var(--color-warning)' }} />
+                                        ROAS Hedefleri (POAS'a göre)
+                                        {(subscriptionPlan === 'solo' || subscriptionPlan === 'free') && (
+                                            <Lock size={14} style={{ color: 'var(--color-text-muted)' }} />
+                                        )}
+                                    </h3>
+                                    {subscriptionPlan !== 'solo' && subscriptionPlan !== 'free' && (
+                                        showRoasTargets ? <ChevronUp size={20} /> : <ChevronDown size={20} />
+                                    )}
+                                </button>
+
+                                {/* Locked state for Solo/Free */}
+                                {(subscriptionPlan === 'solo' || subscriptionPlan === 'free') && (
+                                    <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(99, 102, 241, 0.1)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
+                                        <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem' }}>
+                                            Pro veya Agency planında ROAS hedeflerini görün.
+                                        </p>
+                                        <button
+                                            onClick={() => setShowUpgradeModal(true)}
+                                            className="btn btn-primary"
+                                            style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}
+                                        >
+                                            Pro'ya Geç
+                                        </button>
+                                    </div>
+                                )}
+
+                                {/* ROAS Targets content for Pro/Agency */}
+                                {showRoasTargets && roasTargets && subscriptionPlan !== 'solo' && subscriptionPlan !== 'free' && (
+                                    <div style={{ marginTop: '1rem' }}>
+                                        <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
+                                            Bu ROAS hedefleri, girdiğiniz brüt kâr (POAS) yapısına göre hesaplanır.
+                                        </p>
+
+                                        {/* Breakeven ROAS */}
+                                        <div style={{ padding: '0.75rem', background: 'rgba(245, 158, 11, 0.1)', borderRadius: 'var(--radius-md)', marginBottom: '0.75rem' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                <span style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>Başa baş ROAS</span>
+                                                <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-warning)' }}>
+                                                    {formatNumber(roasTargets.breakevenROAS)}x
+                                                </span>
+                                            </div>
+                                            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>
+                                                Bu ROAS'ta reklam harcaması brüt kârınıza eşittir.
+                                            </div>
+                                        </div>
+
+                                        {/* Margin ROAS targets */}
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
+                                            {/* 10% margin */}
+                                            <div style={{ padding: '0.75rem', background: 'var(--color-surface)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
+                                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>%10 Marj</div>
+                                                {roasTargets.impossible10 ? (
+                                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-error)' }}>Mümkün değil</div>
+                                                ) : (
+                                                    <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>
+                                                        {formatNumber(roasTargets.roas10!)}x
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {/* 15% margin */}
+                                            <div style={{ padding: '0.75rem', background: 'var(--color-surface)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
+                                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>%15 Marj</div>
+                                                {roasTargets.impossible15 ? (
+                                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-error)' }}>Mümkün değil</div>
+                                                ) : (
+                                                    <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>
+                                                        {formatNumber(roasTargets.roas15!)}x
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {/* 20% margin */}
+                                            <div style={{ padding: '0.75rem', background: 'var(--color-surface)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
+                                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>%20 Marj</div>
+                                                {roasTargets.impossible20 ? (
+                                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-error)' }}>Mümkün değil</div>
+                                                ) : (
+                                                    <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>
+                                                        {formatNumber(roasTargets.roas20!)}x
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Info tooltip */}
+                                        <div style={{ marginTop: '0.75rem', display: 'flex', alignItems: 'flex-start', gap: '0.5rem', padding: '0.5rem', background: 'rgba(99, 102, 241, 0.05)', borderRadius: 'var(--radius-sm)' }}>
+                                            <Info size={14} style={{ color: 'var(--color-primary-light)', flexShrink: 0, marginTop: '2px' }} />
+                                            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                                                POAS kârlılığı ölçer, ROAS ise bu kârlılığa göre hedeflenmesi gereken reklam performansını gösterir.
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
 
                             {/* Action Buttons */}
                             <div style={{ display: 'flex', gap: '1rem' }}>

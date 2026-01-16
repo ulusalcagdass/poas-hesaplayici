@@ -161,6 +161,50 @@ export function calculateTargetPOAS(inputs: TargetPOASInputs): TargetPOASOutputs
     };
 }
 
+// ROAS Targets Interface
+export interface ROASTargets {
+    breakevenROAS: number;           // Başa baş ROAS = Revenue / GrossProfit
+    roas10: number | null;           // %10 marj ROAS = Revenue / (GrossProfit - 0.10 * Revenue)
+    roas15: number | null;           // %15 marj ROAS
+    roas20: number | null;           // %20 marj ROAS
+    impossible10: boolean;           // %10 marj mümkün değil mi?
+    impossible15: boolean;           // %15 marj mümkün değil mi?
+    impossible20: boolean;           // %20 marj mümkün değil mi?
+}
+
+/**
+ * ROAS hedeflerini hesaplar (POAS'a dayalı)
+ * Breakeven ROAS = Revenue / GrossProfit
+ * Margin ROAS = Revenue / (GrossProfit - margin * Revenue)
+ */
+export function calculateROASTargets(revenue: number, grossProfit: number): ROASTargets {
+    // Başa baş ROAS: Bu ROAS'ta reklam harcaması brüt kâra eşit
+    const breakevenROAS = grossProfit > 0 ? revenue / grossProfit : Infinity;
+
+    // Marj bazlı ROAS hesaplamaları
+    const calculateMarginROAS = (marginPercent: number): { value: number | null; impossible: boolean } => {
+        const denominator = grossProfit - (marginPercent * revenue);
+        if (denominator <= 0) {
+            return { value: null, impossible: true };
+        }
+        return { value: revenue / denominator, impossible: false };
+    };
+
+    const margin10 = calculateMarginROAS(0.10);
+    const margin15 = calculateMarginROAS(0.15);
+    const margin20 = calculateMarginROAS(0.20);
+
+    return {
+        breakevenROAS,
+        roas10: margin10.value,
+        roas15: margin15.value,
+        roas20: margin20.value,
+        impossible10: margin10.impossible,
+        impossible15: margin15.impossible,
+        impossible20: margin20.impossible,
+    };
+}
+
 /**
  * Eksik veri için varsayılan değerleri önerir
  */
