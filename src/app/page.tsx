@@ -5,7 +5,6 @@ import {
   HowItWorks,
   POASTargets,
   UseCases,
-  Pricing,
   FAQ,
   Footer,
 } from '@/components/landing';
@@ -19,7 +18,6 @@ export default function Home() {
       <HowItWorks />
       <POASTargets />
       <UseCases />
-      <Pricing />
       <FAQ />
       <Footer />
     </main>

@@ -6,14 +6,13 @@ export default function Footer() {
         product: [
             { label: 'Özellikler', href: '#features' },
             { label: 'Nasıl Çalışır', href: '#how-it-works' },
-            { label: 'Fiyatlandırma', href: '#pricing' },
             { label: 'SSS', href: '#faq' },
+            { label: 'Hesaplayıcı', href: '/hesaplayici' },
         ],
         resources: [
             { label: 'POAS Rehberi', href: '#' },
             { label: 'Blog', href: '#' },
             { label: 'Yardım Merkezi', href: '#' },
-            { label: 'API Dokümantasyonu', href: '#' },
         ],
         company: [
             { label: 'Hakkımızda', href: '#' },

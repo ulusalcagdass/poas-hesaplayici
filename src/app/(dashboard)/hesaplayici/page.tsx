@@ -12,7 +12,7 @@ import {
     AlertTriangle,
     ChevronDown,
     ChevronUp,
-    Lock
+    LogIn
 } from 'lucide-react';
 import {
     calculateAll,
@@ -29,7 +29,8 @@ import {
 } from '@/lib/calculations';
 import { CHANNELS, CURRENCIES } from '@/types';
 import SaveScenarioModal from '@/components/calculator/SaveScenarioModal';
-import UpgradeModal from '@/components/UpgradeModal';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 const formatNumber = (num: number, decimals: number = 2): string => {
     if (!isFinite(num)) return '∞';
@@ -90,37 +91,17 @@ export default function HesaplayiciPage() {
 
     // Modals
     const [showSaveModal, setShowSaveModal] = useState(false);
-    const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
     // ROAS Targets Accordion
     const [showRoasTargets, setShowRoasTargets] = useState(false);
 
-    // Subscription check
-    const [hasActiveSubscription, setHasActiveSubscription] = useState<boolean | null>(null);
-    const [subscriptionPlan, setSubscriptionPlan] = useState<string>('free');
+    // Session check (for free login model)
+    const { data: session, status } = useSession();
+    const isLoggedIn = status === 'authenticated';
 
     // Ref for results section (for PDF capture)
     const resultsRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const checkSubscription = async () => {
-            try {
-                const res = await fetch('/api/subscription');
-                if (res.ok) {
-                    const data = await res.json();
-                    setHasActiveSubscription(data.plan !== 'free' && data.status === 'active');
-                    setSubscriptionPlan(data.plan || 'free');
-                } else {
-                    setHasActiveSubscription(false);
-                    setSubscriptionPlan('free');
-                }
-            } catch {
-                setHasActiveSubscription(false);
-                setSubscriptionPlan('free');
-            }
-        };
-        checkSubscription();
-    }, []);
 
     // Handle input change
     const handleInputChange = (field: keyof CalculatorInputs, value: string) => {
@@ -157,15 +138,15 @@ export default function HesaplayiciPage() {
 
     // Calculate results
     const handleCalculate = useCallback(() => {
-        // PAYWALL: Check subscription before calculating
-        if (hasActiveSubscription === false) {
-            setShowUpgradeModal(true);
+        // FREE MODEL: Check login before showing results
+        if (!isLoggedIn) {
+            setShowLoginPrompt(true);
             return;
         }
 
         // Validate adSpend > 0
         if (inputs.adSpend === 0) {
-            setValidationErrors({ adSpend: 'Reklam harcaması 0 olamaz.' });
+            setValidationErrors({ adSpend: 'Reklam harcamas\u0131 0 olamaz.' });
             return;
         }
         setValidationErrors({});
@@ -187,7 +168,7 @@ export default function HesaplayiciPage() {
         } else {
             setTargetOutputs(null);
         }
-    }, [inputs, targetPoas, hasActiveSubscription]);
+    }, [inputs, targetPoas, isLoggedIn]);
 
     // Use suggested defaults
     const applySuggestedDefaults = () => {
@@ -217,9 +198,9 @@ export default function HesaplayiciPage() {
             return;
         }
 
-        // PAYWALL: Check subscription before PDF export
-        if (hasActiveSubscription === false) {
-            setShowUpgradeModal(true);
+        // FREE MODEL: Check login before PDF export
+        if (!isLoggedIn) {
+            setShowLoginPrompt(true);
             return;
         }
 
@@ -854,16 +835,10 @@ export default function HesaplayiciPage() {
                                 </div>
                             )}
 
-                            {/* ROAS Hedefleri - Pro/Agency Only Accordion */}
+                            {/* ROAS Hedefleri - Free for all logged-in users */}
                             <div className="glass-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
                                 <button
-                                    onClick={() => {
-                                        if (subscriptionPlan === 'solo' || subscriptionPlan === 'free') {
-                                            setShowUpgradeModal(true);
-                                        } else {
-                                            setShowRoasTargets(!showRoasTargets);
-                                        }
-                                    }}
+                                    onClick={() => setShowRoasTargets(!showRoasTargets)}
                                     style={{
                                         width: '100%',
                                         display: 'flex',
@@ -879,33 +854,12 @@ export default function HesaplayiciPage() {
                                     <h3 style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
                                         <TrendingUp size={20} style={{ color: 'var(--color-warning)' }} />
                                         ROAS Hedefleri (POAS'a göre)
-                                        {(subscriptionPlan === 'solo' || subscriptionPlan === 'free') && (
-                                            <Lock size={14} style={{ color: 'var(--color-text-muted)' }} />
-                                        )}
                                     </h3>
-                                    {subscriptionPlan !== 'solo' && subscriptionPlan !== 'free' && (
-                                        showRoasTargets ? <ChevronUp size={20} /> : <ChevronDown size={20} />
-                                    )}
+                                    {showRoasTargets ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                                 </button>
 
-                                {/* Locked state for Solo/Free */}
-                                {(subscriptionPlan === 'solo' || subscriptionPlan === 'free') && (
-                                    <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(99, 102, 241, 0.1)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
-                                        <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem' }}>
-                                            Pro veya Agency planında ROAS hedeflerini görün.
-                                        </p>
-                                        <button
-                                            onClick={() => setShowUpgradeModal(true)}
-                                            className="btn btn-primary"
-                                            style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}
-                                        >
-                                            Pro'ya Geç
-                                        </button>
-                                    </div>
-                                )}
-
-                                {/* ROAS Targets content for Pro/Agency */}
-                                {showRoasTargets && roasTargets && subscriptionPlan !== 'solo' && subscriptionPlan !== 'free' && (
+                                {/* ROAS Targets content - free for everyone */}
+                                {showRoasTargets && roasTargets && (
                                     <div style={{ marginTop: '1rem' }}>
                                         <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
                                             Bu ROAS hedefleri, girdiğiniz brüt kâr (POAS) yapısına göre hesaplanır.
@@ -1036,12 +990,56 @@ export default function HesaplayiciPage() {
                 />
             )}
 
-            {/* Upgrade Modal */}
-            <UpgradeModal
-                isOpen={showUpgradeModal}
-                onClose={() => setShowUpgradeModal(false)}
-                reason="subscription_required"
-            />
+            {/* Login Prompt Modal */}
+            {showLoginPrompt && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 100,
+                        padding: '1rem',
+                    }}
+                    onClick={() => setShowLoginPrompt(false)}
+                >
+                    <div
+                        className="glass-card"
+                        style={{
+                            padding: '2rem',
+                            maxWidth: '400px',
+                            width: '100%',
+                            textAlign: 'center',
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <LogIn size={48} style={{ color: 'var(--color-primary-light)', marginBottom: '1rem' }} />
+                        <h3 style={{ marginBottom: '0.75rem' }}>Sonuçları Görmek İçin</h3>
+                        <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem', fontSize: '0.9375rem' }}>
+                            Ücretsiz hesap oluşturarak hesaplama sonuçlarınızı görün, kaydedin ve PDF olarak indirin.
+                        </p>
+                        <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
+                            <Link
+                                href="/login"
+                                className="btn btn-ghost"
+                            >
+                                Giriş Yap
+                            </Link>
+                            <Link
+                                href="/signup"
+                                className="btn btn-primary"
+                            >
+                                Ücretsiz Kayıt Ol
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <style jsx>{`
         @media (max-width: 1024px) {

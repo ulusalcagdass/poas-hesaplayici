@@ -39,7 +39,6 @@ export default function Navbar() {
     const navLinks = [
         { href: '#features', label: 'Özellikler' },
         { href: '#how-it-works', label: 'Nasıl Çalışır' },
-        { href: '#pricing', label: 'Fiyatlandırma' },
         { href: '#faq', label: 'SSS' },
     ];
 
@@ -142,9 +141,9 @@ export default function Navbar() {
                                 <Link href="/login" className="btn btn-ghost">
                                     Giriş Yap
                                 </Link>
-                                <a href="#pricing" className="btn btn-primary">
-                                    Planları Gör
-                                </a>
+                                <Link href="/hesaplayici" className="btn btn-primary">
+                                    Ücretsiz Hesapla
+                                </Link>
                             </div>
                         </div>
 
@@ -222,13 +221,13 @@ export default function Navbar() {
                         >
                             Giriş Yap
                         </Link>
-                        <a
-                            href="#pricing"
+                        <Link
+                            href="/hesaplayici"
                             onClick={closeMobileMenu}
                             className="btn btn-primary btn-lg"
                         >
-                            Planları Gör
-                        </a>
+                            Ücretsiz Hesapla
+                        </Link>
                     </div>
                 </div>
             )}

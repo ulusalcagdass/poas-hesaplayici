@@ -112,7 +112,7 @@ export default function Hero() {
                                 flexWrap: 'wrap',
                             }}
                         >
-                            <Link href="/signup" className="btn btn-primary btn-lg">
+                            <Link href="/hesaplayici" className="btn btn-primary btn-lg">
                                 Ücretsiz Hesapla
                                 <ArrowRight size={18} />
                             </Link>
