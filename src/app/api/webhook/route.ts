@@ -55,8 +55,6 @@ export async function POST(request: Request) {
                     plan,
                     billingCycle,
                     status: 'active',
-                    currentPeriodStart: new Date(subscription.current_period_start * 1000),
-                    currentPeriodEnd: new Date(subscription.current_period_end * 1000),
                 });
 
                 console.log(`Subscription created for user ${userId}: ${plan}/${billingCycle}`);
@@ -93,8 +91,6 @@ export async function POST(request: Request) {
                         stripePriceId: priceId || undefined,
                         plan: planInfo?.planId || undefined,
                         billingCycle: planInfo?.billingCycle || undefined,
-                        currentPeriodStart: new Date(subscription.current_period_start * 1000),
-                        currentPeriodEnd: new Date(subscription.current_period_end * 1000),
                         updatedAt: new Date(),
                     },
                 });
