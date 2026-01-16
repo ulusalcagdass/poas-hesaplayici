@@ -41,6 +41,23 @@ export default function HesaplayiciPage() {
     const [currency, setCurrency] = useState('TRY');
     const currencySymbol = CURRENCIES.find(c => c.value === currency)?.symbol || '₺';
 
+    // Golden Test Case - PDF uyum doğrulama
+    const GOLDEN_INPUT = {
+        revenue: 10000,
+        adSpend: 2000,
+        cogs: 4000,
+        shippingCost: 1500,
+        paymentFees: 500,
+        handlingCost: 500,
+    };
+    const GOLDEN_OUTPUT = {
+        variableOrderCosts: 6500,
+        grossProfit: 3500,
+        poas: 1.75,
+        contributionMargin: 1500,
+        roas: 5.0,
+    };
+
     // Form state
     const [inputs, setInputs] = useState<CalculatorInputs>({
         revenue: 0,
@@ -53,9 +70,12 @@ export default function HesaplayiciPage() {
     });
 
     const [targetPoas, setTargetPoas] = useState<number | null>(null);
+    const [targetPoasError, setTargetPoasError] = useState<string | null>(null);
     const [showNetProfit, setShowNetProfit] = useState(false);
     const [notes, setNotes] = useState('');
     const [channel, setChannel] = useState<string>('Google');
+    const [isGoldenTest, setIsGoldenTest] = useState(false);
+    const [validationErrors, setValidationErrors] = useState<{ adSpend?: string }>({});
 
     // Results
     const [outputs, setOutputs] = useState<CalculatorOutputs | null>(null);
@@ -68,10 +88,44 @@ export default function HesaplayiciPage() {
     const handleInputChange = (field: keyof CalculatorInputs, value: string) => {
         const numValue = parseFloat(value) || 0;
         setInputs(prev => ({ ...prev, [field]: numValue }));
+        setIsGoldenTest(false);
+        // Clear validation errors when user types
+        if (field === 'adSpend' && numValue > 0) {
+            setValidationErrors(prev => ({ ...prev, adSpend: undefined }));
+        }
+    };
+
+    // Handle target POAS change with validation
+    const handleTargetPoasChange = (value: string) => {
+        const numValue = parseFloat(value) || 0;
+        if (numValue <= 0 && value !== '') {
+            setTargetPoasError('Hedef POAS 0\'dan büyük olmalı.');
+            setTargetPoas(null);
+        } else {
+            setTargetPoasError(null);
+            setTargetPoas(numValue || null);
+        }
+    };
+
+    // Apply Golden Test Case
+    const applyGoldenTestCase = () => {
+        setInputs({
+            ...GOLDEN_INPUT,
+            fixedCosts: undefined,
+        });
+        setIsGoldenTest(true);
+        setValidationErrors({});
     };
 
     // Calculate results
     const handleCalculate = useCallback(() => {
+        // Validate adSpend > 0
+        if (inputs.adSpend === 0) {
+            setValidationErrors({ adSpend: 'Reklam harcaması 0 olamaz.' });
+            return;
+        }
+        setValidationErrors({});
+
         const result = calculateAll(inputs);
         setOutputs(result);
 
@@ -101,18 +155,33 @@ export default function HesaplayiciPage() {
         }
     };
 
+    // Check if golden test matches
+    const isGoldenTestValid = isGoldenTest && outputs &&
+        Math.abs(outputs.grossProfit - GOLDEN_OUTPUT.grossProfit) < 0.01 &&
+        Math.abs(outputs.poas - GOLDEN_OUTPUT.poas) < 0.01;
+
     const interpretation = outputs ? interpretPOAS(outputs.poas) : null;
 
     return (
         <div>
             {/* Page Header */}
-            <div style={{ marginBottom: '2rem' }}>
-                <h1 style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>
-                    POAS Hesaplayıcı
-                </h1>
-                <p style={{ color: 'var(--color-text-muted)' }}>
-                    Reklamlarınızın gerçek kârlılığını hesaplayın
-                </p>
+            <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div>
+                    <h1 style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>
+                        POAS Hesaplayıcı
+                    </h1>
+                    <p style={{ color: 'var(--color-text-muted)' }}>
+                        Reklamlarınızın gerçek kârlılığını hesaplayın
+                    </p>
+                </div>
+                <button
+                    onClick={applyGoldenTestCase}
+                    className="btn btn-secondary btn-sm"
+                    style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                >
+                    <Lightbulb size={16} />
+                    Örnek Verileri Doldur
+                </button>
             </div>
 
             <div
@@ -205,7 +274,10 @@ export default function HesaplayiciPage() {
                                     placeholder="0"
                                     value={inputs.adSpend || ''}
                                     onChange={(e) => handleInputChange('adSpend', e.target.value)}
-                                    style={{ paddingLeft: '2.5rem' }}
+                                    style={{
+                                        paddingLeft: '2.5rem',
+                                        ...(validationErrors.adSpend ? { borderColor: 'var(--color-error)' } : {})
+                                    }}
                                 />
                                 <span style={{
                                     position: 'absolute',
@@ -217,6 +289,11 @@ export default function HesaplayiciPage() {
                                     {currencySymbol}
                                 </span>
                             </div>
+                            {validationErrors.adSpend && (
+                                <p style={{ color: 'var(--color-error)', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                    {validationErrors.adSpend}
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -376,8 +453,14 @@ export default function HesaplayiciPage() {
                                 className="input"
                                 placeholder="Örn: 1.5"
                                 value={targetPoas || ''}
-                                onChange={(e) => setTargetPoas(parseFloat(e.target.value) || null)}
+                                onChange={(e) => handleTargetPoasChange(e.target.value)}
+                                style={targetPoasError ? { borderColor: 'var(--color-error)' } : {}}
                             />
+                            {targetPoasError && (
+                                <p style={{ color: 'var(--color-error)', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                                    {targetPoasError}
+                                </p>
+                            )}
                         </div>
 
                         {/* Preset Buttons */}
@@ -463,6 +546,40 @@ export default function HesaplayiciPage() {
                                         }}
                                     >
                                         {interpretation.message}
+                                    </div>
+                                )}
+
+                                {/* Golden Test Verification Badge */}
+                                {isGoldenTest && (
+                                    <div
+                                        style={{
+                                            marginTop: '1rem',
+                                            padding: '0.75rem 1rem',
+                                            background: isGoldenTestValid ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                                            borderRadius: 'var(--radius-md)',
+                                            border: `1px solid ${isGoldenTestValid ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`,
+                                            fontSize: '0.875rem',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            gap: '0.5rem',
+                                        }}
+                                    >
+                                        {isGoldenTestValid ? (
+                                            <>
+                                                <span style={{ color: 'var(--color-success)' }}>✅</span>
+                                                <span style={{ color: 'var(--color-success)', fontWeight: 600 }}>
+                                                    Doğrulandı - PDF ile %100 uyumlu
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span style={{ color: 'var(--color-error)' }}>❌</span>
+                                                <span style={{ color: 'var(--color-error)', fontWeight: 600 }}>
+                                                    Beklenen: POAS 1.75x, Gross Profit 3,500₺
+                                                </span>
+                                            </>
+                                        )}
                                     </div>
                                 )}
                             </div>

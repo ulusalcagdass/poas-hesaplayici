@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { scenarioSchema } from '@/lib/validations';
+import { checkRateLimit, RATE_LIMITS } from '@/lib/rateLimit';
 
 // GET - List scenarios
 export async function GET() {
@@ -12,6 +13,15 @@ export async function GET() {
             return NextResponse.json(
                 { error: 'Yetkisiz erişim' },
                 { status: 401 }
+            );
+        }
+
+        // Rate limit check
+        const rateLimitResult = checkRateLimit(`api:${session.user.id}`, RATE_LIMITS.API);
+        if (!rateLimitResult.success) {
+            return NextResponse.json(
+                { error: 'Çok fazla istek. Lütfen bekleyin.' },
+                { status: 429, headers: { 'Retry-After': String(Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)) } }
             );
         }
 
@@ -42,10 +52,20 @@ export async function POST(request: Request) {
     try {
         const session = await auth();
 
+        // ✅ userId sadece server session'dan alınıyor - güvenli
         if (!session?.user?.id) {
             return NextResponse.json(
                 { error: 'Yetkisiz erişim' },
                 { status: 401 }
+            );
+        }
+
+        // ✅ Rate limit check
+        const rateLimitResult = checkRateLimit(`scenario:${session.user.id}`, RATE_LIMITS.SCENARIO_SAVE);
+        if (!rateLimitResult.success) {
+            return NextResponse.json(
+                { error: 'Çok fazla senaryo kaydı. Lütfen bekleyin.' },
+                { status: 429, headers: { 'Retry-After': String(Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)) } }
             );
         }
 
