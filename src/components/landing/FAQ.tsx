@@ -13,24 +13,24 @@ const faqs = [
         answer: 'Brüt Kâr = Gelir − Değişken Sipariş Maliyetleri. Değişken maliyetler: COGS (ürün maliyeti), kargo gideri, ödeme komisyonları ve birim başı operasyon maliyetleridir. Gelir, KDV hariç ve indirimler sonrası tahsil edilen tutardır.',
     },
     {
+        question: 'Kullanım için ücret var mı?',
+        answer: 'Hayır, POAS Hesaplayıcı tamamen ücretsizdir. Hesaplama, senaryo kaydetme ve PDF export özellikleri herkes için açıktır.',
+    },
+    {
+        question: 'Kayıt olmadan kullanabilir miyim?',
+        answer: 'Hayır, hesaplama sonuçlarını görmek için ücretsiz bir hesap oluşturmanız gerekir. Kayıt sadece email ve şifre gerektirir, kredi kartı istenmez.',
+    },
+    {
         question: 'Hedef POAS değerimi nasıl belirlemeliyim?',
         answer: 'İş hedeflerinize bağlı: Yüksek kârlılık için POAS 2.0, kontrollü büyüme için POAS 1.4, yeni müşteri kazanımı veya break-even için POAS 1.0 hedeflenebilir. Hedef POAS girdiğinizde, sistem maksimum reklam bütçenizi otomatik hesaplar.',
     },
     {
         question: 'Bazı maliyet verilerim eksik, ne yapmalıyım?',
-        answer: 'Endişelenmeyin! Uygulama eksik veriler için varsayılan değerler önerir. "Tahmin bile geniş ortalamalardan daha iyidir" prensibiyle çalışıyoruz. Örneğin: Ödeme komisyonu için gelirin %2\'si, kargo için sipariş başına 30₺ gibi yaygın değerler kullanabilirsiniz.',
-    },
-    {
-        question: 'Contribution Margin (Katkı Marjı) nedir?',
-        answer: 'Contribution Margin = Brüt Kâr − Reklam Harcaması. Reklam harcaması çıktıktan sonra sabit giderlerinizi karşılamak için kalan tutardır. Pozitif katkı marjı, reklamlarınızın kârlı olduğunu gösterir.',
+        answer: 'Endişelenmeyin! Uygulama eksik veriler için varsayılan değerler önerir. Örneğin: Ödeme komisyonu için gelirin %2\'si, kargo için sipariş başına 30₺ gibi yaygın değerler kullanabilirsiniz.',
     },
     {
         question: 'Verilerim güvende mi?',
         answer: 'Evet! Verileriniz şifrelenmiş veritabanında saklanır ve sadece sizin erişebileceğiniz şekilde korunur. Verilerinizi istediğiniz zaman silebilir veya export edebilirsiniz.',
-    },
-    {
-        question: 'Ücretsiz planda sınırlamalar neler?',
-        answer: 'Ücretsiz planda POAS hesaplayıcı, hedef POAS modu, 10 senaryo kaydetme ve PDF export özellikleri mevcuttur. Sınırsız senaryo, CSV export, Net Profit modu ve gelecekteki ekip özellikleri Pro planda sunulacaktır.',
     },
 ];
 

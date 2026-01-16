@@ -141,8 +141,8 @@ export default function Navbar() {
                                 <Link href="/login" className="btn btn-ghost">
                                     Giriş Yap
                                 </Link>
-                                <Link href="/hesaplayici" className="btn btn-primary">
-                                    Ücretsiz Hesapla
+                                <Link href="/signup" className="btn btn-primary">
+                                    Ücretsiz Kayıt Ol
                                 </Link>
                             </div>
                         </div>
@@ -222,11 +222,11 @@ export default function Navbar() {
                             Giriş Yap
                         </Link>
                         <Link
-                            href="/hesaplayici"
+                            href="/signup"
                             onClick={closeMobileMenu}
                             className="btn btn-primary btn-lg"
                         >
-                            Ücretsiz Hesapla
+                            Ücretsiz Kayıt Ol
                         </Link>
                     </div>
                 </div>

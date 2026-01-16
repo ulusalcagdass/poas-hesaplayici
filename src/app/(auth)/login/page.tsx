@@ -66,7 +66,7 @@ export default function LoginPage() {
                 </div>
                 <h1 style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>Hoş Geldiniz</h1>
                 <p style={{ color: 'var(--color-text-muted)' }}>
-                    Hesabınıza giriş yapın
+                    POAS Hesaplayıcı ücretsizdir. Sonuçları görmek için giriş yapın.
                 </p>
             </div>
 

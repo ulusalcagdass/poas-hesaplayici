@@ -55,7 +55,7 @@ export default function SignupPage() {
             } else {
                 setSuccess(true);
                 setTimeout(() => {
-                    router.push('/login');
+                    router.push('/hesaplayici');
                 }, 2000);
             }
         } catch {
@@ -126,7 +126,7 @@ export default function SignupPage() {
                 </div>
                 <h1 style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>Ücretsiz Hesap Oluştur</h1>
                 <p style={{ color: 'var(--color-text-muted)' }}>
-                    POAS ile kârlılığınızı takip edin
+                    POAS Hesaplayıcı ücretsizdir. Sonuçları görmek için kayıt olun.
                 </p>
             </div>
 
