@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
     Calculator,
     Target,
@@ -24,6 +24,7 @@ import {
 } from '@/lib/calculations';
 import { CHANNELS, CURRENCIES } from '@/types';
 import SaveScenarioModal from '@/components/calculator/SaveScenarioModal';
+import UpgradeModal from '@/components/UpgradeModal';
 
 const formatNumber = (num: number, decimals: number = 2): string => {
     if (!isFinite(num)) return '∞';
@@ -81,8 +82,29 @@ export default function HesaplayiciPage() {
     const [outputs, setOutputs] = useState<CalculatorOutputs | null>(null);
     const [targetOutputs, setTargetOutputs] = useState<TargetPOASOutputs | null>(null);
 
-    // Modal
+    // Modals
     const [showSaveModal, setShowSaveModal] = useState(false);
+    const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+
+    // Subscription check
+    const [hasActiveSubscription, setHasActiveSubscription] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        const checkSubscription = async () => {
+            try {
+                const res = await fetch('/api/subscription');
+                if (res.ok) {
+                    const data = await res.json();
+                    setHasActiveSubscription(data.plan !== 'free' && data.status === 'active');
+                } else {
+                    setHasActiveSubscription(false);
+                }
+            } catch {
+                setHasActiveSubscription(false);
+            }
+        };
+        checkSubscription();
+    }, []);
 
     // Handle input change
     const handleInputChange = (field: keyof CalculatorInputs, value: string) => {
@@ -119,6 +141,12 @@ export default function HesaplayiciPage() {
 
     // Calculate results
     const handleCalculate = useCallback(() => {
+        // PAYWALL: Check subscription before calculating
+        if (hasActiveSubscription === false) {
+            setShowUpgradeModal(true);
+            return;
+        }
+
         // Validate adSpend > 0
         if (inputs.adSpend === 0) {
             setValidationErrors({ adSpend: 'Reklam harcaması 0 olamaz.' });
@@ -139,7 +167,7 @@ export default function HesaplayiciPage() {
         } else {
             setTargetOutputs(null);
         }
-    }, [inputs, targetPoas]);
+    }, [inputs, targetPoas, hasActiveSubscription]);
 
     // Use suggested defaults
     const applySuggestedDefaults = () => {
@@ -161,6 +189,74 @@ export default function HesaplayiciPage() {
         Math.abs(outputs.poas - GOLDEN_OUTPUT.poas) < 0.01;
 
     const interpretation = outputs ? interpretPOAS(outputs.poas) : null;
+
+    // PDF Export Function
+    const handleExportPDF = () => {
+        if (!outputs) {
+            alert('Önce hesaplama yapın.');
+            return;
+        }
+
+        // PAYWALL: Check subscription before PDF export
+        if (hasActiveSubscription === false) {
+            setShowUpgradeModal(true);
+            return;
+        }
+
+        try {
+            // Create PDF content
+            const pdfContent = `
+POAS HESAPLAYICI - SENARYO RAPORU
+================================
+Tarih: ${new Date().toLocaleDateString('tr-TR')}
+Kanal: ${channel}
+Para Birimi: ${currency}
+
+GİRDİLER
+--------
+Gelir: ${formatCurrency(inputs.revenue, currencySymbol)}
+Reklam Harcaması: ${formatCurrency(inputs.adSpend, currencySymbol)}
+Ürün Maliyeti (COGS): ${formatCurrency(inputs.cogs, currencySymbol)}
+Kargo Gideri: ${formatCurrency(inputs.shippingCost, currencySymbol)}
+Ödeme Komisyonu: ${formatCurrency(inputs.paymentFees, currencySymbol)}
+Paketleme/Operasyon: ${formatCurrency(inputs.handlingCost, currencySymbol)}
+
+SONUÇLAR
+--------
+Değişken Maliyet: ${formatCurrency(outputs.variableOrderCosts, currencySymbol)}
+Brüt Kâr: ${formatCurrency(outputs.grossProfit, currencySymbol)}
+POAS: ${formatNumber(outputs.poas)}x
+ROAS: ${formatNumber(outputs.roas)}x
+Katkı Payı: ${formatCurrency(outputs.contributionMargin, currencySymbol)}
+
+${targetOutputs ? `
+HEDEF POAS ANALİZİ
+------------------
+Hedef POAS: ${formatNumber(targetPoas || 0)}x
+Maks. Reklam Harcaması: ${formatCurrency(targetOutputs.maxAdSpend, currencySymbol)}
+Min. Brüt Kâr Gereksinimi: ${formatCurrency(targetOutputs.minGrossProfit, currencySymbol)}
+` : ''}
+
+${notes ? `NOTLAR: ${notes}` : ''}
+================================
+POAS Hesaplayıcı - ${new Date().getFullYear()}
+`;
+
+            // Create blob and download
+            const blob = new Blob([pdfContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `poas-rapor-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('PDF export error:', error);
+            alert('PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
+        }
+    };
 
     return (
         <div
@@ -744,6 +840,7 @@ export default function HesaplayiciPage() {
                                 <button
                                     className="btn btn-secondary"
                                     style={{ flex: 1 }}
+                                    onClick={handleExportPDF}
                                 >
                                     <Download size={18} />
                                     PDF İndir
@@ -793,6 +890,13 @@ export default function HesaplayiciPage() {
                     notes={notes}
                 />
             )}
+
+            {/* Upgrade Modal */}
+            <UpgradeModal
+                isOpen={showUpgradeModal}
+                onClose={() => setShowUpgradeModal(false)}
+                reason="subscription_required"
+            />
 
             <style jsx>{`
         @media (max-width: 1024px) {

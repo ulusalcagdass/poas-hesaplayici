@@ -293,7 +293,7 @@ export default function Pricing() {
                 >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
                         <Shield size={18} style={{ color: 'var(--color-success)' }} />
-                        <span>İptal istediğin zaman</span>
+                        <span>İstediğiniz zaman iptal</span>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
                         <CreditCard size={18} style={{ color: 'var(--color-success)' }} />
