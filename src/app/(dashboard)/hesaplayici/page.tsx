@@ -188,16 +188,19 @@ export default function HesaplayiciPage() {
                 style={{
                     display: 'grid',
                     gridTemplateColumns: '1fr 1fr',
-                    gap: '2rem',
+                    gap: '1.5rem',
+                    width: '100%',
+                    maxWidth: '100%',
+                    boxSizing: 'border-box',
                 }}
                 className="calculator-grid"
             >
                 {/* Left Column - Inputs */}
                 <div>
                     {/* Currency & Channel */}
-                    <div className="glass-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
-                        <div style={{ display: 'flex', gap: '1rem' }}>
-                            <div style={{ flex: 1 }}>
+                    <div className="glass-card" style={{ padding: '1rem', marginBottom: '1rem' }}>
+                        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                            <div style={{ flex: '1 1 140px', minWidth: '140px' }}>
                                 <label className="input-label">Para Birimi</label>
                                 <select
                                     className="input"
@@ -210,7 +213,7 @@ export default function HesaplayiciPage() {
                                     ))}
                                 </select>
                             </div>
-                            <div style={{ flex: 1 }}>
+                            <div style={{ flex: '1 1 140px', minWidth: '140px' }}>
                                 <label className="input-label">Reklam Kanalı</label>
                                 <select
                                     className="input"
