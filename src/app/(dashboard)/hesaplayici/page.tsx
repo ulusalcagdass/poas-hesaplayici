@@ -449,14 +449,8 @@ export default function HesaplayiciPage() {
 
                         <div className="input-group" style={{ marginBottom: '1rem' }}>
                             <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                Gelir (Revenue)
-                                <span
-                                    className="tooltip"
-                                    data-tooltip="KDV hariç, indirimler sonrası tahsil edilen tutar"
-                                    style={{ cursor: 'help' }}
-                                >
-                                    <Info size={14} style={{ color: 'var(--color-text-muted)' }} />
-                                </span>
+                                {labels.revenue}
+                                <Tooltip content={language === 'tr' ? 'Ürünün tedarik veya üretim maliyeti.' : 'Product procurement or production cost.'} />
                             </label>
                             <div style={{ position: 'relative' }}>
                                 <input
@@ -480,7 +474,7 @@ export default function HesaplayiciPage() {
                         </div>
 
                         <div className="input-group">
-                            <label className="input-label">Reklam Harcaması (Ad Spend)</label>
+                            <label className="input-label">{labels.adSpend}</label>
                             <div style={{ position: 'relative' }}>
                                 <input
                                     type="number"
@@ -516,7 +510,7 @@ export default function HesaplayiciPage() {
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                             <h3 style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 <Calculator size={20} style={{ color: 'var(--color-warning)' }} />
-                                Değişken Maliyetler
+                                {labels.variableCosts}
                             </h3>
                             {inputs.revenue > 0 && (
                                 <button
@@ -526,7 +520,7 @@ export default function HesaplayiciPage() {
                                     style={{ fontSize: '0.75rem' }}
                                 >
                                     <Lightbulb size={14} />
-                                    Varsayılan Öner
+                                    {language === 'tr' ? 'Varsayılan Öner' : 'Suggest Defaults'}
                                 </button>
                             )}
                         </div>
@@ -549,8 +543,9 @@ export default function HesaplayiciPage() {
                             >
                                 <AlertTriangle size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
                                 <span>
-                                    Bazı maliyet verileri eksik. &quot;Varsayılan Öner&quot; butonuna tıklayarak
-                                    sektör ortalamalarını kullanabilirsiniz.
+                                    {language === 'tr'
+                                        ? 'Bazı maliyet verileri eksik. "Varsayılan Öner" butonuna tıklayarak sektör ortalamalarını kullanabilirsiniz.'
+                                        : 'Some cost data is missing. Click "Suggest Defaults" to use industry averages.'}
                                 </span>
                             </div>
                         )}
@@ -558,8 +553,8 @@ export default function HesaplayiciPage() {
                         <div className="variable-costs-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                             <div className="input-group">
                                 <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                    COGS
-                                    <Tooltip content="Ürünün tedarik veya üretim maliyeti." />
+                                    {labels.cogs}
+                                    <Tooltip content={language === 'tr' ? 'Ürünün tedarik veya üretim maliyeti.' : 'Product procurement or production cost.'} />
                                 </label>
                                 <input
                                     type="number"
@@ -572,8 +567,8 @@ export default function HesaplayiciPage() {
 
                             <div className="input-group">
                                 <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                    Kargo Gideri
-                                    <Tooltip content="Firmaya ait kargo bedelleri (müşteriden alınan hariç)." />
+                                    {labels.shipping}
+                                    <Tooltip content={language === 'tr' ? 'Firmaya ait kargo bedelleri (müşteriden alınan hariç).' : 'Company shipping costs (excluding customer-paid).'} />
                                 </label>
                                 <input
                                     type="number"
@@ -586,8 +581,8 @@ export default function HesaplayiciPage() {
 
                             <div className="input-group">
                                 <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                    Ödeme Komisyonları
-                                    <Tooltip content="Sanal POS komisyonları, taksit farkları, ödeme sağlayıcı kesintileri (iyzico, PayTR vb.)." />
+                                    {labels.paymentFees}
+                                    <Tooltip content={language === 'tr' ? 'Sanal POS komisyonları, taksit farkları, ödeme sağlayıcı kesintileri.' : 'Virtual POS fees, installment fees, payment provider commissions.'} />
                                 </label>
                                 <input
                                     type="number"
@@ -600,8 +595,8 @@ export default function HesaplayiciPage() {
 
                             <div className="input-group">
                                 <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                    Paketleme & Operasyon
-                                    <Tooltip content="Kutu, ambalaj, işçilik, depo/fulfillment giderleri." />
+                                    {labels.handling}
+                                    <Tooltip content={language === 'tr' ? 'Kutu, ambalaj, işçilik, depo/fulfillment giderleri.' : 'Box, packaging, labor, warehouse/fulfillment costs.'} />
                                 </label>
                                 <input
                                     type="number"
@@ -618,8 +613,10 @@ export default function HesaplayiciPage() {
                     <div className="glass-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: showNetProfit ? '1rem' : 0 }}>
                             <h3 style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                Net Profit Modu
-                                <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>(Opsiyonel)</span>
+                                {language === 'tr' ? 'Net Profit Modu' : 'Net Profit Mode'}
+                                <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                                    {language === 'tr' ? '(Opsiyonel)' : '(Optional)'}
+                                </span>
                             </h3>
                             <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                                 <input
@@ -628,13 +625,17 @@ export default function HesaplayiciPage() {
                                     onChange={(e) => setShowNetProfit(e.target.checked)}
                                     style={{ marginRight: '0.5rem' }}
                                 />
-                                <span style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>Aktif</span>
+                                <span style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
+                                    {language === 'tr' ? 'Aktif' : 'Active'}
+                                </span>
                             </label>
                         </div>
 
                         {showNetProfit && (
                             <div className="input-group">
-                                <label className="input-label">Sabit Giderler (Maaş, Kira, Yazılım vb.)</label>
+                                <label className="input-label">
+                                    {language === 'tr' ? 'Sabit Giderler (Maaş, Kira, Yazılım vb.)' : 'Fixed Costs (Salary, Rent, Software, etc.)'}
+                                </label>
                                 <input
                                     type="number"
                                     className="input"
@@ -650,16 +651,18 @@ export default function HesaplayiciPage() {
                     <div className="glass-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
                         <h3 style={{ fontSize: '1rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <Target size={20} style={{ color: 'var(--color-success)' }} />
-                            Hedef POAS
+                            {labels.targetPoas}
                         </h3>
 
                         <div className="input-group" style={{ marginBottom: '1rem' }}>
-                            <label className="input-label">Hedef POAS Değeri</label>
+                            <label className="input-label">
+                                {language === 'tr' ? 'Hedef POAS Değeri' : 'Target POAS Value'}
+                            </label>
                             <input
                                 type="number"
                                 step="0.1"
                                 className="input"
-                                placeholder="Örn: 1.5"
+                                placeholder={language === 'tr' ? 'Örn: 1.5' : 'e.g. 1.5'}
                                 value={targetPoas || ''}
                                 onChange={(e) => handleTargetPoasChange(e.target.value)}
                                 style={targetPoasError ? { borderColor: 'var(--color-error)' } : {}}
@@ -689,11 +692,11 @@ export default function HesaplayiciPage() {
 
                     {/* Notes */}
                     <div className="glass-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
-                        <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>Not</h3>
+                        <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>{labels.notes}</h3>
                         <textarea
                             className="input"
                             rows={3}
-                            placeholder="Kampanya hakkında notlarınız..."
+                            placeholder={language === 'tr' ? 'Kampanya hakkında notlarınız...' : 'Your notes about the campaign...'}
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
                             style={{ resize: 'vertical' }}
@@ -734,7 +737,7 @@ export default function HesaplayiciPage() {
                                 }}
                             >
                                 <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
-                                    POAS Değeriniz
+                                    {language === 'tr' ? 'POAS Değeriniz' : 'Your POAS'}
                                 </div>
                                 <div
                                     style={{
@@ -819,7 +822,7 @@ export default function HesaplayiciPage() {
                                             {formatNumber(outputs.roas)}x
                                         </div>
                                         <div style={{ fontSize: '0.75rem', color: 'var(--color-error)' }}>
-                                            Maliyetler hariç
+                                            {language === 'tr' ? 'Maliyetler hariç' : 'Excludes costs'}
                                         </div>
                                     </div>
                                     <div
@@ -837,7 +840,7 @@ export default function HesaplayiciPage() {
                                             {formatNumber(outputs.poas)}x
                                         </div>
                                         <div style={{ fontSize: '0.75rem', color: 'var(--color-success)' }}>
-                                            Gerçek kârlılık
+                                            {language === 'tr' ? 'Gerçek kârlılık' : 'True profitability'}
                                         </div>
                                     </div>
                                 </div>
@@ -845,27 +848,39 @@ export default function HesaplayiciPage() {
 
                             {/* Detailed Results */}
                             <div className="glass-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
-                                <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>Detaylı Sonuçlar</h3>
+                                <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>
+                                    {language === 'tr' ? 'Detaylı Sonuçlar' : 'Detailed Results'}
+                                </h3>
 
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--color-border)' }}>
-                                        <span style={{ color: 'var(--color-text-secondary)' }}>Gelir</span>
+                                        <span style={{ color: 'var(--color-text-secondary)' }}>
+                                            {language === 'tr' ? 'Gelir' : 'Revenue'}
+                                        </span>
                                         <span style={{ fontWeight: 600 }}>{formatCurrency(inputs.revenue, currencySymbol)}</span>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--color-border)' }}>
-                                        <span style={{ color: 'var(--color-text-secondary)' }}>Değişken Maliyetler</span>
+                                        <span style={{ color: 'var(--color-text-secondary)' }}>
+                                            {labels.variableCosts}
+                                        </span>
                                         <span style={{ fontWeight: 600, color: 'var(--color-error)' }}>-{formatCurrency(outputs.variableOrderCosts, currencySymbol)}</span>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--color-border)', background: 'rgba(99, 102, 241, 0.1)', margin: '0 -1rem', paddingLeft: '1rem', paddingRight: '1rem' }}>
-                                        <span style={{ fontWeight: 600, color: 'var(--color-primary-light)' }}>Brüt Kâr</span>
+                                        <span style={{ fontWeight: 600, color: 'var(--color-primary-light)' }}>
+                                            {labels.grossProfit}
+                                        </span>
                                         <span style={{ fontWeight: 700, color: 'var(--color-primary-light)' }}>{formatCurrency(outputs.grossProfit, currencySymbol)}</span>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--color-border)' }}>
-                                        <span style={{ color: 'var(--color-text-secondary)' }}>Reklam Harcaması</span>
+                                        <span style={{ color: 'var(--color-text-secondary)' }}>
+                                            {labels.adSpend}
+                                        </span>
                                         <span style={{ fontWeight: 600, color: 'var(--color-error)' }}>-{formatCurrency(inputs.adSpend, currencySymbol)}</span>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--color-border)', background: 'rgba(16, 185, 129, 0.1)', margin: '0 -1rem', paddingLeft: '1rem', paddingRight: '1rem' }}>
-                                        <span style={{ fontWeight: 600, color: 'var(--color-success)' }}>Katkı Marjı</span>
+                                        <span style={{ fontWeight: 600, color: 'var(--color-success)' }}>
+                                            {labels.contributionMargin}
+                                        </span>
                                         <span style={{ fontWeight: 700, color: outputs.contributionMargin >= 0 ? 'var(--color-success)' : 'var(--color-error)' }}>
                                             {formatCurrency(outputs.contributionMargin, currencySymbol)}
                                         </span>
@@ -873,7 +888,9 @@ export default function HesaplayiciPage() {
 
                                     {showNetProfit && outputs.netProfit !== null && (
                                         <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0' }}>
-                                            <span style={{ fontWeight: 600 }}>Net Kâr</span>
+                                            <span style={{ fontWeight: 600 }}>
+                                                {language === 'tr' ? 'Net Kâr' : 'Net Profit'}
+                                            </span>
                                             <span style={{ fontWeight: 700, color: outputs.netProfit >= 0 ? 'var(--color-success)' : 'var(--color-error)' }}>
                                                 {formatCurrency(outputs.netProfit, currencySymbol)}
                                             </span>
@@ -941,7 +958,7 @@ export default function HesaplayiciPage() {
                                 >
                                     <h3 style={{ fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
                                         <TrendingUp size={20} style={{ color: 'var(--color-warning)' }} />
-                                        ROAS Hedefleri (POAS'a göre)
+                                        {language === 'tr' ? 'ROAS Hedefleri (POAS\'a göre)' : 'ROAS Targets (based on POAS)'}
                                     </h3>
                                     {showRoasTargets ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                                 </button>
@@ -950,19 +967,25 @@ export default function HesaplayiciPage() {
                                 {showRoasTargets && roasTargets && (
                                     <div style={{ marginTop: '1rem' }}>
                                         <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
-                                            Bu ROAS hedefleri, girdiğiniz brüt kâr (POAS) yapısına göre hesaplanır.
+                                            {language === 'tr'
+                                                ? 'Bu ROAS hedefleri, girdiğiniz brüt kâr (POAS) yapısına göre hesaplanır.'
+                                                : 'These ROAS targets are calculated based on your gross profit (POAS) structure.'}
                                         </p>
 
                                         {/* Breakeven ROAS */}
                                         <div style={{ padding: '0.75rem', background: 'rgba(245, 158, 11, 0.1)', borderRadius: 'var(--radius-md)', marginBottom: '0.75rem' }}>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                <span style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>Başa baş ROAS</span>
+                                                <span style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
+                                                    {labels.breakeven}
+                                                </span>
                                                 <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-warning)' }}>
                                                     {formatNumber(roasTargets.breakevenROAS)}x
                                                 </span>
                                             </div>
                                             <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>
-                                                Bu ROAS'ta reklam harcaması brüt kârınıza eşittir.
+                                                {language === 'tr'
+                                                    ? 'Bu ROAS\'ta reklam harcaması brüt kârınıza eşittir.'
+                                                    : 'At this ROAS, ad spend equals your gross profit.'}
                                             </div>
                                         </div>
 
@@ -970,9 +993,13 @@ export default function HesaplayiciPage() {
                                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
                                             {/* 10% margin */}
                                             <div style={{ padding: '0.75rem', background: 'var(--color-surface)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
-                                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>%10 Marj</div>
+                                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
+                                                    {language === 'tr' ? '%10 Marj' : '10% Margin'}
+                                                </div>
                                                 {roasTargets.impossible10 ? (
-                                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-error)' }}>Mümkün değil</div>
+                                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-error)' }}>
+                                                        {language === 'tr' ? 'Mümkün değil' : 'Not possible'}
+                                                    </div>
                                                 ) : (
                                                     <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>
                                                         {formatNumber(roasTargets.roas10!)}x
@@ -981,9 +1008,13 @@ export default function HesaplayiciPage() {
                                             </div>
                                             {/* 15% margin */}
                                             <div style={{ padding: '0.75rem', background: 'var(--color-surface)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
-                                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>%15 Marj</div>
+                                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
+                                                    {language === 'tr' ? '%15 Marj' : '15% Margin'}
+                                                </div>
                                                 {roasTargets.impossible15 ? (
-                                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-error)' }}>Mümkün değil</div>
+                                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-error)' }}>
+                                                        {language === 'tr' ? 'Mümkün değil' : 'Not possible'}
+                                                    </div>
                                                 ) : (
                                                     <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>
                                                         {formatNumber(roasTargets.roas15!)}x
@@ -992,9 +1023,13 @@ export default function HesaplayiciPage() {
                                             </div>
                                             {/* 20% margin */}
                                             <div style={{ padding: '0.75rem', background: 'var(--color-surface)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
-                                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>%20 Marj</div>
+                                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
+                                                    {language === 'tr' ? '%20 Marj' : '20% Margin'}
+                                                </div>
                                                 {roasTargets.impossible20 ? (
-                                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-error)' }}>Mümkün değil</div>
+                                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-error)' }}>
+                                                        {language === 'tr' ? 'Mümkün değil' : 'Not possible'}
+                                                    </div>
                                                 ) : (
                                                     <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>
                                                         {formatNumber(roasTargets.roas20!)}x
@@ -1007,7 +1042,9 @@ export default function HesaplayiciPage() {
                                         <div style={{ marginTop: '0.75rem', display: 'flex', alignItems: 'flex-start', gap: '0.5rem', padding: '0.5rem', background: 'rgba(99, 102, 241, 0.05)', borderRadius: 'var(--radius-sm)' }}>
                                             <Info size={14} style={{ color: 'var(--color-primary-light)', flexShrink: 0, marginTop: '2px' }} />
                                             <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-                                                POAS kârlılığı ölçer, ROAS ise bu kârlılığa göre hedeflenmesi gereken reklam performansını gösterir.
+                                                {language === 'tr'
+                                                    ? 'POAS kârlılığı ölçer, ROAS ise bu kârlılığa göre hedeflenmesi gereken reklam performansını gösterir.'
+                                                    : 'POAS measures profitability, while ROAS shows ad performance needed to achieve that profit.'}
                                             </span>
                                         </div>
                                     </div>
@@ -1022,7 +1059,7 @@ export default function HesaplayiciPage() {
                                     style={{ flex: 1 }}
                                 >
                                     <Save size={18} />
-                                    Senaryoyu Kaydet
+                                    {language === 'tr' ? 'Senaryoyu Kaydet' : 'Save Scenario'}
                                 </button>
                                 <button
                                     className="btn btn-secondary"
@@ -1030,7 +1067,7 @@ export default function HesaplayiciPage() {
                                     onClick={handleExportPDF}
                                 >
                                     <Download size={18} />
-                                    PDF İndir
+                                    {labels.exportPdf}
                                 </button>
                             </div>
 
