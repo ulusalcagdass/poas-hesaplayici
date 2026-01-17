@@ -48,8 +48,76 @@ const formatCurrency = (num: number, symbol: string = '₺'): string => {
 };
 
 export default function HesaplayiciPage() {
+    const { language } = useLanguage();
     const [currency, setCurrency] = useState('TRY');
     const currencySymbol = CURRENCIES.find(c => c.value === currency)?.symbol || '₺';
+
+    // Labels for i18n
+    const labels = language === 'tr' ? {
+        pageTitle: 'POAS Hesaplayıcı',
+        pageSubtitle: 'Reklamlarınızın gerçek kârlılığını hesaplayın',
+        fillExample: 'Örnek Verileri Doldur',
+        currency: 'Para Birimi',
+        channel: 'Kanal',
+        revenue: 'Gelir (Net)',
+        adSpend: 'Reklam Harcaması',
+        cogs: 'COGS',
+        shipping: 'Kargo Gideri',
+        paymentFees: 'Ödeme Komisyonları',
+        handling: 'Paketleme & Operasyon',
+        targetPoas: 'Hedef POAS',
+        notes: 'Notlar',
+        calculate: 'Hesapla',
+        useSuggested: 'Önerilen Değerleri Kullan',
+        results: 'Sonuçlar',
+        grossProfit: 'Brüt Kâr',
+        poas: 'POAS',
+        roas: 'ROAS',
+        contributionMargin: 'Katkı Marjı',
+        variableCosts: 'Değişken Maliyetler',
+        roasTargets: 'ROAS Hedefleri',
+        breakeven: 'Başa Baş ROAS',
+        margin10: '%10 Kar Marjı için ROAS',
+        margin15: '%15 Kar Marjı için ROAS',
+        margin20: '%20 Kar Marjı için ROAS',
+        save: 'Kaydet',
+        exportPdf: 'PDF İndir',
+        waitingCalc: 'Hesaplama Bekleniyor',
+        fillForm: 'Sol taraftaki formu doldurup "Hesapla" butonuna tıklayın.',
+        sharingNote: 'Bu hesaplama POAS (Profit on Ad Spend) mantığı ile yapılmıştır.',
+    } : {
+        pageTitle: 'POAS Calculator',
+        pageSubtitle: 'Calculate the true profitability of your ads',
+        fillExample: 'Fill Example Data',
+        currency: 'Currency',
+        channel: 'Channel',
+        revenue: 'Revenue (Net)',
+        adSpend: 'Ad Spend',
+        cogs: 'COGS',
+        shipping: 'Shipping Cost',
+        paymentFees: 'Payment Fees',
+        handling: 'Packaging & Operations',
+        targetPoas: 'Target POAS',
+        notes: 'Notes',
+        calculate: 'Calculate',
+        useSuggested: 'Use Suggested Values',
+        results: 'Results',
+        grossProfit: 'Gross Profit',
+        poas: 'POAS',
+        roas: 'ROAS',
+        contributionMargin: 'Contribution Margin',
+        variableCosts: 'Variable Costs',
+        roasTargets: 'ROAS Targets',
+        breakeven: 'Break-even ROAS',
+        margin10: 'ROAS for 10% Margin',
+        margin15: 'ROAS for 15% Margin',
+        margin20: 'ROAS for 20% Margin',
+        save: 'Save',
+        exportPdf: 'Export PDF',
+        waitingCalc: 'Waiting for Calculation',
+        fillForm: 'Fill out the form on the left and click "Calculate".',
+        sharingNote: 'This calculation uses POAS (Profit on Ad Spend) methodology.',
+    };
 
     // Golden Test Case - PDF uyum doğrulama
     const GOLDEN_INPUT = {
@@ -304,10 +372,10 @@ export default function HesaplayiciPage() {
             <div className="calculator-header" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                     <h1 style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>
-                        POAS Hesaplayıcı
+                        {labels.pageTitle}
                     </h1>
                     <p style={{ color: 'var(--color-text-muted)' }}>
-                        Reklamlarınızın gerçek kârlılığını hesaplayın
+                        {labels.pageSubtitle}
                     </p>
                 </div>
                 <button
@@ -316,7 +384,7 @@ export default function HesaplayiciPage() {
                     style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
                 >
                     <Lightbulb size={16} />
-                    Örnek Verileri Doldur
+                    {labels.fillExample}
                 </button>
             </div>
 
@@ -344,7 +412,7 @@ export default function HesaplayiciPage() {
                     <div className="glass-card" style={{ padding: '1rem', marginBottom: '1rem' }}>
                         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                             <div style={{ flex: '1 1 140px', minWidth: '140px' }}>
-                                <label className="input-label">Para Birimi</label>
+                                <label className="input-label">{labels.currency}</label>
                                 <select
                                     className="input"
                                     value={currency}

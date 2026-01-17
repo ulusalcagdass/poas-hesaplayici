@@ -1,26 +1,51 @@
+'use client';
+
 import Link from 'next/link';
 import { Calculator, Twitter, Linkedin, Mail } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n';
 
 export default function Footer() {
-    const footerLinks = {
-        product: [
-            { label: 'Özellikler', href: '#features' },
-            { label: 'Nasıl Çalışır', href: '#how-it-works' },
-            { label: 'SSS', href: '#faq' },
-            { label: 'Hesaplayıcı', href: '/hesaplayici' },
-        ],
-        resources: [
-            { label: 'POAS Rehberi', href: '#' },
-            { label: 'Blog', href: '#' },
-            { label: 'Yardım Merkezi', href: '#' },
-        ],
-        company: [
-            { label: 'Hakkımızda', href: '#' },
-            { label: 'İletişim', href: '#' },
-            { label: 'Gizlilik Politikası', href: '#' },
-            { label: 'Kullanım Şartları', href: '#' },
-        ],
-    };
+    const { language } = useLanguage();
+
+    const footerLinks = language === 'tr'
+        ? {
+            product: [
+                { label: 'Özellikler', href: '#features' },
+                { label: 'Nasıl Çalışır', href: '#how-it-works' },
+                { label: 'SSS', href: '#faq' },
+                { label: 'Hesaplayıcı', href: '/hesaplayici' },
+            ],
+            resources: [
+                { label: 'POAS Rehberi', href: '#' },
+                { label: 'Blog', href: '#' },
+                { label: 'Yardım Merkezi', href: '#' },
+            ],
+            company: [
+                { label: 'Hakkımızda', href: '#' },
+                { label: 'İletişim', href: '#' },
+                { label: 'Gizlilik Politikası', href: '#' },
+                { label: 'Kullanım Şartları', href: '#' },
+            ],
+        }
+        : {
+            product: [
+                { label: 'Features', href: '#features' },
+                { label: 'How It Works', href: '#how-it-works' },
+                { label: 'FAQ', href: '#faq' },
+                { label: 'Calculator', href: '/hesaplayici' },
+            ],
+            resources: [
+                { label: 'POAS Guide', href: '#' },
+                { label: 'Blog', href: '#' },
+                { label: 'Help Center', href: '#' },
+            ],
+            company: [
+                { label: 'About Us', href: '#' },
+                { label: 'Contact', href: '#' },
+                { label: 'Privacy Policy', href: '#' },
+                { label: 'Terms of Service', href: '#' },
+            ],
+        };
 
     return (
         <footer
@@ -248,7 +273,7 @@ export default function Footer() {
                     }}
                 >
                     <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        Bu araç{' '}
+                        {language === 'tr' ? 'Bu araç' : 'This tool is provided free by'}{' '}
                         <a
                             href="https://www.linkedin.com/in/ulusal-%C3%A7a%C4%9Fda%C5%9F-%C3%A7al%C4%B1m-2889281b4/"
                             target="_blank"
@@ -265,10 +290,10 @@ export default function Footer() {
                             Ulusal Çağdaş Çalım
                             <Linkedin size={14} />
                         </a>
-                        {' '}tarafından ücretsiz sunulmaktadır.
+                        {language === 'tr' ? ' tarafından ücretsiz sunulmaktadır.' : '.'}
                     </p>
                     <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
-                        Herkes için açık ve ücretsizdir.
+                        {language === 'tr' ? 'Herkes için açık ve ücretsizdir.' : 'Free and open to everyone.'}
                     </p>
                 </div>
             </div>

@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import { ChevronDown, HelpCircle } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n';
 
-const faqs = [
+const faqsTR = [
     {
         question: 'POAS nedir ve ROAS\'tan farkı ne?',
         answer: 'ROAS (Return on Ad Spend) sadece gelir/reklam harcaması oranını gösterir. POAS (Profit on Ad Spend) ise brüt kâr/reklam harcaması oranını ölçer. POAS, ürün maliyeti, kargo, komisyon gibi tüm değişken maliyetleri hesaba katarak gerçek kârlılığınızı gösterir.',
@@ -26,8 +27,34 @@ const faqs = [
     },
 ];
 
+const faqsEN = [
+    {
+        question: 'What is POAS and how is it different from ROAS?',
+        answer: 'ROAS (Return on Ad Spend) only shows revenue/ad spend ratio. POAS (Profit on Ad Spend) measures gross profit/ad spend ratio. POAS accounts for all variable costs like product cost, shipping, and commissions to show your true profitability.',
+    },
+    {
+        question: 'How is gross profit calculated?',
+        answer: 'Gross Profit = Revenue − Variable Order Costs. Variable costs include: COGS (product cost), shipping costs, payment fees, and per-unit operational costs. Revenue is the net amount collected after discounts, excluding VAT.',
+    },
+    {
+        question: 'Is there a fee or registration required?',
+        answer: 'No! POAS Calculator is completely free and you can use it without registration. Calculation and PDF export features are open to everyone.',
+    },
+    {
+        question: 'How should I determine my target POAS?',
+        answer: 'Depends on your business goals: POAS 2.0 for high profitability, POAS 1.4 for controlled growth, POAS 1.0 for customer acquisition or break-even. When you enter a target POAS, the system automatically calculates your maximum ad budget.',
+    },
+    {
+        question: 'Some of my cost data is missing, what should I do?',
+        answer: 'Don\'t worry! The app suggests default values for missing data. For example: 2% of revenue for payment fees, $30 per order for shipping as common values you can use.',
+    },
+];
+
 export default function FAQ() {
+    const { language } = useLanguage();
     const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+    const faqs = language === 'tr' ? faqsTR : faqsEN;
 
     return (
         <section
@@ -53,15 +80,15 @@ export default function FAQ() {
                     >
                         <HelpCircle size={16} style={{ color: 'var(--color-primary-light)' }} />
                         <span style={{ color: 'var(--color-primary-light)', fontSize: '0.875rem', fontWeight: 600 }}>
-                            Sıkça Sorulan Sorular
+                            {language === 'tr' ? 'Sıkça Sorulan Sorular' : 'Frequently Asked Questions'}
                         </span>
                     </div>
 
                     <h2 className="section-title">
-                        <span className="text-gradient">SSS</span>
+                        <span className="text-gradient">{language === 'tr' ? 'SSS' : 'FAQ'}</span>
                     </h2>
                     <p className="section-subtitle">
-                        POAS hakkında merak ettikleriniz
+                        {language === 'tr' ? 'POAS hakkında merak ettikleriniz' : 'Everything you need to know about POAS'}
                     </p>
                 </div>
 
