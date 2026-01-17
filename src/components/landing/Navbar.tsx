@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Menu, X, Calculator } from 'lucide-react';
+import LanguageSelector from '@/components/ui/LanguageSelector';
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -138,6 +139,7 @@ export default function Navbar() {
                                     gap: '0.75rem',
                                 }}
                             >
+                                <LanguageSelector />
                                 <Link href="/hesaplayici" className="btn btn-primary">
                                     Hesapla
                                 </Link>

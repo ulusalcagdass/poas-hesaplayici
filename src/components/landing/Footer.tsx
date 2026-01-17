@@ -247,8 +247,25 @@ export default function Footer() {
                         gap: '1rem',
                     }}
                 >
-                    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
-                        Bu araç Ulusal Çağdaş Çalım tarafından ücretsiz sunulmaktadır.
+                    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        Bu araç{' '}
+                        <a
+                            href="https://www.linkedin.com/in/ulusal-%C3%A7a%C4%9Fda%C5%9F-%C3%A7al%C4%B1m-2889281b4/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                color: 'var(--color-primary-light)',
+                                textDecoration: 'none',
+                                fontWeight: 600,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.25rem',
+                            }}
+                        >
+                            Ulusal Çağdaş Çalım
+                            <Linkedin size={14} />
+                        </a>
+                        {' '}tarafından ücretsiz sunulmaktadır.
                     </p>
                     <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
                         Herkes için açık ve ücretsizdir.

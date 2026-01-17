@@ -29,6 +29,10 @@ import {
 } from '@/lib/calculations';
 import { CHANNELS, CURRENCIES } from '@/types';
 import SaveScenarioModal from '@/components/calculator/SaveScenarioModal';
+import CostBreakdownChart from '@/components/calculator/CostBreakdownChart';
+import MarginSlider from '@/components/calculator/MarginSlider';
+import Tooltip from '@/components/ui/Tooltip';
+import { useLanguage } from '@/lib/i18n';
 import Link from 'next/link';
 
 const formatNumber = (num: number, decimals: number = 2): string => {
@@ -485,15 +489,9 @@ export default function HesaplayiciPage() {
 
                         <div className="variable-costs-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                             <div className="input-group">
-                                <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                     COGS
-                                    <span
-                                        className="tooltip"
-                                        data-tooltip="Ürün maliyeti (landed cost)"
-                                        style={{ cursor: 'help' }}
-                                    >
-                                        <Info size={14} style={{ color: 'var(--color-text-muted)' }} />
-                                    </span>
+                                    <Tooltip content="Ürünün tedarik veya üretim maliyeti." />
                                 </label>
                                 <input
                                     type="number"
@@ -505,7 +503,10 @@ export default function HesaplayiciPage() {
                             </div>
 
                             <div className="input-group">
-                                <label className="input-label">Kargo Gideri</label>
+                                <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                    Kargo Gideri
+                                    <Tooltip content="Firmaya ait kargo bedelleri (müşteriden alınan hariç)." />
+                                </label>
                                 <input
                                     type="number"
                                     className="input"
@@ -516,7 +517,10 @@ export default function HesaplayiciPage() {
                             </div>
 
                             <div className="input-group">
-                                <label className="input-label">Ödeme Komisyonları</label>
+                                <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                    Ödeme Komisyonları
+                                    <Tooltip content="Sanal POS komisyonları, taksit farkları, ödeme sağlayıcı kesintileri (iyzico, PayTR vb.)." />
+                                </label>
                                 <input
                                     type="number"
                                     className="input"
@@ -527,15 +531,9 @@ export default function HesaplayiciPage() {
                             </div>
 
                             <div className="input-group">
-                                <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                     Paketleme & Operasyon
-                                    <span
-                                        className="tooltip"
-                                        data-tooltip="Kutu, etiket, dolgu, sipariş hazırlama"
-                                        style={{ cursor: 'help' }}
-                                    >
-                                        <Info size={14} style={{ color: 'var(--color-text-muted)' }} />
-                                    </span>
+                                    <Tooltip content="Kutu, ambalaj, işçilik, depo/fulfillment giderleri." />
                                 </label>
                                 <input
                                     type="number"
@@ -966,6 +964,51 @@ export default function HesaplayiciPage() {
                                     <Download size={18} />
                                     PDF İndir
                                 </button>
+                            </div>
+
+                            {/* Cost Breakdown Chart */}
+                            <CostBreakdownChart
+                                cogs={inputs.cogs || 0}
+                                shipping={inputs.shippingCost || 0}
+                                paymentFees={inputs.paymentFees || 0}
+                                handling={inputs.handlingCost || 0}
+                                grossProfit={outputs.grossProfit}
+                                currency={currency}
+                            />
+
+                            {/* Dynamic Margin Slider */}
+                            <MarginSlider
+                                revenue={inputs.revenue}
+                                grossProfit={outputs.grossProfit}
+                                onRoasChange={() => { }}
+                            />
+
+                            {/* Sharing Note */}
+                            <div
+                                style={{
+                                    marginTop: '1.5rem',
+                                    padding: '1rem',
+                                    background: 'var(--color-surface)',
+                                    borderRadius: 'var(--radius-md)',
+                                    textAlign: 'center',
+                                    borderTop: '1px solid var(--color-border)',
+                                }}
+                            >
+                                <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
+                                    Bu hesaplama POAS (Profit on Ad Spend) mantığı ile yapılmıştır.
+                                </p>
+                                <a
+                                    href="https://poas-hesaplayici.onrender.com"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{
+                                        fontSize: '0.75rem',
+                                        color: 'var(--color-primary-light)',
+                                        textDecoration: 'none',
+                                    }}
+                                >
+                                    poas-hesaplayici.onrender.com
+                                </a>
                             </div>
                         </>
                     ) : (
