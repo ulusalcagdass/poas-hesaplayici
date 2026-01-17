@@ -4,8 +4,10 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Menu, X, Calculator } from 'lucide-react';
 import LanguageSelector from '@/components/ui/LanguageSelector';
+import { useLanguage } from '@/lib/i18n';
 
 export default function Navbar() {
+    const { language, t } = useLanguage();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -37,11 +39,17 @@ export default function Navbar() {
         setIsMobileMenuOpen(false);
     }, []);
 
-    const navLinks = [
-        { href: '#features', label: 'Özellikler' },
-        { href: '#how-it-works', label: 'Nasıl Çalışır' },
-        { href: '#faq', label: 'SSS' },
-    ];
+    const navLinks = language === 'tr'
+        ? [
+            { href: '#features', label: 'Özellikler' },
+            { href: '#how-it-works', label: 'Nasıl Çalışır' },
+            { href: '#faq', label: 'SSS' },
+        ]
+        : [
+            { href: '#features', label: 'Features' },
+            { href: '#how-it-works', label: 'How It Works' },
+            { href: '#faq', label: 'FAQ' },
+        ];
 
     return (
         <>
@@ -141,7 +149,7 @@ export default function Navbar() {
                             >
                                 <LanguageSelector />
                                 <Link href="/hesaplayici" className="btn btn-primary">
-                                    Hesapla
+                                    {language === 'tr' ? 'Hesapla' : 'Calculate'}
                                 </Link>
                             </div>
                         </div>
@@ -218,7 +226,7 @@ export default function Navbar() {
                             onClick={closeMobileMenu}
                             className="btn btn-primary btn-lg"
                         >
-                            Hesapla
+                            {language === 'tr' ? 'Hesapla' : 'Calculate'}
                         </Link>
                     </div>
                 </div>

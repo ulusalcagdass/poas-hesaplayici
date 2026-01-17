@@ -2,8 +2,10 @@
 
 import Link from 'next/link';
 import { ArrowRight, TrendingUp, Target, Sparkles } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n';
 
 export default function Hero() {
+    const { language, t } = useLanguage();
     return (
         <section
             style={{
@@ -80,10 +82,14 @@ export default function Hero() {
                                 fontWeight: 800,
                             }}
                         >
-                            <span style={{ color: 'var(--color-text-primary)' }}>ROAS değil, </span>
+                            <span style={{ color: 'var(--color-text-primary)' }}>
+                                {language === 'tr' ? 'ROAS değil, ' : 'Not ROAS, '}
+                            </span>
                             <span className="text-gradient">POAS</span>
                             <br />
-                            <span style={{ color: 'var(--color-text-primary)' }}>ile gerçek kârlılığı ölç.</span>
+                            <span style={{ color: 'var(--color-text-primary)' }}>
+                                {language === 'tr' ? 'ile gerçek kârlılığı ölç.' : 'measures true profitability.'}
+                            </span>
                         </h1>
 
                         {/* Subtitle */}
@@ -96,10 +102,14 @@ export default function Hero() {
                                 lineHeight: 1.7,
                             }}
                         >
-                            <strong style={{ color: 'var(--color-text-primary)', fontSize: '1.1rem' }}>POAS = Brüt Kâr / Reklam Harcaması</strong>
+                            <strong style={{ color: 'var(--color-text-primary)', fontSize: '1.1rem' }}>
+                                {language === 'tr' ? 'POAS = Brüt Kâr / Reklam Harcaması' : 'POAS = Gross Profit / Ad Spend'}
+                            </strong>
                             <br />
                             <span style={{ fontSize: '1rem', display: 'block', marginTop: '0.75rem' }}>
-                                Kargo, komisyon ve operasyon maliyetlerini yok sayan ROAS yerine gerçek kârlılığa odaklan.
+                                {language === 'tr'
+                                    ? 'Kargo, komisyon ve operasyon maliyetlerini yok sayan ROAS yerine gerçek kârlılığa odaklan.'
+                                    : 'Focus on real profit instead of ROAS which ignores shipping, commission, and operational costs.'}
                             </span>
                         </p>
 
@@ -113,11 +123,11 @@ export default function Hero() {
                             }}
                         >
                             <Link href="/hesaplayici" className="btn btn-primary btn-lg">
-                                Ücretsiz Hesapla
+                                {language === 'tr' ? 'Ücretsiz Hesapla' : 'Calculate Free'}
                                 <ArrowRight size={18} />
                             </Link>
                             <a href="#how-it-works" className="btn btn-secondary btn-lg">
-                                Nasıl Çalışır?
+                                {language === 'tr' ? 'Nasıl Çalışır?' : 'How It Works?'}
                             </a>
                         </div>
 
