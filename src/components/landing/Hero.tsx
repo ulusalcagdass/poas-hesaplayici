@@ -112,24 +112,14 @@ export default function Hero() {
                                 flexWrap: 'wrap',
                             }}
                         >
-                            <Link href="/signup" className="btn btn-primary btn-lg">
-                                Ücretsiz Kayıt Ol ve Hesapla
+                            <Link href="/hesaplayici" className="btn btn-primary btn-lg">
+                                Ücretsiz Hesapla
                                 <ArrowRight size={18} />
                             </Link>
-                            <Link href="/login" className="btn btn-secondary btn-lg">
-                                Giriş Yap
-                            </Link>
+                            <a href="#how-it-works" className="btn btn-secondary btn-lg">
+                                Nasıl Çalışır?
+                            </a>
                         </div>
-
-                        {/* Registration Note */}
-                        <p style={{
-                            fontSize: '0.875rem',
-                            color: 'var(--color-text-muted)',
-                            marginTop: '1rem',
-                            fontStyle: 'italic'
-                        }}>
-                            Hesaplayıcıyı kullanmak için ücretsiz hesap oluşturmanız gerekir.
-                        </p>
 
                         {/* Stats */}
                         <div

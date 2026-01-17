@@ -13,12 +13,8 @@ const faqs = [
         answer: 'Brüt Kâr = Gelir − Değişken Sipariş Maliyetleri. Değişken maliyetler: COGS (ürün maliyeti), kargo gideri, ödeme komisyonları ve birim başı operasyon maliyetleridir. Gelir, KDV hariç ve indirimler sonrası tahsil edilen tutardır.',
     },
     {
-        question: 'Kullanım için ücret var mı?',
-        answer: 'Hayır, POAS Hesaplayıcı tamamen ücretsizdir. Hesaplama, senaryo kaydetme ve PDF export özellikleri herkes için açıktır.',
-    },
-    {
-        question: 'Kayıt olmadan kullanabilir miyim?',
-        answer: 'Hayır, hesaplama sonuçlarını görmek için ücretsiz bir hesap oluşturmanız gerekir. Kayıt sadece email ve şifre gerektirir, kredi kartı istenmez.',
+        question: 'Kullanım için ücret veya kayıt gerekiyor mu?',
+        answer: 'Hayır! POAS Hesaplayıcı tamamen ücretsizdir ve kayıt olmadan kullanabilirsiniz. Hesaplama ve PDF export özellikleri herkes için açıktır.',
     },
     {
         question: 'Hedef POAS değerimi nasıl belirlemeliyim?',
@@ -27,10 +23,6 @@ const faqs = [
     {
         question: 'Bazı maliyet verilerim eksik, ne yapmalıyım?',
         answer: 'Endişelenmeyin! Uygulama eksik veriler için varsayılan değerler önerir. Örneğin: Ödeme komisyonu için gelirin %2\'si, kargo için sipariş başına 30₺ gibi yaygın değerler kullanabilirsiniz.',
-    },
-    {
-        question: 'Verilerim güvende mi?',
-        answer: 'Evet! Verileriniz şifrelenmiş veritabanında saklanır ve sadece sizin erişebileceğiniz şekilde korunur. Verilerinizi istediğiniz zaman silebilir veya export edebilirsiniz.',
     },
 ];
 

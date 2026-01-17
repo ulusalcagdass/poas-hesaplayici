@@ -2,14 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Calculator, FileText, LogOut, User, Home } from 'lucide-react';
+import { Menu, X, Calculator, Home } from 'lucide-react';
 
-interface MobileMenuProps {
-    userName: string | null;
-    userEmail: string | null;
-}
-
-export default function MobileMenu({ userName, userEmail }: MobileMenuProps) {
+export default function MobileMenu() {
     const [isOpen, setIsOpen] = useState(false);
 
     // ESC key to close
@@ -102,55 +97,32 @@ export default function MobileMenu({ userName, userEmail }: MobileMenuProps) {
                         <X size={24} />
                     </button>
 
-                    {/* User Info */}
+                    {/* Logo */}
                     <div
                         style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.75rem',
+                            gap: '0.5rem',
                             padding: '1rem',
-                            background: 'var(--color-surface)',
-                            borderRadius: 'var(--radius-md)',
-                            marginBottom: '1.5rem',
+                            marginBottom: '1rem',
                         }}
                     >
                         <div
                             style={{
                                 width: '40px',
                                 height: '40px',
-                                borderRadius: '50%',
+                                borderRadius: 'var(--radius-md)',
                                 background: 'var(--gradient-primary)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}
                         >
-                            <User size={20} />
+                            <Calculator size={22} />
                         </div>
-                        <div style={{ overflow: 'hidden' }}>
-                            <div
-                                style={{
-                                    fontWeight: 600,
-                                    fontSize: '1rem',
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                }}
-                            >
-                                {userName || 'Kullanıcı'}
-                            </div>
-                            <div
-                                style={{
-                                    fontSize: '0.75rem',
-                                    color: 'var(--color-text-muted)',
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                }}
-                            >
-                                {userEmail}
-                            </div>
-                        </div>
+                        <span style={{ fontWeight: 700, fontSize: '1.25rem' }}>
+                            POAS <span style={{ color: 'var(--color-primary-light)' }}>Hesap</span>
+                        </span>
                     </div>
 
                     {/* Navigation Links */}
@@ -191,49 +163,17 @@ export default function MobileMenu({ userName, userEmail }: MobileMenuProps) {
                             <Calculator size={22} />
                             Hesaplayıcı
                         </Link>
-                        <Link
-                            href="/senaryolar"
-                            onClick={closeMenu}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.75rem',
-                                padding: '1rem',
-                                color: 'var(--color-text-secondary)',
-                                textDecoration: 'none',
-                                fontSize: '1.125rem',
-                                borderRadius: 'var(--radius-md)',
-                                transition: 'background 0.2s',
-                            }}
-                        >
-                            <FileText size={22} />
-                            Senaryolarım
-                        </Link>
                     </nav>
 
-                    {/* Logout Button */}
-                    <form action="/api/auth/signout" method="POST">
-                        <button
-                            type="submit"
-                            style={{
-                                width: '100%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '0.5rem',
-                                padding: '1rem',
-                                background: 'transparent',
-                                border: '1px solid var(--color-border)',
-                                borderRadius: 'var(--radius-md)',
-                                color: 'var(--color-text-muted)',
-                                fontSize: '1rem',
-                                cursor: 'pointer',
-                            }}
-                        >
-                            <LogOut size={18} />
-                            Çıkış Yap
-                        </button>
-                    </form>
+                    {/* Footer */}
+                    <p style={{
+                        textAlign: 'center',
+                        color: 'var(--color-text-muted)',
+                        fontSize: '0.875rem',
+                        padding: '1rem'
+                    }}>
+                        Ücretsiz ve herkese açık
+                    </p>
                 </div>
             )}
 

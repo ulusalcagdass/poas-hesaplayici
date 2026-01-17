@@ -29,7 +29,6 @@ import {
 } from '@/lib/calculations';
 import { CHANNELS, CURRENCIES } from '@/types';
 import SaveScenarioModal from '@/components/calculator/SaveScenarioModal';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 const formatNumber = (num: number, decimals: number = 2): string => {
@@ -91,20 +90,12 @@ export default function HesaplayiciPage() {
 
     // Modals
     const [showSaveModal, setShowSaveModal] = useState(false);
-    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
     // ROAS Targets Accordion
     const [showRoasTargets, setShowRoasTargets] = useState(false);
 
-    // Session check (for free login model)
-    const { data: session, status } = useSession();
-    const isLoggedIn = status === 'authenticated';
-
     // Ref for results section (for PDF capture)
     const resultsRef = useRef<HTMLDivElement>(null);
-
-    // Usage limit message
-    const [limitMessage, setLimitMessage] = useState<string | null>(null);
 
     // Handle input change
     const handleInputChange = (field: keyof CalculatorInputs, value: string) => {
@@ -140,35 +131,7 @@ export default function HesaplayiciPage() {
     };
 
     // Calculate results
-    const handleCalculate = useCallback(async () => {
-        // FREE MODEL: Check login before showing results
-        if (!isLoggedIn) {
-            setShowLoginPrompt(true);
-            return;
-        }
-
-        // Clear previous limit message
-        setLimitMessage(null);
-
-        // Check usage limit
-        try {
-            const usageRes = await fetch('/api/usage', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ type: 'calculation' }),
-            });
-
-            if (!usageRes.ok) {
-                const data = await usageRes.json();
-                if (data.limitReached) {
-                    setLimitMessage(data.message);
-                    return;
-                }
-            }
-        } catch {
-            // Continue if API fails
-        }
-
+    const handleCalculate = useCallback(() => {
         // Validate adSpend > 0
         if (inputs.adSpend === 0) {
             setValidationErrors({ adSpend: 'Reklam harcaması 0 olamaz.' });
@@ -193,7 +156,7 @@ export default function HesaplayiciPage() {
         } else {
             setTargetOutputs(null);
         }
-    }, [inputs, targetPoas, isLoggedIn]);
+    }, [inputs, targetPoas]);
 
     // Use suggested defaults
     const applySuggestedDefaults = () => {
@@ -221,31 +184,6 @@ export default function HesaplayiciPage() {
         if (!outputs) {
             alert('Önce hesaplama yapın.');
             return;
-        }
-
-        // FREE MODEL: Check login before PDF export
-        if (!isLoggedIn) {
-            setShowLoginPrompt(true);
-            return;
-        }
-
-        // Check PDF export limit
-        try {
-            const usageRes = await fetch('/api/usage', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ type: 'pdf' }),
-            });
-
-            if (!usageRes.ok) {
-                const data = await usageRes.json();
-                if (data.limitReached) {
-                    setLimitMessage(data.message);
-                    return;
-                }
-            }
-        } catch {
-            // Continue if API fails
         }
 
         if (!resultsRef.current) {
@@ -1072,57 +1010,6 @@ export default function HesaplayiciPage() {
                     currency={currency}
                     notes={notes}
                 />
-            )}
-
-            {/* Login Prompt Modal */}
-            {showLoginPrompt && (
-                <div
-                    style={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        background: 'rgba(0, 0, 0, 0.7)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        zIndex: 100,
-                        padding: '1rem',
-                    }}
-                    onClick={() => setShowLoginPrompt(false)}
-                >
-                    <div
-                        className="glass-card"
-                        style={{
-                            padding: '2rem',
-                            maxWidth: '400px',
-                            width: '100%',
-                            textAlign: 'center',
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <LogIn size={48} style={{ color: 'var(--color-primary-light)', marginBottom: '1rem' }} />
-                        <h3 style={{ marginBottom: '0.75rem' }}>Sonuçları Görmek İçin</h3>
-                        <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem', fontSize: '0.9375rem' }}>
-                            Ücretsiz hesap oluşturarak hesaplama sonuçlarınızı görün, kaydedin ve PDF olarak indirin.
-                        </p>
-                        <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
-                            <Link
-                                href="/login"
-                                className="btn btn-ghost"
-                            >
-                                Giriş Yap
-                            </Link>
-                            <Link
-                                href="/signup"
-                                className="btn btn-primary"
-                            >
-                                Ücretsiz Kayıt Ol
-                            </Link>
-                        </div>
-                    </div>
-                </div>
             )}
 
             <style jsx>{`

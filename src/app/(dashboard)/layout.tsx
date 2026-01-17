@@ -1,20 +1,12 @@
-import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { auth, signOut } from '@/lib/auth';
-import { Calculator, FileText, LogOut, User } from 'lucide-react';
+import { Calculator, Home } from 'lucide-react';
 import MobileMenu from '@/components/dashboard/MobileMenu';
 
-export default async function DashboardLayout({
+export default function DashboardLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const session = await auth();
-
-    if (!session?.user) {
-        redirect('/login');
-    }
-
     return (
         <div
             style={{
@@ -94,7 +86,7 @@ export default async function DashboardLayout({
                     </div>
 
                     <Link
-                        href="/hesaplayici"
+                        href="/"
                         style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -109,12 +101,12 @@ export default async function DashboardLayout({
                         }}
                         className="nav-link"
                     >
-                        <Calculator size={20} />
-                        Hesaplayıcı
+                        <Home size={20} />
+                        Ana Sayfa
                     </Link>
 
                     <Link
-                        href="/senaryolar"
+                        href="/hesaplayici"
                         style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -128,96 +120,25 @@ export default async function DashboardLayout({
                         }}
                         className="nav-link"
                     >
-                        <FileText size={20} />
-                        Senaryolarım
+                        <Calculator size={20} />
+                        Hesaplayıcı
                     </Link>
                 </nav>
 
-                {/* User Section */}
+                {/* Footer */}
                 <div
                     style={{
                         padding: '1rem',
                         borderTop: '1px solid var(--color-border)',
                     }}
                 >
-                    <div
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.75rem',
-                            padding: '0.75rem',
-                            background: 'var(--color-surface)',
-                            borderRadius: 'var(--radius-md)',
-                            marginBottom: '0.75rem',
-                        }}
-                    >
-                        <div
-                            style={{
-                                width: '36px',
-                                height: '36px',
-                                borderRadius: '50%',
-                                background: 'var(--gradient-primary)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            <User size={18} />
-                        </div>
-                        <div style={{ flex: 1, overflow: 'hidden' }}>
-                            <div
-                                style={{
-                                    fontWeight: 600,
-                                    fontSize: '0.875rem',
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                }}
-                            >
-                                {session.user.name || 'Kullanıcı'}
-                            </div>
-                            <div
-                                style={{
-                                    fontSize: '0.75rem',
-                                    color: 'var(--color-text-muted)',
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis',
-                                }}
-                            >
-                                {session.user.email}
-                            </div>
-                        </div>
-                    </div>
-
-                    <form
-                        action={async () => {
-                            'use server';
-                            await signOut({ redirectTo: '/' });
-                        }}
-                    >
-                        <button
-                            type="submit"
-                            style={{
-                                width: '100%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '0.5rem',
-                                padding: '0.625rem',
-                                background: 'transparent',
-                                border: '1px solid var(--color-border)',
-                                borderRadius: 'var(--radius-md)',
-                                color: 'var(--color-text-muted)',
-                                fontSize: '0.875rem',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s ease',
-                            }}
-                        >
-                            <LogOut size={16} />
-                            Çıkış Yap
-                        </button>
-                    </form>
+                    <p style={{
+                        fontSize: '0.75rem',
+                        color: 'var(--color-text-muted)',
+                        textAlign: 'center'
+                    }}>
+                        Ücretsiz ve herkese açık
+                    </p>
                 </div>
             </aside>
 
@@ -235,7 +156,7 @@ export default async function DashboardLayout({
                 className="main-content"
             >
                 {/* Mobile Menu - Client Component */}
-                <MobileMenu userName={session.user.name || null} userEmail={session.user.email || null} />
+                <MobileMenu />
 
                 {/* Page Content */}
                 <div

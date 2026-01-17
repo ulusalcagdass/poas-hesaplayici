@@ -138,11 +138,8 @@ export default function Navbar() {
                                     gap: '0.75rem',
                                 }}
                             >
-                                <Link href="/login" className="btn btn-ghost">
-                                    Giriş Yap
-                                </Link>
-                                <Link href="/signup" className="btn btn-primary">
-                                    Ücretsiz Kayıt Ol
+                                <Link href="/hesaplayici" className="btn btn-primary">
+                                    Hesapla
                                 </Link>
                             </div>
                         </div>
@@ -215,18 +212,11 @@ export default function Navbar() {
                     {/* CTA Buttons */}
                     <div className="mobile-menu-cta">
                         <Link
-                            href="/login"
-                            onClick={closeMobileMenu}
-                            className="btn btn-secondary btn-lg"
-                        >
-                            Giriş Yap
-                        </Link>
-                        <Link
-                            href="/signup"
+                            href="/hesaplayici"
                             onClick={closeMobileMenu}
                             className="btn btn-primary btn-lg"
                         >
-                            Ücretsiz Kayıt Ol
+                            Hesapla
                         </Link>
                     </div>
                 </div>
