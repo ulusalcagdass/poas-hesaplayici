@@ -425,7 +425,7 @@ export default function HesaplayiciPage() {
                                 </select>
                             </div>
                             <div style={{ flex: '1 1 140px', minWidth: '140px' }}>
-                                <label className="input-label">Reklam Kanalı</label>
+                                <label className="input-label">{labels.channel}</label>
                                 <select
                                     className="input"
                                     value={channel}
@@ -444,7 +444,7 @@ export default function HesaplayiciPage() {
                     <div className="glass-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
                         <h3 style={{ fontSize: '1rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <TrendingUp size={20} style={{ color: 'var(--color-primary-light)' }} />
-                            Gelir & Harcama
+                            {language === 'tr' ? 'Gelir & Harcama' : 'Revenue & Spend'}
                         </h3>
 
                         <div className="input-group" style={{ marginBottom: '1rem' }}>
@@ -707,7 +707,7 @@ export default function HesaplayiciPage() {
                         style={{ width: '100%' }}
                     >
                         <Calculator size={20} />
-                        Hesapla
+                        {labels.calculate}
                     </button>
                 </div>
 
@@ -1063,7 +1063,7 @@ export default function HesaplayiciPage() {
                                 }}
                             >
                                 <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
-                                    Bu hesaplama POAS (Profit on Ad Spend) mantığı ile yapılmıştır.
+                                    {labels.sharingNote}
                                 </p>
                                 <a
                                     href="https://poas-hesaplayici.onrender.com"
@@ -1102,9 +1102,9 @@ export default function HesaplayiciPage() {
                             >
                                 <Calculator size={40} style={{ color: 'var(--color-primary-light)' }} />
                             </div>
-                            <h3 style={{ marginBottom: '0.5rem' }}>Hesaplama Bekleniyor</h3>
+                            <h3 style={{ marginBottom: '0.5rem' }}>{labels.waitingCalc}</h3>
                             <p style={{ color: 'var(--color-text-muted)', maxWidth: '300px', margin: '0 auto' }}>
-                                Sol taraftaki formu doldurup &quot;Hesapla&quot; butonuna tıklayın.
+                                {labels.fillForm}
                             </p>
                         </div>
                     )}
