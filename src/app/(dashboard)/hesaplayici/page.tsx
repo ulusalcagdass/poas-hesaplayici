@@ -31,9 +31,21 @@ import { CHANNELS, CURRENCIES } from '@/types';
 import SaveScenarioModal from '@/components/calculator/SaveScenarioModal';
 import CostBreakdownChart from '@/components/calculator/CostBreakdownChart';
 import MarginSlider from '@/components/calculator/MarginSlider';
+import WhatIfAnalysis from '@/components/calculator/WhatIfAnalysis';
+import SoftCTA from '@/components/calculator/SoftCTA';
+import CopyShareButtons from '@/components/calculator/CopyShareButtons';
 import Tooltip from '@/components/ui/Tooltip';
 import { useLanguage } from '@/lib/i18n';
 import Link from 'next/link';
+
+// Sector Presets - example values for different industries
+const SECTOR_PRESETS = {
+    none: { paymentFees: 0, shippingCost: 0 },
+    ecommerce: { paymentFees: 0.025, shippingCost: 35 },
+    dtc: { paymentFees: 0.03, shippingCost: 25 },
+    marketplace: { paymentFees: 0.08, shippingCost: 0 },
+    leadgen: { paymentFees: 0.02, shippingCost: 0 },
+};
 
 const formatNumber = (num: number, decimals: number = 2): string => {
     if (!isFinite(num)) return '∞';
@@ -1115,6 +1127,27 @@ export default function HesaplayiciPage() {
                                     poas-hesaplayici.onrender.com
                                 </a>
                             </div>
+
+                            {/* Copy/Share Buttons */}
+                            <CopyShareButtons
+                                poas={outputs.poas}
+                                grossProfit={outputs.grossProfit}
+                                breakevenRoas={roasTargets?.breakevenROAS || 0}
+                                currencySymbol={currencySymbol}
+                            />
+
+                            {/* What-If Analysis */}
+                            <WhatIfAnalysis
+                                currentPoas={outputs.poas}
+                                currentGrossProfit={outputs.grossProfit}
+                                variableOrderCosts={outputs.variableOrderCosts}
+                                revenue={inputs.revenue}
+                                adSpend={inputs.adSpend}
+                                currencySymbol={currencySymbol}
+                            />
+
+                            {/* Soft CTA for Consulting */}
+                            <SoftCTA />
                         </>
                     ) : (
                         /* Empty State */

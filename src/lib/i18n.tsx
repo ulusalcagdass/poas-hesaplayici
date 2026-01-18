@@ -200,23 +200,103 @@ export const translations = {
         },
     },
 
-    // Interpretation
+    // Interpretation - tempered, non-advisory language
     interpretation: {
         tr: {
-            excellent: 'Mükemmel kârlılık',
-            good: 'İyi kârlılık',
-            moderate: 'Orta düzey kârlılık',
-            low: 'Düşük kârlılık',
-            breakeven: 'Başa baş noktası',
-            loss: 'Zarar',
+            loss: 'Mevcut maliyet yapısında reklam harcamanız kâr üretmiyor.',
+            breakeven: 'Reklam getirisi maliyetleri karşılıyor, net kâr sıfıra yakın.',
+            low: 'Kârlılığa yakın bir yapı var, ancak maliyetler sonucu baskılıyor.',
+            moderate: 'Bu kampanya mevcut verilerle kârlı görünüyor.',
+            good: 'Mevcut verilere göre kârlı bir reklam performansı gözlemleniyor.',
+            excellent: 'Veriler güçlü bir kârlılık yapısına işaret ediyor.',
         },
         en: {
-            excellent: 'Excellent profitability',
-            good: 'Good profitability',
-            moderate: 'Moderate profitability',
-            low: 'Low profitability',
-            breakeven: 'Break-even point',
-            loss: 'Loss',
+            loss: 'With the current cost structure, your ad spend is not generating profit.',
+            breakeven: 'Ad revenue covers costs, net profit is near zero.',
+            low: 'Near profitability, but costs are pressuring results.',
+            moderate: 'This campaign appears profitable with current data.',
+            good: 'A profitable ad performance is observed based on current data.',
+            excellent: 'Data indicates a strong profitability structure.',
+        },
+    },
+
+    // Sector Presets
+    sectorPresets: {
+        tr: {
+            label: 'Sektör Örneği',
+            ecommerce: 'E-ticaret',
+            dtc: 'DTC (Doğrudan Satış)',
+            marketplace: 'Marketplace',
+            leadgen: 'Lead Gen',
+            note: 'Bu değerler örnektir. Her işletme için farklılık gösterebilir.',
+            consultNote: 'Gerçek hedefler danışmanlık sürecinde belirlenir.',
+        },
+        en: {
+            label: 'Sector Example',
+            ecommerce: 'E-commerce',
+            dtc: 'DTC (Direct to Consumer)',
+            marketplace: 'Marketplace',
+            leadgen: 'Lead Gen',
+            note: 'These are example values. May vary by business.',
+            consultNote: 'Actual targets are determined during consulting.',
+        },
+    },
+
+    // What-If Analysis
+    whatIf: {
+        tr: {
+            title: 'Eğer... Ne Olur?',
+            costDown10: 'Maliyetler %10 düşerse',
+            aovUp5: 'AOV %5 artarsa',
+            current: 'Mevcut Durum',
+            scenario: 'Senaryo',
+            disclaimer: 'Bu bir simülasyondur. Gerçek dünyada farklılık gösterebilir.',
+        },
+        en: {
+            title: 'What If...?',
+            costDown10: 'Costs decrease 10%',
+            aovUp5: 'AOV increases 5%',
+            current: 'Current',
+            scenario: 'Scenario',
+            disclaimer: 'This is a simulation. Real results may differ.',
+        },
+    },
+
+    // Copy/Share
+    copyShare: {
+        tr: {
+            copyResult: 'Sonucu Kopyala',
+            shareImage: 'Görsel Paylaş',
+            copied: 'Kopyalandı!',
+            imageFooter: 'POAS Hesaplayıcı – poas-hesaplayici.onrender.com',
+        },
+        en: {
+            copyResult: 'Copy Result',
+            shareImage: 'Share as Image',
+            copied: 'Copied!',
+            imageFooter: 'POAS Calculator – poas-hesaplayici.onrender.com',
+        },
+    },
+
+    // Soft CTA
+    softCta: {
+        tr: {
+            text: 'POAS\'ınızı artırmak için işletmenize özel bir yol haritası istiyorsanız:',
+            link: 'Ulusal Çağdaş Çalım ile iletişime geçin.',
+        },
+        en: {
+            text: 'If you want a custom roadmap to improve your POAS:',
+            link: 'Contact Ulusal Çağdaş Çalım.',
+        },
+    },
+
+    // Max Budget Info
+    maxBudget: {
+        tr: {
+            label: 'Bu hedefle maksimum reklam bütçeniz:',
+        },
+        en: {
+            label: 'With this target, your maximum ad budget is:',
         },
     },
 };
