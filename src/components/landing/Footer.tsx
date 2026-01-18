@@ -5,7 +5,7 @@ import { Calculator, Twitter, Linkedin, Mail } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 
 export default function Footer() {
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
 
     const footerLinks = language === 'tr'
         ? {
@@ -94,7 +94,7 @@ export default function Footer() {
                                 <Calculator size={20} />
                             </div>
                             <span>POAS</span>
-                            <span style={{ color: 'var(--color-primary-light)' }}>Hesaplayıcı</span>
+                            <span style={{ color: 'var(--color-primary-light)' }}>{t('footerContent', 'logo')}</span>
                         </Link>
                         <p
                             style={{
@@ -104,7 +104,7 @@ export default function Footer() {
                                 maxWidth: '280px',
                             }}
                         >
-                            ROAS değil, POAS ile reklamlarınızın gerçek kârlılığını ölçün.
+                            {t('footerContent', 'tagline')}
                         </p>
 
                         {/* Social Links */}

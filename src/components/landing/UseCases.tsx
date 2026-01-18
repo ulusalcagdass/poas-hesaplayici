@@ -1,30 +1,35 @@
+'use client';
+
 import { Building2, ShoppingBag, BarChart3, Layers } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n';
 
 export default function UseCases() {
+    const { t } = useLanguage();
+
     const cases = [
         {
             icon: Building2,
-            title: 'Ajans Raporlama',
-            description: 'Müşterilerinize POAS bazlı raporlar sunun. Gerçek kârlılığı gösterin, güven kazanın.',
-            features: ['Müşteri bazlı POAS takibi', 'Otomatik PDF raporlar', 'Kanal karşılaştırması'],
+            titleKey: 'agencyTitle',
+            descKey: 'agencyDesc',
+            features: ['agencyF1', 'agencyF2', 'agencyF3'],
         },
         {
             icon: ShoppingBag,
-            title: 'E-Ticaret Kampanyaları',
-            description: 'Her kampanyanın gerçek kârlılığını ölçün. ROAS\'ın yanıltıcı olduğu yerde POAS gerçeği gösterir.',
-            features: ['Kampanya bazlı analiz', 'Sezonsal karşılaştırma', 'Maliyet detayları'],
+            titleKey: 'ecomTitle',
+            descKey: 'ecomDesc',
+            features: ['ecomF1', 'ecomF2', 'ecomF3'],
         },
         {
             icon: BarChart3,
-            title: 'Ürün Bazlı Kârlılık',
-            description: 'Hangi ürünler gerçekten kârlı? Ürün kategorisi bazında POAS analizi yapın.',
-            features: ['Ürün grubu analizi', 'Margin optimizasyonu', 'SKU performansı'],
+            titleKey: 'productTitle',
+            descKey: 'productDesc',
+            features: ['productF1', 'productF2', 'productF3'],
         },
         {
             icon: Layers,
-            title: 'Bütçe Planlama',
-            description: 'Hedef POAS ile maksimum reklam bütçenizi veya minimum kâr hedefinizi belirleyin.',
-            features: ['Bütçe simülasyonu', 'Break-even analizi', 'Senaryo karşılaştırma'],
+            titleKey: 'budgetTitle',
+            descKey: 'budgetDesc',
+            features: ['budgetF1', 'budgetF2', 'budgetF3'],
         },
     ];
 
@@ -46,15 +51,15 @@ export default function UseCases() {
                     >
                         <Layers size={16} style={{ color: 'var(--color-secondary)' }} />
                         <span style={{ color: 'var(--color-secondary)', fontSize: '0.875rem', fontWeight: 600 }}>
-                            Kullanım Alanları
+                            {t('useCases', 'badge')}
                         </span>
                     </div>
 
                     <h2 className="section-title">
-                        <span className="text-gradient">POAS</span> Nerede Kullanılır?
+                        <span className="text-gradient">{t('useCases', 'title')}</span> {t('useCases', 'titleEnd')}
                     </h2>
                     <p className="section-subtitle">
-                        E-ticaret, ajans raporlaması ve bütçe planlamasında POAS ile doğru kararlar verin.
+                        {t('useCases', 'subtitle')}
                     </p>
                 </div>
 
@@ -93,7 +98,7 @@ export default function UseCases() {
                             </div>
 
                             {/* Content */}
-                            <h4 style={{ marginBottom: '0.75rem' }}>{useCase.title}</h4>
+                            <h4 style={{ marginBottom: '0.75rem' }}>{t('useCases', useCase.titleKey)}</h4>
                             <p
                                 style={{
                                     color: 'var(--color-text-secondary)',
@@ -103,7 +108,7 @@ export default function UseCases() {
                                     flex: 1,
                                 }}
                             >
-                                {useCase.description}
+                                {t('useCases', useCase.descKey)}
                             </p>
 
                             {/* Features */}
@@ -114,7 +119,7 @@ export default function UseCases() {
                                     gap: '0.5rem',
                                 }}
                             >
-                                {useCase.features.map((feature, i) => (
+                                {useCase.features.map((featureKey, i) => (
                                     <span
                                         key={i}
                                         style={{
@@ -125,7 +130,7 @@ export default function UseCases() {
                                             color: 'var(--color-text-muted)',
                                         }}
                                     >
-                                        {feature}
+                                        {t('useCases', featureKey)}
                                     </span>
                                 ))}
                             </div>

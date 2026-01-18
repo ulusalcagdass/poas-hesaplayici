@@ -445,6 +445,90 @@ export const translations = {
             detailedResults: 'Detailed Results',
         },
     },
+
+    // Use Cases Section
+    useCases: {
+        tr: {
+            badge: 'Kullanım Alanları',
+            title: 'POAS',
+            titleEnd: 'Nerede Kullanılır?',
+            subtitle: 'E-ticaret, ajans raporlaması ve bütçe planlamasında POAS ile doğru kararlar verin.',
+            // Card 1 - Agency
+            agencyTitle: 'Ajans Raporlama',
+            agencyDesc: 'Müşterilerinize POAS bazlı raporlar sunun. Gerçek kârlılığı gösterin, güven kazanın.',
+            agencyF1: 'Müşteri bazlı POAS takibi',
+            agencyF2: 'Otomatik PDF raporlar',
+            agencyF3: 'Kanal karşılaştırması',
+            // Card 2 - Ecommerce
+            ecomTitle: 'E-Ticaret Kampanyaları',
+            ecomDesc: 'Her kampanyanın gerçek kârlılığını ölçün. ROAS\'ın yanıltıcı olduğu yerde POAS gerçeği gösterir.',
+            ecomF1: 'Kampanya bazlı analiz',
+            ecomF2: 'Sezonsal karşılaştırma',
+            ecomF3: 'Maliyet detayları',
+            // Card 3 - Product
+            productTitle: 'Ürün Bazlı Kârlılık',
+            productDesc: 'Hangi ürünler gerçekten kârlı? Ürün kategorisi bazında POAS analizi yapın.',
+            productF1: 'Ürün grubu analizi',
+            productF2: 'Margin optimizasyonu',
+            productF3: 'SKU performansı',
+            // Card 4 - Budget
+            budgetTitle: 'Bütçe Planlama',
+            budgetDesc: 'Hedef POAS ile maksimum reklam bütçenizi veya minimum kâr hedefinizi belirleyin.',
+            budgetF1: 'Bütçe simülasyonu',
+            budgetF2: 'Break-even analizi',
+            budgetF3: 'Senaryo karşılaştırma',
+        },
+        en: {
+            badge: 'Use Cases',
+            title: 'POAS',
+            titleEnd: 'Where Is It Used?',
+            subtitle: 'Make informed decisions in e-commerce, agency reporting, and budget planning with POAS.',
+            // Card 1 - Agency
+            agencyTitle: 'Agency Reporting',
+            agencyDesc: 'Deliver POAS-based reports to clients. Show true profitability, build trust.',
+            agencyF1: 'Client-level POAS tracking',
+            agencyF2: 'Automated PDF reports',
+            agencyF3: 'Channel comparison',
+            // Card 2 - Ecommerce
+            ecomTitle: 'E-Commerce Campaigns',
+            ecomDesc: 'Measure true profitability of each campaign. POAS reveals the truth where ROAS misleads.',
+            ecomF1: 'Campaign-level analysis',
+            ecomF2: 'Seasonal comparison',
+            ecomF3: 'Cost breakdown',
+            // Card 3 - Product
+            productTitle: 'Product-Level Profitability',
+            productDesc: 'Which products are truly profitable? Run POAS analysis by product category.',
+            productF1: 'Product group analysis',
+            productF2: 'Margin optimization',
+            productF3: 'SKU performance',
+            // Card 4 - Budget
+            budgetTitle: 'Budget Planning',
+            budgetDesc: 'Set your maximum ad budget or minimum profit target using target POAS.',
+            budgetF1: 'Budget simulation',
+            budgetF2: 'Break-even analysis',
+            budgetF3: 'Scenario comparison',
+        },
+    },
+
+    // Footer Content
+    footerContent: {
+        tr: {
+            logo: 'Hesaplayıcı',
+            tagline: 'ROAS değil, POAS ile reklamlarınızın gerçek kârlılığını ölçün.',
+            product: 'Ürün',
+            resources: 'Kaynaklar',
+            company: 'Şirket',
+            copyright: '© 2024 POAS Hesaplayıcı. Tüm hakları saklıdır.',
+        },
+        en: {
+            logo: 'Calculator',
+            tagline: 'Measure true ad profitability with POAS, not just ROAS.',
+            product: 'Product',
+            resources: 'Resources',
+            company: 'Company',
+            copyright: '© 2024 POAS Calculator. All rights reserved.',
+        },
+    },
 };
 
 // Language Context

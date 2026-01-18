@@ -800,14 +800,14 @@ export default function HesaplayiciPage() {
                                             <>
                                                 <span style={{ color: 'var(--color-success)' }}>✅</span>
                                                 <span style={{ color: 'var(--color-success)', fontWeight: 600 }}>
-                                                    Doğrulandı - PDF ile %100 uyumlu
+                                                    {language === 'tr' ? 'Doğrulandı - PDF ile %100 uyumlu' : 'Verified - 100% PDF accurate'}
                                                 </span>
                                             </>
                                         ) : (
                                             <>
                                                 <span style={{ color: 'var(--color-error)' }}>❌</span>
                                                 <span style={{ color: 'var(--color-error)', fontWeight: 600 }}>
-                                                    Beklenen: POAS 1.75x, Gross Profit 3,500₺
+                                                    {language === 'tr' ? 'Beklenen: POAS 1.75x, Brüt Kâr 3,500₺' : 'Expected: POAS 1.75x, Gross Profit $3,500'}
                                                 </span>
                                             </>
                                         )}
@@ -817,7 +817,9 @@ export default function HesaplayiciPage() {
 
                             {/* Comparison with ROAS */}
                             <div className="glass-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
-                                <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>ROAS vs POAS Karşılaştırma</h3>
+                                <h3 style={{ fontSize: '1rem', marginBottom: '1rem' }}>
+                                    {language === 'tr' ? 'ROAS vs POAS Karşılaştırma' : 'ROAS vs POAS Comparison'}
+                                </h3>
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                                     <div
                                         style={{
