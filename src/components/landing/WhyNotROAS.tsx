@@ -1,28 +1,31 @@
 'use client';
 
 import { AlertTriangle, TrendingDown, DollarSign, Package, CreditCard, Truck } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n';
 
 export default function WhyNotROAS() {
+    const { t } = useLanguage();
+
     const problems = [
         {
             icon: Package,
-            title: 'Ürün Maliyeti (COGS)',
-            description: 'ROAS, ürünün alış maliyetini hesaba katmaz. 100₺\'ye sattığınız ürünün 60₺\'ye mal olduğunu görmezden gelir.',
+            titleKey: 'cogsTitle',
+            descKey: 'cogsDesc',
         },
         {
             icon: Truck,
-            title: 'Kargo Giderleri',
-            description: 'Müşteriye kargo ücretsiz göründüğünde bile, siz taşıyıcıya ödeme yapıyorsunuz. Bu maliyet ROAS\'ta yok.',
+            titleKey: 'shippingTitle',
+            descKey: 'shippingDesc',
         },
         {
             icon: CreditCard,
-            title: 'Ödeme Komisyonları',
-            description: 'Kredi kartı, PayPal veya diğer ödeme yöntemlerinin %2-4 komisyonu ROAS hesabında görünmez.',
+            titleKey: 'feesTitle',
+            descKey: 'feesDesc',
         },
         {
             icon: DollarSign,
-            title: 'İndirimler & Kuponlar',
-            description: '%20 indirim yaptığınızda gelir azalır ama ROAS bunu yansıtmaz. Gerçek kârlılığınız düşer.',
+            titleKey: 'discountsTitle',
+            descKey: 'discountsDesc',
         },
     ];
 
@@ -50,16 +53,15 @@ export default function WhyNotROAS() {
                     >
                         <AlertTriangle size={16} style={{ color: 'var(--color-error)' }} />
                         <span style={{ color: 'var(--color-error)', fontSize: '0.875rem', fontWeight: 600 }}>
-                            Dikkat: ROAS Yanıltıcı Olabilir
+                            {t('whyNotRoas', 'badge')}
                         </span>
                     </div>
 
                     <h2 className="section-title">
-                        Neden <span style={{ color: 'var(--color-error)' }}>ROAS</span> Yetmez?
+                        {t('whyNotRoas', 'title')} <span style={{ color: 'var(--color-error)' }}>{t('whyNotRoas', 'titleHighlight')}</span> {t('whyNotRoas', 'titleEnd')}
                     </h2>
                     <p className="section-subtitle">
-                        ROAS sadece gelir/harcama oranını gösterir. Gerçek kârlılığınızı anlamak için
-                        tüm maliyetleri hesaba katmalısınız.
+                        {t('whyNotRoas', 'subtitle')}
                     </p>
                 </div>
 
@@ -95,9 +97,9 @@ export default function WhyNotROAS() {
                             >
                                 <problem.icon size={24} style={{ color: 'var(--color-error)' }} />
                             </div>
-                            <h4 style={{ marginBottom: '0.5rem' }}>{problem.title}</h4>
+                            <h4 style={{ marginBottom: '0.5rem' }}>{t('whyNotRoas', problem.titleKey)}</h4>
                             <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.9375rem', lineHeight: 1.6 }}>
-                                {problem.description}
+                                {t('whyNotRoas', problem.descKey)}
                             </p>
                         </div>
                     ))}
@@ -130,7 +132,7 @@ export default function WhyNotROAS() {
                                     marginBottom: '0.5rem',
                                 }}
                             >
-                                ROAS Hesabı
+                                {t('whyNotRoas', 'roasCalc')}
                             </div>
                             <div
                                 style={{
@@ -141,19 +143,19 @@ export default function WhyNotROAS() {
                                 }}
                             >
                                 <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
-                                    10.000₺ Gelir / 2.000₺ Harcama
+                                    {t('whyNotRoas', 'roasExample')}
                                 </div>
                                 <div style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--color-error)' }}>
                                     5x
                                 </div>
                                 <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
-                                    "Harika görünüyor!"
+                                    {t('whyNotRoas', 'looksGreat')}
                                 </div>
                             </div>
                             <div style={{ marginTop: '1rem' }}>
                                 <TrendingDown size={20} style={{ color: 'var(--color-error)' }} />
                                 <div style={{ fontSize: '0.75rem', color: 'var(--color-error)', marginTop: '0.25rem' }}>
-                                    Maliyetler yok sayılıyor
+                                    {t('whyNotRoas', 'costsIgnored')}
                                 </div>
                             </div>
                         </div>
@@ -185,7 +187,7 @@ export default function WhyNotROAS() {
                                     marginBottom: '0.5rem',
                                 }}
                             >
-                                POAS Hesabı
+                                {t('whyNotRoas', 'poasCalc')}
                             </div>
                             <div
                                 style={{
@@ -196,19 +198,19 @@ export default function WhyNotROAS() {
                                 }}
                             >
                                 <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
-                                    3.500₺ Brüt Kâr / 2.000₺ Harcama
+                                    {t('whyNotRoas', 'poasExample')}
                                 </div>
                                 <div style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--color-success)' }}>
                                     1.75x
                                 </div>
                                 <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
-                                    "Gerçek kârlılık"
+                                    {t('whyNotRoas', 'realProfit')}
                                 </div>
                             </div>
                             <div style={{ marginTop: '1rem' }}>
                                 <DollarSign size={20} style={{ color: 'var(--color-success)' }} />
                                 <div style={{ fontSize: '0.75rem', color: 'var(--color-success)', marginTop: '0.25rem' }}>
-                                    Tüm maliyetler dahil
+                                    {t('whyNotRoas', 'costsIncluded')}
                                 </div>
                             </div>
                         </div>
@@ -225,23 +227,23 @@ export default function WhyNotROAS() {
                         }}
                     >
                         <div style={{ color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
-                            Maliyetler (10.000₺ gelirden düşülen):
+                            {t('whyNotRoas', 'costBreakdown')}
                         </div>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
                             <span style={{ color: 'var(--color-text-secondary)' }}>
-                                COGS: <strong>4.000₺</strong>
+                                {t('whyNotRoas', 'cogs')}: <strong>4.000₺</strong>
                             </span>
                             <span style={{ color: 'var(--color-text-secondary)' }}>
-                                Kargo: <strong>1.500₺</strong>
+                                {t('whyNotRoas', 'shipping')}: <strong>1.500₺</strong>
                             </span>
                             <span style={{ color: 'var(--color-text-secondary)' }}>
-                                Komisyon: <strong>500₺</strong>
+                                {t('whyNotRoas', 'commission')}: <strong>500₺</strong>
                             </span>
                             <span style={{ color: 'var(--color-text-secondary)' }}>
-                                Operasyon: <strong>500₺</strong>
+                                {t('whyNotRoas', 'operations')}: <strong>500₺</strong>
                             </span>
                             <span style={{ color: 'var(--color-primary-light)' }}>
-                                = Brüt Kâr: <strong>3.500₺</strong>
+                                = {t('whyNotRoas', 'grossProfit')}: <strong>3.500₺</strong>
                             </span>
                         </div>
                     </div>

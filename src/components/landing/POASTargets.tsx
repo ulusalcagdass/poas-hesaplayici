@@ -1,36 +1,41 @@
+'use client';
+
 import { Target, TrendingUp, Rocket, Users } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n';
 
 export default function POASTargets() {
+    const { t } = useLanguage();
+
     const targets = [
         {
             value: 2.0,
-            label: 'Kısa Vadeli Kârlılık',
-            description: 'Yüksek kâr marjı hedefliyorsunuz. Her 1₺ reklam harcamasına 2₺ brüt kâr.',
+            labelKey: 'target2Label',
+            descKey: 'target2Desc',
+            idealKey: 'target2Ideal',
             icon: Target,
             color: 'var(--color-success)',
             bgColor: 'rgba(16, 185, 129, 0.15)',
             borderColor: 'rgba(16, 185, 129, 0.3)',
-            ideal: 'Olgun markalar, yüksek kar marjlı ürünler',
         },
         {
             value: 1.4,
-            label: 'Kontrollü Büyüme',
-            description: 'Kârlılık ve büyüme arasında denge. Sürdürülebilir ölçeklendirme.',
+            labelKey: 'target14Label',
+            descKey: 'target14Desc',
+            idealKey: 'target14Ideal',
             icon: TrendingUp,
             color: 'var(--color-primary-light)',
             bgColor: 'rgba(99, 102, 241, 0.15)',
             borderColor: 'rgba(99, 102, 241, 0.3)',
-            ideal: 'Büyüyen markalar, market share genişletme',
         },
         {
             value: 1.0,
-            label: 'Yeni Müşteri / Break-even',
-            description: 'Başabaş noktası. Müşteri kazanımı ve pazar payı öncelikli.',
+            labelKey: 'target1Label',
+            descKey: 'target1Desc',
+            idealKey: 'target1Ideal',
             icon: Users,
             color: 'var(--color-warning)',
             bgColor: 'rgba(245, 158, 11, 0.15)',
             borderColor: 'rgba(245, 158, 11, 0.3)',
-            ideal: 'Yeni markalar, agresif büyüme, LTV odaklı strateji',
         },
     ];
 
@@ -57,16 +62,15 @@ export default function POASTargets() {
                     >
                         <Rocket size={16} style={{ color: 'var(--color-primary-light)' }} />
                         <span style={{ color: 'var(--color-primary-light)', fontSize: '0.875rem', fontWeight: 600 }}>
-                            Hedef Belirleme
+                            {t('poasTargets', 'badge')}
                         </span>
                     </div>
 
                     <h2 className="section-title">
-                        <span className="text-gradient">Örnek Hedefler</span> (Sektöre Göre Değişir)
+                        <span className="text-gradient">{t('poasTargets', 'title')}</span> {t('poasTargets', 'titleSuffix')}
                     </h2>
                     <p className="section-subtitle">
-                        Marjınız ve operasyon giderleriniz hedefi belirler.
-                        Break-even POAS = 1.0 (başabaş noktası).
+                        {t('poasTargets', 'subtitle')}
                     </p>
                 </div>
 
@@ -130,10 +134,10 @@ export default function POASTargets() {
 
                             {/* Content */}
                             <h4 style={{ marginBottom: '0.75rem', color: 'var(--color-text-primary)' }}>
-                                {target.label}
+                                {t('poasTargets', target.labelKey)}
                             </h4>
                             <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.9375rem', lineHeight: 1.6, marginBottom: '1rem' }}>
-                                {target.description}
+                                {t('poasTargets', target.descKey)}
                             </p>
 
                             {/* Ideal For */}
@@ -145,8 +149,8 @@ export default function POASTargets() {
                                     fontSize: '0.8125rem',
                                 }}
                             >
-                                <span style={{ color: 'var(--color-text-muted)' }}>İdeal: </span>
-                                <span style={{ color: 'var(--color-text-secondary)' }}>{target.ideal}</span>
+                                <span style={{ color: 'var(--color-text-muted)' }}>{t('poasTargets', 'suitable')} </span>
+                                <span style={{ color: 'var(--color-text-secondary)' }}>{t('poasTargets', target.idealKey)}</span>
                             </div>
                         </div>
                     ))}
@@ -179,12 +183,9 @@ export default function POASTargets() {
                         <Target size={20} style={{ color: 'var(--color-primary-light)' }} />
                     </div>
                     <div>
-                        <h4 style={{ marginBottom: '0.5rem' }}>Hedef POAS ile Planlama</h4>
+                        <h4 style={{ marginBottom: '0.5rem' }}>{t('poasTargets', 'infoTitle')}</h4>
                         <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.9375rem', lineHeight: 1.6 }}>
-                            Hesaplayıcıda hedef POAS girdiğinizde, sistem size bu kârlılık için{' '}
-                            <strong style={{ color: 'var(--color-text-primary)' }}>maksimum reklam harcamasını</strong> veya{' '}
-                            <strong style={{ color: 'var(--color-text-primary)' }}>ulaşılması gereken minimum brüt kârı</strong>{' '}
-                            otomatik hesaplar.
+                            {t('poasTargets', 'infoDesc')}
                         </p>
                     </div>
                 </div>
