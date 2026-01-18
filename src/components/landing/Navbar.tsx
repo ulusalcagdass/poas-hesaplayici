@@ -154,27 +154,33 @@ export default function Navbar() {
                             </div>
                         </div>
 
-                        {/* Mobile Language Toggle + Menu Button */}
+                        {/* Mobile: Language Toggle (next to logo) */}
                         <div
                             style={{
                                 display: 'none',
                                 alignItems: 'center',
-                                gap: '0.5rem',
                             }}
-                            className="mobile-menu-btn"
+                            className="mobile-lang-toggle"
                         >
-                            {/* Mobile Language Toggle */}
-                            <div style={{ display: 'flex', gap: '0.25rem' }}>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    background: 'var(--color-bg-tertiary)',
+                                    borderRadius: 'var(--radius-md)',
+                                    padding: '0.2rem',
+                                    gap: '0.15rem',
+                                }}
+                            >
                                 <button
                                     onClick={() => setLanguage('tr')}
                                     style={{
-                                        padding: '0.4rem 0.6rem',
+                                        padding: '0.35rem 0.6rem',
                                         borderRadius: 'var(--radius-sm)',
                                         border: 'none',
                                         cursor: 'pointer',
-                                        fontSize: '0.7rem',
+                                        fontSize: '0.75rem',
                                         fontWeight: 600,
-                                        background: language === 'tr' ? 'var(--gradient-primary)' : 'var(--color-surface)',
+                                        background: language === 'tr' ? 'var(--color-primary)' : 'transparent',
                                         color: language === 'tr' ? 'white' : 'var(--color-text-muted)',
                                     }}
                                 >
@@ -183,41 +189,43 @@ export default function Navbar() {
                                 <button
                                     onClick={() => setLanguage('en')}
                                     style={{
-                                        padding: '0.4rem 0.6rem',
+                                        padding: '0.35rem 0.6rem',
                                         borderRadius: 'var(--radius-sm)',
                                         border: 'none',
                                         cursor: 'pointer',
-                                        fontSize: '0.7rem',
+                                        fontSize: '0.75rem',
                                         fontWeight: 600,
-                                        background: language === 'en' ? 'var(--gradient-primary)' : 'var(--color-surface)',
+                                        background: language === 'en' ? 'var(--color-primary)' : 'transparent',
                                         color: language === 'en' ? 'white' : 'var(--color-text-muted)',
                                     }}
                                 >
                                     EN
                                 </button>
                             </div>
-
-                            {/* Menu Button */}
-                            <button
-                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                                aria-label={isMobileMenuOpen ? 'Menüyü kapat' : 'Menüyü aç'}
-                                aria-expanded={isMobileMenuOpen}
-                                style={{
-                                    background: 'transparent',
-                                    border: 'none',
-                                    color: 'var(--color-text-primary)',
-                                    cursor: 'pointer',
-                                    padding: '0.75rem',
-                                    minWidth: '48px',
-                                    minHeight: '48px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                            </button>
                         </div>
+
+                        {/* Mobile: Hamburger Menu Button (far right) */}
+                        <button
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            aria-label={isMobileMenuOpen ? 'Menüyü kapat' : 'Menüyü aç'}
+                            aria-expanded={isMobileMenuOpen}
+                            style={{
+                                display: 'none',
+                                background: 'transparent',
+                                border: 'none',
+                                color: 'var(--color-text-primary)',
+                                cursor: 'pointer',
+                                padding: '0.75rem',
+                                minWidth: '48px',
+                                minHeight: '48px',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                marginLeft: 'auto',
+                            }}
+                            className="mobile-menu-btn"
+                        >
+                            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                        </button>
                     </div>
                 </div>
             </nav>

@@ -413,7 +413,7 @@ export const translations = {
             home: 'Ana Sayfa',
             calculator: 'Hesaplayıcı',
             freeAndOpen: 'Ücretsiz ve herkese açık',
-            logo: 'Hesap',
+            logo: 'Hesaplayıcı',
         },
         en: {
             mainMenu: 'Main Menu',

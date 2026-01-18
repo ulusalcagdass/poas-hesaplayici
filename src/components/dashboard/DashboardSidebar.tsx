@@ -60,53 +60,55 @@ export default function DashboardSidebar() {
                 </Link>
             </div>
 
-            {/* Language Selector - MOVED TO TOP */}
+            {/* Language Selector - Landing Page Style */}
             <div
                 style={{
                     padding: '1rem',
                     borderBottom: '1px solid var(--color-border)',
                 }}
             >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                    <Globe size={16} style={{ color: 'var(--color-text-muted)' }} />
-                    <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
-                        {language === 'tr' ? 'Dil' : 'Language'}
-                    </span>
-                </div>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <div
+                    style={{
+                        display: 'flex',
+                        background: 'var(--color-bg-tertiary)',
+                        borderRadius: 'var(--radius-md)',
+                        padding: '0.25rem',
+                        gap: '0.25rem',
+                    }}
+                >
                     <button
                         onClick={() => setLanguage('tr')}
                         style={{
                             flex: 1,
-                            padding: '0.5rem',
+                            padding: '0.5rem 1rem',
                             borderRadius: 'var(--radius-sm)',
                             border: 'none',
                             cursor: 'pointer',
-                            fontSize: '0.8125rem',
+                            fontSize: '0.875rem',
                             fontWeight: 600,
                             transition: 'all 0.2s ease',
-                            background: language === 'tr' ? 'var(--gradient-primary)' : 'var(--color-surface)',
+                            background: language === 'tr' ? 'var(--color-primary)' : 'transparent',
                             color: language === 'tr' ? 'white' : 'var(--color-text-muted)',
                         }}
                     >
-                        🇹🇷 TR
+                        TR
                     </button>
                     <button
                         onClick={() => setLanguage('en')}
                         style={{
                             flex: 1,
-                            padding: '0.5rem',
+                            padding: '0.5rem 1rem',
                             borderRadius: 'var(--radius-sm)',
                             border: 'none',
                             cursor: 'pointer',
-                            fontSize: '0.8125rem',
+                            fontSize: '0.875rem',
                             fontWeight: 600,
                             transition: 'all 0.2s ease',
-                            background: language === 'en' ? 'var(--gradient-primary)' : 'var(--color-surface)',
+                            background: language === 'en' ? 'var(--color-primary)' : 'transparent',
                             color: language === 'en' ? 'white' : 'var(--color-text-muted)',
                         }}
                     >
-                        🇬🇧 EN
+                        EN
                     </button>
                 </div>
             </div>

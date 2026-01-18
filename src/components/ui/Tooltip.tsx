@@ -75,7 +75,7 @@ export default function Tooltip({ content }: TooltipProps) {
                         fontSize: '0.8125rem',
                         color: 'var(--color-text-secondary)',
                         whiteSpace: 'normal',
-                        maxWidth: 'min(280px, 80vw)',
+                        maxWidth: '350px',
                         wordWrap: 'break-word',
                         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
                         animation: position === 'right' ? 'fadeInRight 0.15s ease-out' : 'fadeInLeft 0.15s ease-out',

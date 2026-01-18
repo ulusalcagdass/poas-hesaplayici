@@ -466,7 +466,11 @@ h4 {
   }
 
   .mobile-menu-btn {
-    display: block !important;
+    display: flex !important;
+  }
+
+  .mobile-lang-toggle {
+    display: flex !important;
   }
 
   /* Fix all glass cards on mobile */
