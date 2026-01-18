@@ -126,7 +126,9 @@ export default function Footer() {
                                 <Twitter size={18} />
                             </a>
                             <a
-                                href="#"
+                                href="https://www.linkedin.com/in/ulusal-%C3%A7a%C4%9Fda%C5%9F-%C3%A7al%C4%B1m-2889281b4/"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 style={{
                                     width: '40px',
                                     height: '40px',
@@ -172,7 +174,7 @@ export default function Footer() {
                                 letterSpacing: '0.05em',
                             }}
                         >
-                            Ürün
+                            {t('footerContent', 'product')}
                         </h4>
                         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                             {footerLinks.product.map((link, i) => (
@@ -205,7 +207,7 @@ export default function Footer() {
                                 letterSpacing: '0.05em',
                             }}
                         >
-                            Kaynaklar
+                            {t('footerContent', 'resources')}
                         </h4>
                         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                             {footerLinks.resources.map((link, i) => (
@@ -238,7 +240,7 @@ export default function Footer() {
                                 letterSpacing: '0.05em',
                             }}
                         >
-                            Şirket
+                            {t('footerContent', 'company')}
                         </h4>
                         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                             {footerLinks.company.map((link, i) => (
@@ -272,8 +274,8 @@ export default function Footer() {
                         gap: '1rem',
                     }}
                 >
-                    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        {language === 'tr' ? 'Bu araç' : 'This tool is provided free by'}{' '}
+                    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                        <span>{language === 'tr' ? 'Bu araç' : 'This tool is provided free by'}</span>
                         <a
                             href="https://www.linkedin.com/in/ulusal-%C3%A7a%C4%9Fda%C5%9F-%C3%A7al%C4%B1m-2889281b4/"
                             target="_blank"
@@ -285,12 +287,13 @@ export default function Footer() {
                                 display: 'inline-flex',
                                 alignItems: 'center',
                                 gap: '0.25rem',
+                                whiteSpace: 'nowrap',
                             }}
                         >
                             Ulusal Çağdaş Çalım
                             <Linkedin size={14} />
                         </a>
-                        {language === 'tr' ? ' tarafından ücretsiz sunulmaktadır.' : '.'}
+                        <span>{language === 'tr' ? 'tarafından ücretsiz sunulmaktadır.' : '.'}</span>
                     </p>
                     <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
                         {language === 'tr' ? 'Herkes için açık ve ücretsizdir.' : 'Free and open to everyone.'}

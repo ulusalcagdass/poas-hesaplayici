@@ -31,9 +31,7 @@ import { CHANNELS, CURRENCIES } from '@/types';
 import SaveScenarioModal from '@/components/calculator/SaveScenarioModal';
 import CostBreakdownChart from '@/components/calculator/CostBreakdownChart';
 import MarginSlider from '@/components/calculator/MarginSlider';
-import WhatIfAnalysis from '@/components/calculator/WhatIfAnalysis';
 import SoftCTA from '@/components/calculator/SoftCTA';
-import CopyShareButtons from '@/components/calculator/CopyShareButtons';
 import Tooltip from '@/components/ui/Tooltip';
 import { useLanguage } from '@/lib/i18n';
 import Link from 'next/link';
@@ -462,7 +460,6 @@ export default function HesaplayiciPage() {
                         <div className="input-group" style={{ marginBottom: '1rem' }}>
                             <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 {labels.revenue}
-                                <Tooltip content={language === 'tr' ? 'KDV hariç, indirimler sonrası tahsil edilen net tutar.' : 'Net revenue after discounts, excluding VAT.'} />
                             </label>
                             <div style={{ position: 'relative' }}>
                                 <input
@@ -779,40 +776,6 @@ export default function HesaplayiciPage() {
                                         {interpretation.message}
                                     </div>
                                 )}
-
-                                {/* Golden Test Verification Badge */}
-                                {isGoldenTest && (
-                                    <div
-                                        style={{
-                                            marginTop: '1rem',
-                                            padding: '0.75rem 1rem',
-                                            background: isGoldenTestValid ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-                                            borderRadius: 'var(--radius-md)',
-                                            border: `1px solid ${isGoldenTestValid ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`,
-                                            fontSize: '0.875rem',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            gap: '0.5rem',
-                                        }}
-                                    >
-                                        {isGoldenTestValid ? (
-                                            <>
-                                                <span style={{ color: 'var(--color-success)' }}>✅</span>
-                                                <span style={{ color: 'var(--color-success)', fontWeight: 600 }}>
-                                                    {language === 'tr' ? 'Doğrulandı - PDF ile %100 uyumlu' : 'Verified - 100% PDF accurate'}
-                                                </span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <span style={{ color: 'var(--color-error)' }}>❌</span>
-                                                <span style={{ color: 'var(--color-error)', fontWeight: 600 }}>
-                                                    {language === 'tr' ? 'Beklenen: POAS 1.75x, Brüt Kâr 3,500₺' : 'Expected: POAS 1.75x, Gross Profit $3,500'}
-                                                </span>
-                                            </>
-                                        )}
-                                    </div>
-                                )}
                             </div>
 
                             {/* Comparison with ROAS */}
@@ -954,6 +917,16 @@ export default function HesaplayiciPage() {
                                 </div>
                             )}
 
+                            {/* Cost Breakdown Chart */}
+                            <CostBreakdownChart
+                                cogs={inputs.cogs || 0}
+                                shipping={inputs.shippingCost || 0}
+                                paymentFees={inputs.paymentFees || 0}
+                                handling={inputs.handlingCost || 0}
+                                fixedCosts={inputs.fixedCosts || 0}
+                                currency={currencySymbol}
+                            />
+
                             {/* ROAS Hedefleri - Free for all logged-in users */}
                             <div className="glass-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
                                 <button
@@ -1065,6 +1038,13 @@ export default function HesaplayiciPage() {
                                 )}
                             </div>
 
+                            {/* Dynamic Margin Slider */}
+                            <MarginSlider
+                                revenue={inputs.revenue}
+                                grossProfit={outputs.grossProfit}
+                                onRoasChange={() => { }}
+                            />
+
                             {/* Action Buttons */}
                             <div style={{ display: 'flex', gap: '1rem' }}>
                                 <button
@@ -1084,69 +1064,6 @@ export default function HesaplayiciPage() {
                                     {labels.exportPdf}
                                 </button>
                             </div>
-
-                            {/* Cost Breakdown Chart */}
-                            <CostBreakdownChart
-                                cogs={inputs.cogs || 0}
-                                shipping={inputs.shippingCost || 0}
-                                paymentFees={inputs.paymentFees || 0}
-                                handling={inputs.handlingCost || 0}
-                                fixedCosts={inputs.fixedCosts || 0}
-                                currency={currencySymbol}
-                            />
-
-                            {/* Dynamic Margin Slider */}
-                            <MarginSlider
-                                revenue={inputs.revenue}
-                                grossProfit={outputs.grossProfit}
-                                onRoasChange={() => { }}
-                            />
-
-                            {/* Sharing Note */}
-                            <div
-                                style={{
-                                    marginTop: '1.5rem',
-                                    padding: '1rem',
-                                    background: 'var(--color-surface)',
-                                    borderRadius: 'var(--radius-md)',
-                                    textAlign: 'center',
-                                    borderTop: '1px solid var(--color-border)',
-                                }}
-                            >
-                                <p style={{ fontSize: '0.8125rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
-                                    {labels.sharingNote}
-                                </p>
-                                <a
-                                    href="https://poas-hesaplayici.onrender.com"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    style={{
-                                        fontSize: '0.75rem',
-                                        color: 'var(--color-primary-light)',
-                                        textDecoration: 'none',
-                                    }}
-                                >
-                                    poas-hesaplayici.onrender.com
-                                </a>
-                            </div>
-
-                            {/* Copy/Share Buttons */}
-                            <CopyShareButtons
-                                poas={outputs.poas}
-                                grossProfit={outputs.grossProfit}
-                                breakevenRoas={roasTargets?.breakevenROAS || 0}
-                                currencySymbol={currencySymbol}
-                            />
-
-                            {/* What-If Analysis */}
-                            <WhatIfAnalysis
-                                currentPoas={outputs.poas}
-                                currentGrossProfit={outputs.grossProfit}
-                                variableOrderCosts={outputs.variableOrderCosts}
-                                revenue={inputs.revenue}
-                                adSpend={inputs.adSpend}
-                                currencySymbol={currencySymbol}
-                            />
 
                             {/* Soft CTA for Consulting */}
                             <SoftCTA />
