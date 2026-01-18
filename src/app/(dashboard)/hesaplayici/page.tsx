@@ -1057,7 +1057,7 @@ export default function HesaplayiciPage() {
                             />
 
                             {/* Action Buttons */}
-                            <div style={{ display: 'flex', gap: '1rem' }}>
+                            <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
                                 <button
                                     onClick={() => setShowSaveModal(true)}
                                     className="btn btn-primary"

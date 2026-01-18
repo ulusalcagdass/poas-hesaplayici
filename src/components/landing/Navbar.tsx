@@ -7,7 +7,7 @@ import LanguageSelector from '@/components/ui/LanguageSelector';
 import { useLanguage } from '@/lib/i18n';
 
 export default function Navbar() {
-    const { language, t } = useLanguage();
+    const { language, setLanguage, t } = useLanguage();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -154,25 +154,70 @@ export default function Navbar() {
                             </div>
                         </div>
 
-                        {/* Mobile Menu Button */}
-                        <button
-                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            aria-label={isMobileMenuOpen ? 'Menüyü kapat' : 'Menüyü aç'}
-                            aria-expanded={isMobileMenuOpen}
+                        {/* Mobile Language Toggle + Menu Button */}
+                        <div
                             style={{
                                 display: 'none',
-                                background: 'transparent',
-                                border: 'none',
-                                color: 'var(--color-text-primary)',
-                                cursor: 'pointer',
-                                padding: '0.75rem',
-                                minWidth: '48px',
-                                minHeight: '48px',
+                                alignItems: 'center',
+                                gap: '0.5rem',
                             }}
                             className="mobile-menu-btn"
                         >
-                            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                        </button>
+                            {/* Mobile Language Toggle */}
+                            <div style={{ display: 'flex', gap: '0.25rem' }}>
+                                <button
+                                    onClick={() => setLanguage('tr')}
+                                    style={{
+                                        padding: '0.4rem 0.6rem',
+                                        borderRadius: 'var(--radius-sm)',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        fontSize: '0.7rem',
+                                        fontWeight: 600,
+                                        background: language === 'tr' ? 'var(--gradient-primary)' : 'var(--color-surface)',
+                                        color: language === 'tr' ? 'white' : 'var(--color-text-muted)',
+                                    }}
+                                >
+                                    TR
+                                </button>
+                                <button
+                                    onClick={() => setLanguage('en')}
+                                    style={{
+                                        padding: '0.4rem 0.6rem',
+                                        borderRadius: 'var(--radius-sm)',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        fontSize: '0.7rem',
+                                        fontWeight: 600,
+                                        background: language === 'en' ? 'var(--gradient-primary)' : 'var(--color-surface)',
+                                        color: language === 'en' ? 'white' : 'var(--color-text-muted)',
+                                    }}
+                                >
+                                    EN
+                                </button>
+                            </div>
+
+                            {/* Menu Button */}
+                            <button
+                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                                aria-label={isMobileMenuOpen ? 'Menüyü kapat' : 'Menüyü aç'}
+                                aria-expanded={isMobileMenuOpen}
+                                style={{
+                                    background: 'transparent',
+                                    border: 'none',
+                                    color: 'var(--color-text-primary)',
+                                    cursor: 'pointer',
+                                    padding: '0.75rem',
+                                    minWidth: '48px',
+                                    minHeight: '48px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </nav>
