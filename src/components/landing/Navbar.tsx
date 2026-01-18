@@ -221,6 +221,7 @@ export default function Navbar() {
 
                     {/* CTA Buttons */}
                     <div className="mobile-menu-cta">
+                        <LanguageSelector />
                         <Link
                             href="/hesaplayici"
                             onClick={closeMobileMenu}

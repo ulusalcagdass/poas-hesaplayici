@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, Calculator, Home } from 'lucide-react';
+import { Menu, X, Calculator, Home, Globe } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n';
 
 export default function MobileMenu() {
+    const { language, setLanguage, t } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
 
     // ESC key to close
@@ -37,12 +39,14 @@ export default function MobileMenu() {
                     position: 'sticky',
                     top: 0,
                     zIndex: 40,
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                 }}
             >
                 <button
                     type="button"
                     onClick={() => setIsOpen(true)}
-                    aria-label="Menüyü aç"
+                    aria-label={language === 'tr' ? 'Menüyü aç' : 'Open menu'}
                     style={{
                         background: 'transparent',
                         border: 'none',
@@ -58,6 +62,40 @@ export default function MobileMenu() {
                 >
                     <Menu size={24} />
                 </button>
+
+                {/* Language Toggle in Header */}
+                <div style={{ display: 'flex', gap: '0.25rem' }}>
+                    <button
+                        onClick={() => setLanguage('tr')}
+                        style={{
+                            padding: '0.5rem 0.75rem',
+                            borderRadius: 'var(--radius-sm)',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            background: language === 'tr' ? 'var(--gradient-primary)' : 'var(--color-surface)',
+                            color: language === 'tr' ? 'white' : 'var(--color-text-muted)',
+                        }}
+                    >
+                        TR
+                    </button>
+                    <button
+                        onClick={() => setLanguage('en')}
+                        style={{
+                            padding: '0.5rem 0.75rem',
+                            borderRadius: 'var(--radius-sm)',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            background: language === 'en' ? 'var(--gradient-primary)' : 'var(--color-surface)',
+                            color: language === 'en' ? 'white' : 'var(--color-text-muted)',
+                        }}
+                    >
+                        EN
+                    </button>
+                </div>
             </header>
 
             {/* Full-screen Mobile Menu Overlay */}
@@ -82,7 +120,7 @@ export default function MobileMenu() {
                     <button
                         type="button"
                         onClick={closeMenu}
-                        aria-label="Menüyü kapat"
+                        aria-label={language === 'tr' ? 'Menüyü kapat' : 'Close menu'}
                         style={{
                             alignSelf: 'flex-end',
                             background: 'transparent',
@@ -121,7 +159,7 @@ export default function MobileMenu() {
                             <Calculator size={22} />
                         </div>
                         <span style={{ fontWeight: 700, fontSize: '1.25rem' }}>
-                            POAS <span style={{ color: 'var(--color-primary-light)' }}>Hesap</span>
+                            POAS <span style={{ color: 'var(--color-primary-light)' }}>{t('sidebar', 'logo')}</span>
                         </span>
                     </div>
 
@@ -143,7 +181,7 @@ export default function MobileMenu() {
                             }}
                         >
                             <Home size={22} />
-                            Ana Sayfa
+                            {t('sidebar', 'home')}
                         </Link>
                         <Link
                             href="/hesaplayici"
@@ -161,9 +199,53 @@ export default function MobileMenu() {
                             }}
                         >
                             <Calculator size={22} />
-                            Hesaplayıcı
+                            {t('sidebar', 'calculator')}
                         </Link>
                     </nav>
+
+                    {/* Language Selector in Menu */}
+                    <div style={{ padding: '1rem', borderTop: '1px solid var(--color-border)', marginTop: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                            <Globe size={16} style={{ color: 'var(--color-text-muted)' }} />
+                            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
+                                {language === 'tr' ? 'Dil' : 'Language'}
+                            </span>
+                        </div>
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            <button
+                                onClick={() => setLanguage('tr')}
+                                style={{
+                                    flex: 1,
+                                    padding: '0.75rem',
+                                    borderRadius: 'var(--radius-sm)',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    fontSize: '0.875rem',
+                                    fontWeight: 600,
+                                    background: language === 'tr' ? 'var(--gradient-primary)' : 'var(--color-surface)',
+                                    color: language === 'tr' ? 'white' : 'var(--color-text-muted)',
+                                }}
+                            >
+                                🇹🇷 Türkçe
+                            </button>
+                            <button
+                                onClick={() => setLanguage('en')}
+                                style={{
+                                    flex: 1,
+                                    padding: '0.75rem',
+                                    borderRadius: 'var(--radius-sm)',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    fontSize: '0.875rem',
+                                    fontWeight: 600,
+                                    background: language === 'en' ? 'var(--gradient-primary)' : 'var(--color-surface)',
+                                    color: language === 'en' ? 'white' : 'var(--color-text-muted)',
+                                }}
+                            >
+                                🇬🇧 English
+                            </button>
+                        </div>
+                    </div>
 
                     {/* Footer */}
                     <p style={{
@@ -172,7 +254,7 @@ export default function MobileMenu() {
                         fontSize: '0.875rem',
                         padding: '1rem'
                     }}>
-                        Ücretsiz ve herkese açık
+                        {t('sidebar', 'freeAndOpen')}
                     </p>
                 </div>
             )}
