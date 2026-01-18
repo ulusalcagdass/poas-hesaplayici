@@ -9,16 +9,23 @@ interface TooltipProps {
 
 export default function Tooltip({ content }: TooltipProps) {
     const [isVisible, setIsVisible] = useState(false);
-    const [position, setPosition] = useState<'top' | 'bottom'>('top');
+    const [position, setPosition] = useState<'right' | 'left'>('right');
     const tooltipRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
-        if (isVisible && triggerRef.current) {
-            const rect = triggerRef.current.getBoundingClientRect();
-            const spaceAbove = rect.top;
-            const spaceBelow = window.innerHeight - rect.bottom;
-            setPosition(spaceAbove < 80 && spaceBelow > spaceAbove ? 'bottom' : 'top');
+        if (isVisible && triggerRef.current && tooltipRef.current) {
+            const triggerRect = triggerRef.current.getBoundingClientRect();
+            const tooltipRect = tooltipRef.current.getBoundingClientRect();
+            const spaceRight = window.innerWidth - triggerRect.right;
+            const spaceLeft = triggerRect.left;
+
+            // Prefer right, but flip to left if not enough space
+            if (spaceRight < tooltipRect.width + 20 && spaceLeft > spaceRight) {
+                setPosition('left');
+            } else {
+                setPosition('right');
+            }
         }
     }, [isVisible]);
 
@@ -32,7 +39,7 @@ export default function Tooltip({ content }: TooltipProps) {
                 onFocus={() => setIsVisible(true)}
                 onBlur={() => setIsVisible(false)}
                 onClick={() => setIsVisible(!isVisible)}
-                aria-label="Bilgi"
+                aria-label="Info"
                 style={{
                     background: 'transparent',
                     border: 'none',
@@ -54,9 +61,12 @@ export default function Tooltip({ content }: TooltipProps) {
                     role="tooltip"
                     style={{
                         position: 'absolute',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        ...(position === 'top' ? { bottom: '100%', marginBottom: '0.5rem' } : { top: '100%', marginTop: '0.5rem' }),
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        ...(position === 'right'
+                            ? { left: '100%', marginLeft: '0.5rem' }
+                            : { right: '100%', marginRight: '0.5rem' }
+                        ),
                         zIndex: 1000,
                         background: 'var(--color-bg-tertiary)',
                         border: '1px solid var(--color-border)',
@@ -65,9 +75,9 @@ export default function Tooltip({ content }: TooltipProps) {
                         fontSize: '0.8125rem',
                         color: 'var(--color-text-secondary)',
                         whiteSpace: 'nowrap',
-                        maxWidth: '280px',
+                        maxWidth: 'min(280px, 70vw)',
                         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-                        animation: 'fadeIn 0.15s ease-out',
+                        animation: position === 'right' ? 'fadeInRight 0.15s ease-out' : 'fadeInLeft 0.15s ease-out',
                     }}
                 >
                     <span style={{ whiteSpace: 'normal', display: 'block' }}>{content}</span>
@@ -76,11 +86,11 @@ export default function Tooltip({ content }: TooltipProps) {
                     <div
                         style={{
                             position: 'absolute',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            ...(position === 'top'
-                                ? { bottom: '-6px', borderTop: '6px solid var(--color-bg-tertiary)', borderLeft: '6px solid transparent', borderRight: '6px solid transparent' }
-                                : { top: '-6px', borderBottom: '6px solid var(--color-bg-tertiary)', borderLeft: '6px solid transparent', borderRight: '6px solid transparent' }
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            ...(position === 'right'
+                                ? { left: '-6px', borderRight: '6px solid var(--color-bg-tertiary)', borderTop: '6px solid transparent', borderBottom: '6px solid transparent' }
+                                : { right: '-6px', borderLeft: '6px solid var(--color-bg-tertiary)', borderTop: '6px solid transparent', borderBottom: '6px solid transparent' }
                             ),
                             width: 0,
                             height: 0,
@@ -90,9 +100,13 @@ export default function Tooltip({ content }: TooltipProps) {
             )}
 
             <style jsx>{`
-                @keyframes fadeIn {
-                    from { opacity: 0; transform: translateX(-50%) translateY(4px); }
-                    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+                @keyframes fadeInRight {
+                    from { opacity: 0; transform: translateY(-50%) translateX(-4px); }
+                    to { opacity: 1; transform: translateY(-50%) translateX(0); }
+                }
+                @keyframes fadeInLeft {
+                    from { opacity: 0; transform: translateY(-50%) translateX(4px); }
+                    to { opacity: 1; transform: translateY(-50%) translateX(0); }
                 }
             `}</style>
         </div>

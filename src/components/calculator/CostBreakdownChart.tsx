@@ -8,29 +8,29 @@ interface CostBreakdownChartProps {
     shipping: number;
     paymentFees: number;
     handling: number;
-    grossProfit: number;
+    fixedCosts?: number;
     currency: string;
 }
 
-const COLORS = ['#ef4444', '#f59e0b', '#8b5cf6', '#06b6d4', '#10b981'];
+const COLORS = ['#ef4444', '#f59e0b', '#8b5cf6', '#06b6d4', '#64748b'];
 
 export default function CostBreakdownChart({
     cogs,
     shipping,
     paymentFees,
     handling,
-    grossProfit,
+    fixedCosts = 0,
     currency,
 }: CostBreakdownChartProps) {
     const { language, t } = useLanguage();
 
-    const operations = paymentFees + handling;
-
+    // Build data array with only cost items (no profit)
     const data = [
         { name: t('chart', 'productCost'), value: cogs, color: COLORS[0] },
         { name: t('chart', 'shippingCost'), value: shipping, color: COLORS[1] },
-        { name: t('chart', 'operationCost'), value: operations, color: COLORS[2] },
-        { name: t('chart', 'profit'), value: Math.max(0, grossProfit), color: COLORS[4] },
+        { name: t('chart', 'paymentFees'), value: paymentFees, color: COLORS[2] },
+        { name: t('chart', 'operationCost'), value: handling, color: COLORS[3] },
+        ...(fixedCosts > 0 ? [{ name: t('chart', 'fixedCosts'), value: fixedCosts, color: COLORS[4] }] : []),
     ].filter(item => item.value > 0);
 
     const formatValue = (value: number) => {
@@ -94,7 +94,7 @@ export default function CostBreakdownChart({
             className="glass-card"
             style={{
                 padding: '1.5rem',
-                marginTop: '1rem',
+                marginBottom: '1.5rem',
             }}
         >
             <h4 style={{

@@ -450,7 +450,7 @@ export default function HesaplayiciPage() {
                         <div className="input-group" style={{ marginBottom: '1rem' }}>
                             <label className="input-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 {labels.revenue}
-                                <Tooltip content={language === 'tr' ? 'Ürünün tedarik veya üretim maliyeti.' : 'Product procurement or production cost.'} />
+                                <Tooltip content={language === 'tr' ? 'KDV hariç, indirimler sonrası tahsil edilen net tutar.' : 'Net revenue after discounts, excluding VAT.'} />
                             </label>
                             <div style={{ position: 'relative' }}>
                                 <input
@@ -904,7 +904,7 @@ export default function HesaplayiciPage() {
                                 <div className="glass-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
                                     <h3 style={{ fontSize: '1rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                         <Target size={20} style={{ color: 'var(--color-success)' }} />
-                                        Hedef POAS: {targetPoas}x
+                                        {language === 'tr' ? `Hedef POAS: ${targetPoas}x` : `Target POAS: ${targetPoas}x`}
                                     </h3>
 
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -916,7 +916,7 @@ export default function HesaplayiciPage() {
                                             }}
                                         >
                                             <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
-                                                Bu brüt kâr için maksimum reklam harcaması
+                                                {language === 'tr' ? 'Bu brüt kâr için maksimum reklam harcaması' : 'Maximum ad spend for this gross profit'}
                                             </div>
                                             <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--color-primary-light)' }}>
                                                 {formatCurrency(targetOutputs.maxAdSpend, currencySymbol)}
@@ -930,7 +930,7 @@ export default function HesaplayiciPage() {
                                             }}
                                         >
                                             <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
-                                                Bu reklam harcamasıyla ulaşılması gereken minimum brüt kâr
+                                                {language === 'tr' ? 'Bu reklam harcamasıyla ulaşılması gereken minimum brüt kâr' : 'Minimum gross profit required for this ad spend'}
                                             </div>
                                             <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--color-success)' }}>
                                                 {formatCurrency(targetOutputs.minGrossProfit, currencySymbol)}
@@ -1077,8 +1077,8 @@ export default function HesaplayiciPage() {
                                 shipping={inputs.shippingCost || 0}
                                 paymentFees={inputs.paymentFees || 0}
                                 handling={inputs.handlingCost || 0}
-                                grossProfit={outputs.grossProfit}
-                                currency={currency}
+                                fixedCosts={inputs.fixedCosts || 0}
+                                currency={currencySymbol}
                             />
 
                             {/* Dynamic Margin Slider */}
