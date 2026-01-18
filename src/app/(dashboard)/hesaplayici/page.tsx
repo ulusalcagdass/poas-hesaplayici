@@ -685,7 +685,11 @@ export default function HesaplayiciPage() {
 
                         {/* Preset Buttons */}
                         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                            {Object.values(POAS_PRESETS).map((preset) => (
+                            {[
+                                { value: 2.0, labelTr: 'Kısa Vadeli Kârlılık', labelEn: 'Short-term Profit' },
+                                { value: 1.4, labelTr: 'Kontrollü Büyüme', labelEn: 'Controlled Growth' },
+                                { value: 1.0, labelTr: 'Yeni Müşteri / Break-even', labelEn: 'New Customer / Break-even' },
+                            ].map((preset) => (
                                 <button
                                     key={preset.value}
                                     type="button"
@@ -693,7 +697,7 @@ export default function HesaplayiciPage() {
                                     className={`btn btn-sm ${targetPoas === preset.value ? 'btn-primary' : 'btn-secondary'}`}
                                     style={{ fontSize: '0.75rem' }}
                                 >
-                                    {preset.value}x - {preset.label}
+                                    {preset.value}x - {language === 'tr' ? preset.labelTr : preset.labelEn}
                                 </button>
                             ))}
                         </div>
@@ -773,7 +777,14 @@ export default function HesaplayiciPage() {
                                             fontSize: '0.9375rem',
                                         }}
                                     >
-                                        {interpretation.message}
+                                        {interpretation.status === 'excellent'
+                                            ? (language === 'tr' ? 'Mükemmel kârlılık! Reklam harcamanız çok verimli çalışıyor.' : 'Excellent profitability! Your ad spend is very efficient.')
+                                            : interpretation.status === 'good'
+                                                ? (language === 'tr' ? 'İyi kârlılık. Kontrollü büyüme sağlıyorsunuz.' : 'Good profitability. You are achieving controlled growth.')
+                                                : interpretation.status === 'warning'
+                                                    ? (language === 'tr' ? 'Başabaş noktasındasınız. Müşteri kazanımı için kabul edilebilir.' : 'You are at break-even. Acceptable for customer acquisition.')
+                                                    : (language === 'tr' ? 'Dikkat! Reklam harcamanız brüt kârınızdan fazla.' : 'Warning! Your ad spend exceeds your gross profit.')
+                                        }
                                     </div>
                                 )}
                             </div>

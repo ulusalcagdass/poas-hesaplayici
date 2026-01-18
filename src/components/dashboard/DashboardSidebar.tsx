@@ -60,6 +60,57 @@ export default function DashboardSidebar() {
                 </Link>
             </div>
 
+            {/* Language Selector - MOVED TO TOP */}
+            <div
+                style={{
+                    padding: '1rem',
+                    borderBottom: '1px solid var(--color-border)',
+                }}
+            >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                    <Globe size={16} style={{ color: 'var(--color-text-muted)' }} />
+                    <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
+                        {language === 'tr' ? 'Dil' : 'Language'}
+                    </span>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <button
+                        onClick={() => setLanguage('tr')}
+                        style={{
+                            flex: 1,
+                            padding: '0.5rem',
+                            borderRadius: 'var(--radius-sm)',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '0.8125rem',
+                            fontWeight: 600,
+                            transition: 'all 0.2s ease',
+                            background: language === 'tr' ? 'var(--gradient-primary)' : 'var(--color-surface)',
+                            color: language === 'tr' ? 'white' : 'var(--color-text-muted)',
+                        }}
+                    >
+                        🇹🇷 TR
+                    </button>
+                    <button
+                        onClick={() => setLanguage('en')}
+                        style={{
+                            flex: 1,
+                            padding: '0.5rem',
+                            borderRadius: 'var(--radius-sm)',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '0.8125rem',
+                            fontWeight: 600,
+                            transition: 'all 0.2s ease',
+                            background: language === 'en' ? 'var(--gradient-primary)' : 'var(--color-surface)',
+                            color: language === 'en' ? 'white' : 'var(--color-text-muted)',
+                        }}
+                    >
+                        🇬🇧 EN
+                    </button>
+                </div>
+            </div>
+
             {/* Navigation */}
             <nav style={{ flex: 1, padding: '1rem' }}>
                 <div style={{ marginBottom: '0.5rem' }}>
@@ -116,57 +167,6 @@ export default function DashboardSidebar() {
                     {t('sidebar', 'calculator')}
                 </Link>
             </nav>
-
-            {/* Language Selector */}
-            <div
-                style={{
-                    padding: '1rem',
-                    borderTop: '1px solid var(--color-border)',
-                }}
-            >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                    <Globe size={16} style={{ color: 'var(--color-text-muted)' }} />
-                    <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
-                        {language === 'tr' ? 'Dil' : 'Language'}
-                    </span>
-                </div>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button
-                        onClick={() => setLanguage('tr')}
-                        style={{
-                            flex: 1,
-                            padding: '0.5rem',
-                            borderRadius: 'var(--radius-sm)',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: '0.8125rem',
-                            fontWeight: 600,
-                            transition: 'all 0.2s ease',
-                            background: language === 'tr' ? 'var(--gradient-primary)' : 'var(--color-surface)',
-                            color: language === 'tr' ? 'white' : 'var(--color-text-muted)',
-                        }}
-                    >
-                        🇹🇷 TR
-                    </button>
-                    <button
-                        onClick={() => setLanguage('en')}
-                        style={{
-                            flex: 1,
-                            padding: '0.5rem',
-                            borderRadius: 'var(--radius-sm)',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: '0.8125rem',
-                            fontWeight: 600,
-                            transition: 'all 0.2s ease',
-                            background: language === 'en' ? 'var(--gradient-primary)' : 'var(--color-surface)',
-                            color: language === 'en' ? 'white' : 'var(--color-text-muted)',
-                        }}
-                    >
-                        🇬🇧 EN
-                    </button>
-                </div>
-            </div>
 
             {/* Footer */}
             <div

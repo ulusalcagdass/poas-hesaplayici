@@ -420,7 +420,7 @@ export const translations = {
             home: 'Home',
             calculator: 'Calculator',
             freeAndOpen: 'Free and open to everyone',
-            logo: 'Calc',
+            logo: 'Calculator',
         },
     },
 
