@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Info } from 'lucide-react';
 
 interface TooltipProps {
@@ -9,28 +10,69 @@ interface TooltipProps {
 
 export default function Tooltip({ content }: TooltipProps) {
     const [isVisible, setIsVisible] = useState(false);
-    const [position, setPosition] = useState<'right' | 'left'>('right');
-    const tooltipRef = useRef<HTMLDivElement>(null);
+    const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
     const triggerRef = useRef<HTMLButtonElement>(null);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        if (isVisible && triggerRef.current && tooltipRef.current) {
-            const triggerRect = triggerRef.current.getBoundingClientRect();
-            const tooltipRect = tooltipRef.current.getBoundingClientRect();
-            const spaceRight = window.innerWidth - triggerRect.right;
-            const spaceLeft = triggerRect.left;
+        setMounted(true);
+    }, []);
 
-            // Prefer right, but flip to left if not enough space
-            if (spaceRight < tooltipRect.width + 20 && spaceLeft > spaceRight) {
-                setPosition('left');
+    useEffect(() => {
+        if (isVisible && triggerRef.current) {
+            const triggerRect = triggerRef.current.getBoundingClientRect();
+            const tooltipWidth = 350;
+            const spaceRight = window.innerWidth - triggerRect.right;
+
+            let left: number;
+            if (spaceRight >= tooltipWidth + 20) {
+                // Position to the right
+                left = triggerRect.right + 8;
             } else {
-                setPosition('right');
+                // Position to the left
+                left = triggerRect.left - tooltipWidth - 8;
             }
+
+            // Keep tooltip within viewport
+            left = Math.max(10, Math.min(left, window.innerWidth - tooltipWidth - 10));
+
+            setTooltipPosition({
+                top: triggerRect.top + triggerRect.height / 2,
+                left: left,
+            });
         }
     }, [isVisible]);
 
+    const tooltipContent = isVisible && mounted && (
+        <div
+            role="tooltip"
+            style={{
+                position: 'fixed',
+                top: tooltipPosition.top,
+                left: tooltipPosition.left,
+                transform: 'translateY(-50%)',
+                zIndex: 99999,
+                background: 'var(--color-bg-tertiary)',
+                border: '1px solid var(--color-border)',
+                borderRadius: 'var(--radius-md)',
+                padding: '0.75rem 1rem',
+                fontSize: '0.875rem',
+                color: 'var(--color-text-secondary)',
+                whiteSpace: 'normal',
+                width: '350px',
+                maxWidth: 'calc(100vw - 20px)',
+                wordWrap: 'break-word',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)',
+                animation: 'fadeIn 0.15s ease-out',
+                pointerEvents: 'none',
+            }}
+        >
+            {content}
+        </div>
+    );
+
     return (
-        <div style={{ position: 'relative', display: 'inline-flex' }}>
+        <>
             <button
                 ref={triggerRef}
                 type="button"
@@ -45,7 +87,7 @@ export default function Tooltip({ content }: TooltipProps) {
                     border: 'none',
                     cursor: 'pointer',
                     padding: '0.25rem',
-                    display: 'flex',
+                    display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: 'var(--color-text-muted)',
@@ -55,61 +97,14 @@ export default function Tooltip({ content }: TooltipProps) {
                 <Info size={16} />
             </button>
 
-            {isVisible && (
-                <div
-                    ref={tooltipRef}
-                    role="tooltip"
-                    style={{
-                        position: 'absolute',
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        ...(position === 'right'
-                            ? { left: '100%', marginLeft: '0.5rem' }
-                            : { right: '100%', marginRight: '0.5rem' }
-                        ),
-                        zIndex: 1000,
-                        background: 'var(--color-bg-tertiary)',
-                        border: '1px solid var(--color-border)',
-                        borderRadius: 'var(--radius-md)',
-                        padding: '0.5rem 0.75rem',
-                        fontSize: '0.8125rem',
-                        color: 'var(--color-text-secondary)',
-                        whiteSpace: 'normal',
-                        maxWidth: '350px',
-                        wordWrap: 'break-word',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-                        animation: position === 'right' ? 'fadeInRight 0.15s ease-out' : 'fadeInLeft 0.15s ease-out',
-                    }}
-                >
-                    <span style={{ whiteSpace: 'normal', display: 'block' }}>{content}</span>
+            {mounted && createPortal(tooltipContent, document.body)}
 
-                    {/* Arrow */}
-                    <div
-                        style={{
-                            position: 'absolute',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            ...(position === 'right'
-                                ? { left: '-6px', borderRight: '6px solid var(--color-bg-tertiary)', borderTop: '6px solid transparent', borderBottom: '6px solid transparent' }
-                                : { right: '-6px', borderLeft: '6px solid var(--color-bg-tertiary)', borderTop: '6px solid transparent', borderBottom: '6px solid transparent' }
-                            ),
-                            width: 0,
-                            height: 0,
-                        }}
-                    />
-                </div>
-            )}
-
-            <style jsx>{`
-                @keyframes fadeInRight {
-                    from { opacity: 0; transform: translateY(-50%) translateX(-4px); }
-                    to { opacity: 1; transform: translateY(-50%) translateX(0); }
-                }
-                @keyframes fadeInLeft {
-                    from { opacity: 0; transform: translateY(-50%) translateX(4px); }
-                    to { opacity: 1; transform: translateY(-50%) translateX(0); }
+            <style jsx global>{`
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
                 }
             `}</style>
-        </div>
+        </>
     );
 }

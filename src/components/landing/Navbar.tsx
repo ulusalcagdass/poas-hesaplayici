@@ -159,6 +159,7 @@ export default function Navbar() {
                             style={{
                                 display: 'none',
                                 alignItems: 'center',
+                                marginLeft: '0.75rem',
                             }}
                             className="mobile-lang-toggle"
                         >

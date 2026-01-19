@@ -58,9 +58,14 @@ const formatCurrency = (num: number, symbol: string = '₺'): string => {
 };
 
 export default function HesaplayiciPage() {
-    const { language } = useLanguage();
-    const [currency, setCurrency] = useState('TRY');
-    const currencySymbol = CURRENCIES.find(c => c.value === currency)?.symbol || '₺';
+    const { language, setLanguage } = useLanguage();
+    const [currency, setCurrency] = useState(language === 'en' ? 'USD' : 'TRY');
+    const currencySymbol = CURRENCIES.find(c => c.value === currency)?.symbol || (language === 'en' ? '$' : '₺');
+
+    // Auto-switch currency when language changes
+    useEffect(() => {
+        setCurrency(language === 'en' ? 'USD' : 'TRY');
+    }, [language]);
 
     // Labels for i18n
     const labels = language === 'tr' ? {
@@ -388,14 +393,59 @@ export default function HesaplayiciPage() {
                         {labels.pageSubtitle}
                     </p>
                 </div>
-                <button
-                    onClick={applyGoldenTestCase}
-                    className="btn btn-secondary btn-sm"
-                    style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-                >
-                    <Lightbulb size={16} />
-                    {labels.fillExample}
-                </button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    {/* Language Toggle - same style as landing page */}
+                    <div
+                        style={{
+                            display: 'flex',
+                            background: 'var(--color-bg-tertiary)',
+                            borderRadius: 'var(--radius-md)',
+                            padding: '0.25rem',
+                            gap: '0.25rem',
+                        }}
+                    >
+                        <button
+                            onClick={() => setLanguage('tr')}
+                            style={{
+                                padding: '0.5rem 1rem',
+                                borderRadius: 'var(--radius-sm)',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '0.875rem',
+                                fontWeight: 600,
+                                transition: 'all 0.2s ease',
+                                background: language === 'tr' ? 'var(--color-primary)' : 'transparent',
+                                color: language === 'tr' ? 'white' : 'var(--color-text-muted)',
+                            }}
+                        >
+                            TR
+                        </button>
+                        <button
+                            onClick={() => setLanguage('en')}
+                            style={{
+                                padding: '0.5rem 1rem',
+                                borderRadius: 'var(--radius-sm)',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '0.875rem',
+                                fontWeight: 600,
+                                transition: 'all 0.2s ease',
+                                background: language === 'en' ? 'var(--color-primary)' : 'transparent',
+                                color: language === 'en' ? 'white' : 'var(--color-text-muted)',
+                            }}
+                        >
+                            EN
+                        </button>
+                    </div>
+                    <button
+                        onClick={applyGoldenTestCase}
+                        className="btn btn-secondary btn-sm"
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                    >
+                        <Lightbulb size={16} />
+                        {labels.fillExample}
+                    </button>
+                </div>
             </div>
 
             <div
