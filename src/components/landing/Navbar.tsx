@@ -102,7 +102,7 @@ export default function Navbar() {
                                 <Calculator size={20} />
                             </div>
                             <span>POAS</span>
-                            <span style={{ color: 'var(--color-primary-light)' }}>Hesaplayıcı</span>
+                            <span style={{ color: 'var(--color-primary-light)' }}>{language === 'tr' ? 'Hesaplayıcı' : 'Calculator'}</span>
                         </Link>
 
                         {/* Desktop Navigation */}

@@ -69,7 +69,7 @@ export default function Hero() {
                         >
                             <Sparkles size={16} style={{ color: 'var(--color-primary-light)' }} />
                             <span style={{ color: 'var(--color-primary-light)', fontSize: '0.875rem', fontWeight: 600 }}>
-                                Kârlılık Odaklı Reklam Yönetimi
+                                {language === 'tr' ? 'Kârlılık Odaklı Reklam Yönetimi' : 'Profit-Focused Ad Management'}
                             </span>
                         </div>
 
@@ -143,21 +143,21 @@ export default function Hero() {
                         >
                             <div>
                                 <div style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--color-primary-light)' }}>
-                                    30sn
+                                    {language === 'tr' ? '30sn' : '30s'}
                                 </div>
-                                <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>Hızlı Hesaplama</div>
+                                <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>{language === 'tr' ? 'Hızlı Hesaplama' : 'Fast Calculation'}</div>
                             </div>
                             <div>
                                 <div style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--color-primary-light)' }}>
                                     ∞
                                 </div>
-                                <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>Senaryo Kaydet</div>
+                                <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>{language === 'tr' ? 'Senaryo Kaydet' : 'Save Scenarios'}</div>
                             </div>
                             <div>
                                 <div style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--color-primary-light)' }}>
                                     PDF/CSV
                                 </div>
-                                <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>Export</div>
+                                <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>{language === 'tr' ? 'Dışa Aktar' : 'Export'}</div>
                             </div>
                         </div>
                     </div>
@@ -199,9 +199,9 @@ export default function Hero() {
                                     <Target size={20} color="white" />
                                 </div>
                                 <div>
-                                    <div style={{ fontWeight: 600 }}>POAS Hesaplayıcı</div>
+                                    <div style={{ fontWeight: 600 }}>{language === 'tr' ? 'POAS Hesaplayıcı' : 'POAS Calculator'}</div>
                                     <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
-                                        Gerçek kârlılığını hesapla
+                                        {language === 'tr' ? 'Gerçek kârlılığını hesapla' : 'Calculate your true profitability'}
                                     </div>
                                 </div>
                             </div>
@@ -229,7 +229,7 @@ export default function Hero() {
                                         3.5x
                                     </div>
                                     <div style={{ fontSize: '0.75rem', color: 'var(--color-warning)' }}>
-                                        Eksik bilgi
+                                        {language === 'tr' ? 'Eksik bilgi' : 'Incomplete data'}
                                     </div>
                                 </div>
                                 <div
@@ -247,7 +247,7 @@ export default function Hero() {
                                         1.8x
                                     </div>
                                     <div style={{ fontSize: '0.75rem', color: 'var(--color-success)' }}>
-                                        Gerçek kârlılık
+                                        {language === 'tr' ? 'Gerçek kârlılık' : 'True profit'}
                                     </div>
                                 </div>
                             </div>
@@ -266,8 +266,12 @@ export default function Hero() {
                             >
                                 <TrendingUp size={20} style={{ color: 'var(--color-primary-light)', flexShrink: 0, marginTop: '2px' }} />
                                 <div style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
-                                    ROAS 3.5x görünse de, maliyetler dahil edildiğinde
-                                    <strong style={{ color: 'var(--color-text-primary)' }}> gerçek kârlılık 1.8x</strong>
+                                    {language === 'tr'
+                                        ? 'ROAS 3.5x görünse de, maliyetler dahil edildiğinde'
+                                        : 'Even if ROAS shows 3.5x, when costs are included,'}
+                                    <strong style={{ color: 'var(--color-text-primary)' }}>
+                                        {language === 'tr' ? ' gerçek kârlılık 1.8x' : ' true profit is 1.8x'}
+                                    </strong>
                                 </div>
                             </div>
                         </div>
@@ -289,7 +293,7 @@ export default function Hero() {
                                 animationDelay: '0.5s',
                             }}
                         >
-                            +180% Kâr
+                            {language === 'tr' ? '+180% Kâr' : '+180% Profit'}
                         </div>
                     </div>
                 </div>
