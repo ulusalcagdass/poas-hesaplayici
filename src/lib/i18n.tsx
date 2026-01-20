@@ -541,8 +541,8 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 // Language Provider Component
-export function LanguageProvider({ children }: { children: ReactNode }) {
-    const [language, setLanguage] = useState<Language>('tr');
+export function LanguageProvider({ children, initialLocale }: { children: ReactNode; initialLocale?: Language }) {
+    const [language, setLanguage] = useState<Language>(initialLocale || 'tr');
 
     const t = useCallback((section: keyof typeof translations, key: string): string => {
         const sectionData = translations[section];

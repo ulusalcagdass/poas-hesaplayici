@@ -122,7 +122,7 @@ export default function Hero() {
                                 flexWrap: 'wrap',
                             }}
                         >
-                            <Link href="/hesaplayici" className="btn btn-primary btn-lg">
+                            <Link href={language === 'en' ? '/en/calculator' : '/tr/hesaplayici'} className="btn btn-primary btn-lg">
                                 {language === 'tr' ? 'Ücretsiz Hesapla' : 'Calculate Free'}
                                 <ArrowRight size={18} />
                             </Link>

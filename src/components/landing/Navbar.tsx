@@ -148,7 +148,7 @@ export default function Navbar() {
                                 }}
                             >
                                 <LanguageSelector />
-                                <Link href="/hesaplayici" className="btn btn-primary">
+                                <Link href={language === 'en' ? '/en/calculator' : '/tr/hesaplayici'} className="btn btn-primary">
                                     {language === 'tr' ? 'Hesapla' : 'Calculate'}
                                 </Link>
                             </div>
@@ -277,7 +277,7 @@ export default function Navbar() {
                     <div className="mobile-menu-cta">
                         <LanguageSelector />
                         <Link
-                            href="/hesaplayici"
+                            href={language === 'en' ? '/en/calculator' : '/tr/hesaplayici'}
                             onClick={closeMobileMenu}
                             className="btn btn-primary btn-lg"
                         >

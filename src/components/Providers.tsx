@@ -2,12 +2,17 @@
 
 import { SessionProvider } from 'next-auth/react';
 import { ReactNode } from 'react';
-import { LanguageProvider } from '@/lib/i18n';
+import { LanguageProvider, type Language } from '@/lib/i18n';
 
-export default function Providers({ children }: { children: ReactNode }) {
+interface ProvidersProps {
+    children: ReactNode;
+    initialLocale?: Language;
+}
+
+export default function Providers({ children, initialLocale }: ProvidersProps) {
     return (
         <SessionProvider>
-            <LanguageProvider>
+            <LanguageProvider initialLocale={initialLocale}>
                 {children}
             </LanguageProvider>
         </SessionProvider>
