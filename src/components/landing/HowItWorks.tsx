@@ -232,7 +232,7 @@ export default function HowItWorks() {
 
                 {/* CTA */}
                 <div style={{ textAlign: 'center', marginTop: '3rem' }}>
-                    <Link href="/hesaplayici" className="btn btn-primary btn-lg">
+                    <Link href={language === 'tr' ? '/hesaplayici' : '/calculator'} className="btn btn-primary btn-lg">
                         {language === 'tr' ? 'Hemen Hesapla' : 'Calculate Now'}
                         <ArrowRight size={18} />
                     </Link>

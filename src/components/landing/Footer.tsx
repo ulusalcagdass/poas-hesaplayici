@@ -32,7 +32,7 @@ export default function Footer() {
                 { label: 'Features', href: '#features' },
                 { label: 'How It Works', href: '#how-it-works' },
                 { label: 'FAQ', href: '#faq' },
-                { label: 'Calculator', href: '/hesaplayici' },
+                { label: 'Calculator', href: '/calculator' },
             ],
             resources: [
                 { label: 'POAS Guide', href: '#' },

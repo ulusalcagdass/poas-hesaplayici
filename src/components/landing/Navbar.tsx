@@ -5,11 +5,26 @@ import Link from 'next/link';
 import { Menu, X, Calculator } from 'lucide-react';
 import LanguageSelector from '@/components/ui/LanguageSelector';
 import { useLanguage } from '@/lib/i18n';
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function Navbar() {
     const { language, setLanguage, t } = useLanguage();
+    const router = useRouter();
+    const pathname = usePathname();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    // Handle language change with URL redirect
+    const handleLanguageChange = (lang: 'tr' | 'en') => {
+        setLanguage(lang);
+        if (lang === 'en') {
+            if (pathname === '/' || pathname === '/en') router.push('/en');
+            else if (pathname === '/hesaplayici' || pathname === '/calculator') router.push('/calculator');
+        } else {
+            if (pathname === '/' || pathname === '/en') router.push('/');
+            else if (pathname === '/hesaplayici' || pathname === '/calculator') router.push('/hesaplayici');
+        }
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -148,7 +163,7 @@ export default function Navbar() {
                                 }}
                             >
                                 <LanguageSelector />
-                                <Link href="/hesaplayici" className="btn btn-primary">
+                                <Link href={language === 'tr' ? '/hesaplayici' : '/calculator'} className="btn btn-primary">
                                     {language === 'tr' ? 'Hesapla' : 'Calculate'}
                                 </Link>
                             </div>
@@ -173,7 +188,7 @@ export default function Navbar() {
                                 }}
                             >
                                 <button
-                                    onClick={() => setLanguage('tr')}
+                                    onClick={() => handleLanguageChange('tr')}
                                     style={{
                                         padding: '0.35rem 0.6rem',
                                         borderRadius: 'var(--radius-sm)',
@@ -188,7 +203,7 @@ export default function Navbar() {
                                     TR
                                 </button>
                                 <button
-                                    onClick={() => setLanguage('en')}
+                                    onClick={() => handleLanguageChange('en')}
                                     style={{
                                         padding: '0.35rem 0.6rem',
                                         borderRadius: 'var(--radius-sm)',
@@ -277,7 +292,7 @@ export default function Navbar() {
                     <div className="mobile-menu-cta">
                         <LanguageSelector />
                         <Link
-                            href="/hesaplayici"
+                            href={language === 'tr' ? '/hesaplayici' : '/calculator'}
                             onClick={closeMobileMenu}
                             className="btn btn-primary btn-lg"
                         >
