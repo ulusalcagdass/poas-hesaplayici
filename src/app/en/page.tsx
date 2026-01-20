@@ -1,3 +1,7 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useLanguage } from '@/lib/i18n';
 import {
     Navbar,
     Hero,
@@ -9,7 +13,14 @@ import {
     Footer,
 } from '@/components/landing';
 
-export default function LocaleHome() {
+export default function EnglishHome() {
+    const { setLanguage } = useLanguage();
+
+    // Set language to English when this page loads
+    useEffect(() => {
+        setLanguage('en');
+    }, [setLanguage]);
+
     return (
         <main>
             <Navbar />

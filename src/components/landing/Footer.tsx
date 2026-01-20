@@ -13,7 +13,7 @@ export default function Footer() {
                 { label: 'Özellikler', href: '#features' },
                 { label: 'Nasıl Çalışır', href: '#how-it-works' },
                 { label: 'SSS', href: '#faq' },
-                { label: 'Hesaplayıcı', href: '/tr/hesaplayici' },
+                { label: 'Hesaplayıcı', href: '/hesaplayici' },
             ],
             resources: [
                 { label: 'POAS Rehberi', href: '#' },
@@ -32,7 +32,7 @@ export default function Footer() {
                 { label: 'Features', href: '#features' },
                 { label: 'How It Works', href: '#how-it-works' },
                 { label: 'FAQ', href: '#faq' },
-                { label: 'Calculator', href: '/en/calculator' },
+                { label: 'Calculator', href: '/hesaplayici' },
             ],
             resources: [
                 { label: 'POAS Guide', href: '#' },
