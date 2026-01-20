@@ -325,7 +325,7 @@ export const translations = {
             costsIgnored: 'Maliyetler yok sayılıyor',
             costsIncluded: 'Tüm maliyetler dahil',
             costBreakdown: 'Maliyetler (10.000₺ gelirden düşülen):',
-            cogs: 'Ürün Mly.',
+            cogs: 'Ürün Maliyeti',
             shipping: 'Kargo',
             commission: 'Komisyon',
             operations: 'Operasyon',

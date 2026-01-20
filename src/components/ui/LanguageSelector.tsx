@@ -1,12 +1,32 @@
 'use client';
 
 import { useLanguage, Language } from '@/lib/i18n';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function LanguageSelector() {
     const { language, setLanguage } = useLanguage();
+    const pathname = usePathname();
+    const router = useRouter();
 
     const handleChange = (lang: Language) => {
         setLanguage(lang);
+
+        // Redirect based on language and current page
+        if (lang === 'en') {
+            // TR → EN redirect
+            if (pathname === '/' || pathname === '/en') {
+                router.push('/en');
+            } else if (pathname === '/hesaplayici' || pathname === '/calculator') {
+                router.push('/calculator');
+            }
+        } else {
+            // EN → TR redirect
+            if (pathname === '/' || pathname === '/en') {
+                router.push('/');
+            } else if (pathname === '/hesaplayici' || pathname === '/calculator') {
+                router.push('/hesaplayici');
+            }
+        }
     };
 
     return (

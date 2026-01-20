@@ -35,6 +35,7 @@ import SoftCTA from '@/components/calculator/SoftCTA';
 import Tooltip from '@/components/ui/Tooltip';
 import { useLanguage } from '@/lib/i18n';
 import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 
 // Sector Presets - example values for different industries
 const SECTOR_PRESETS = {
@@ -59,6 +60,8 @@ const formatCurrency = (num: number, symbol: string = '₺'): string => {
 
 export default function HesaplayiciPage() {
     const { language, setLanguage } = useLanguage();
+    const router = useRouter();
+    const pathname = usePathname();
     const [currency, setCurrency] = useState(language === 'en' ? 'USD' : 'TRY');
     const currencySymbol = CURRENCIES.find(c => c.value === currency)?.symbol || (language === 'en' ? '$' : '₺');
 
@@ -405,7 +408,10 @@ export default function HesaplayiciPage() {
                         }}
                     >
                         <button
-                            onClick={() => setLanguage('tr')}
+                            onClick={() => {
+                                setLanguage('tr');
+                                if (pathname === '/calculator') router.push('/hesaplayici');
+                            }}
                             style={{
                                 padding: '0.5rem 1rem',
                                 borderRadius: 'var(--radius-sm)',
@@ -421,7 +427,10 @@ export default function HesaplayiciPage() {
                             TR
                         </button>
                         <button
-                            onClick={() => setLanguage('en')}
+                            onClick={() => {
+                                setLanguage('en');
+                                if (pathname === '/hesaplayici') router.push('/calculator');
+                            }}
                             style={{
                                 padding: '0.5rem 1rem',
                                 borderRadius: 'var(--radius-sm)',
