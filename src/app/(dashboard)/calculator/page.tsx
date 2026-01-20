@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/lib/i18n';
-import HesaplayiciPage from '@/app/(dashboard)/hesaplayici/page';
+import HesaplayiciPage from '../hesaplayici/page';
 
 export default function CalculatorPage() {
     const { language, setLanguage } = useLanguage();
