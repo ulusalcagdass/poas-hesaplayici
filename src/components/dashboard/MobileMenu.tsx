@@ -62,40 +62,6 @@ export default function MobileMenu() {
                 >
                     <Menu size={24} />
                 </button>
-
-                {/* Language Toggle in Header */}
-                <div style={{ display: 'flex', gap: '0.25rem' }}>
-                    <button
-                        onClick={() => setLanguage('tr')}
-                        style={{
-                            padding: '0.5rem 0.75rem',
-                            borderRadius: 'var(--radius-sm)',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
-                            background: language === 'tr' ? 'var(--gradient-primary)' : 'var(--color-surface)',
-                            color: language === 'tr' ? 'white' : 'var(--color-text-muted)',
-                        }}
-                    >
-                        TR
-                    </button>
-                    <button
-                        onClick={() => setLanguage('en')}
-                        style={{
-                            padding: '0.5rem 0.75rem',
-                            borderRadius: 'var(--radius-sm)',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
-                            background: language === 'en' ? 'var(--gradient-primary)' : 'var(--color-surface)',
-                            color: language === 'en' ? 'white' : 'var(--color-text-muted)',
-                        }}
-                    >
-                        EN
-                    </button>
-                </div>
             </header>
 
             {/* Full-screen Mobile Menu Overlay */}
@@ -202,50 +168,6 @@ export default function MobileMenu() {
                             {t('sidebar', 'calculator')}
                         </Link>
                     </nav>
-
-                    {/* Language Selector in Menu */}
-                    <div style={{ padding: '1rem', borderTop: '1px solid var(--color-border)', marginTop: '1rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                            <Globe size={16} style={{ color: 'var(--color-text-muted)' }} />
-                            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
-                                {language === 'tr' ? 'Dil' : 'Language'}
-                            </span>
-                        </div>
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                            <button
-                                onClick={() => setLanguage('tr')}
-                                style={{
-                                    flex: 1,
-                                    padding: '0.75rem',
-                                    borderRadius: 'var(--radius-sm)',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    fontSize: '0.875rem',
-                                    fontWeight: 600,
-                                    background: language === 'tr' ? 'var(--gradient-primary)' : 'var(--color-surface)',
-                                    color: language === 'tr' ? 'white' : 'var(--color-text-muted)',
-                                }}
-                            >
-                                🇹🇷 Türkçe
-                            </button>
-                            <button
-                                onClick={() => setLanguage('en')}
-                                style={{
-                                    flex: 1,
-                                    padding: '0.75rem',
-                                    borderRadius: 'var(--radius-sm)',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    fontSize: '0.875rem',
-                                    fontWeight: 600,
-                                    background: language === 'en' ? 'var(--gradient-primary)' : 'var(--color-surface)',
-                                    color: language === 'en' ? 'white' : 'var(--color-text-muted)',
-                                }}
-                            >
-                                🇬🇧 English
-                            </button>
-                        </div>
-                    </div>
 
                     {/* Footer */}
                     <p style={{
