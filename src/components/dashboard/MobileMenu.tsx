@@ -62,6 +62,40 @@ export default function MobileMenu() {
                 >
                     <Menu size={24} />
                 </button>
+
+                {/* Language Toggle in Header */}
+                <div style={{ display: 'flex', gap: '0.25rem' }}>
+                    <button
+                        onClick={() => setLanguage('tr')}
+                        style={{
+                            padding: '0.5rem 0.75rem',
+                            borderRadius: 'var(--radius-sm)',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            background: language === 'tr' ? 'var(--gradient-primary)' : 'var(--color-surface)',
+                            color: language === 'tr' ? 'white' : 'var(--color-text-muted)',
+                        }}
+                    >
+                        TR
+                    </button>
+                    <button
+                        onClick={() => setLanguage('en')}
+                        style={{
+                            padding: '0.5rem 0.75rem',
+                            borderRadius: 'var(--radius-sm)',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            background: language === 'en' ? 'var(--gradient-primary)' : 'var(--color-surface)',
+                            color: language === 'en' ? 'white' : 'var(--color-text-muted)',
+                        }}
+                    >
+                        EN
+                    </button>
+                </div>
             </header>
 
             {/* Full-screen Mobile Menu Overlay */}
