@@ -109,39 +109,27 @@ export default function SenaryolarPage() {
     const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
     const [copiedId, setCopiedId] = useState<string | null>(null);
 
-    // Fetch scenarios
+    // Fetch scenarios from localStorage
     useEffect(() => {
-        const fetchScenarios = async () => {
-            try {
-                const response = await fetch('/api/senaryolar');
-                const data = await response.json();
-
-                if (!response.ok) {
-                    setError(data.error || t.errorLoad);
-                } else {
-                    setScenarios(data);
-                }
-            } catch {
-                setError(t.errorLoad);
-            } finally {
-                setIsLoading(false);
+        try {
+            const storedScenarios = localStorage.getItem('poas_scenarios_v1');
+            if (storedScenarios) {
+                setScenarios(JSON.parse(storedScenarios));
             }
-        };
-
-        fetchScenarios();
+        } catch {
+            setError(t.errorLoad);
+        } finally {
+            setIsLoading(false);
+        }
     }, [t.errorLoad]);
 
-    // Delete scenario
-    const handleDelete = async (id: string) => {
+    // Delete scenario from localStorage
+    const handleDelete = (id: string) => {
         try {
-            const response = await fetch(`/api/senaryolar/${id}`, {
-                method: 'DELETE',
-            });
-
-            if (response.ok) {
-                setScenarios(scenarios.filter(s => s.id !== id));
-                setDeleteConfirm(null);
-            }
+            const updatedScenarios = scenarios.filter(s => s.id !== id);
+            localStorage.setItem('poas_scenarios_v1', JSON.stringify(updatedScenarios));
+            setScenarios(updatedScenarios);
+            setDeleteConfirm(null);
         } catch {
             setError(t.errorDelete);
         }

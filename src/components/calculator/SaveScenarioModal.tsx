@@ -35,27 +35,33 @@ export default function SaveScenarioModal({
         setIsLoading(true);
 
         try {
-            const response = await fetch('/api/senaryolar', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name,
-                    channel: selectedChannel,
-                    currency,
-                    inputs,
-                    outputs,
-                    notes,
-                }),
-            });
+            // Generate unique ID
+            const id = `scenario_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-            const data = await response.json();
+            // Create scenario object
+            const scenario = {
+                id,
+                name,
+                channel: selectedChannel,
+                currency,
+                inputs,
+                outputs,
+                notes,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            };
 
-            if (!response.ok) {
-                setError(data.error || 'Bir hata oluştu');
-            } else {
-                router.push('/senaryolar');
-                router.refresh();
-            }
+            // Get existing scenarios from localStorage
+            const existingScenarios = JSON.parse(localStorage.getItem('poas_scenarios_v1') || '[]');
+
+            // Add new scenario to the beginning
+            const updatedScenarios = [scenario, ...existingScenarios];
+
+            // Save to localStorage
+            localStorage.setItem('poas_scenarios_v1', JSON.stringify(updatedScenarios));
+
+            router.push('/senaryolar');
+            router.refresh();
         } catch {
             setError('Bir hata oluştu. Lütfen tekrar deneyin.');
         } finally {
