@@ -66,8 +66,8 @@ export default function ResultsExportPDF({
         contributionMargin: 'Katkı Marjı',
         costBreakdown: 'Maliyet Dağılımı',
         target: 'Hedef POAS',
-        requiredProfit: 'Hedef Brüt Kâr',
-        scalableSpend: 'Ölçeklenebilir Bütçe',
+        maxAdSpend: 'Maks. Reklam Harcaması',
+        minGrossProfit: 'Min. Brüt Kâr',
         roasTargets: 'ROAS Hedefleri',
         breakeven: 'Başabaş',
         margin10: '%10 Marj',
@@ -94,8 +94,8 @@ export default function ResultsExportPDF({
         contributionMargin: 'Contribution Margin',
         costBreakdown: 'Cost Breakdown',
         target: 'Target POAS',
-        requiredProfit: 'Required Profit',
-        scalableSpend: 'Scalable Spend',
+        maxAdSpend: 'Max Ad Spend',
+        minGrossProfit: 'Min Gross Profit',
         roasTargets: 'ROAS Targets',
         breakeven: 'Breakeven',
         margin10: '10% Margin',
@@ -318,16 +318,16 @@ export default function ResultsExportPDF({
                             {labels.target}: {formatNumber(targetPoas)}x
                         </h3>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                            <div style={{ padding: '12px', background: 'rgba(16,185,129,0.1)', borderRadius: '8px' }}>
-                                <div style={{ fontSize: '11px', color: '#94a3b8' }}>{labels.requiredProfit}</div>
-                                <div style={{ fontSize: '18px', fontWeight: 700, color: '#10b981' }}>
-                                    {formatCurrency(targetOutputs.minGrossProfit, symbol)}
+                            <div style={{ padding: '12px', background: 'rgba(99,102,241,0.1)', borderRadius: '8px' }}>
+                                <div style={{ fontSize: '11px', color: '#94a3b8' }}>{labels.maxAdSpend}</div>
+                                <div style={{ fontSize: '18px', fontWeight: 700, color: '#6366f1' }}>
+                                    {formatCurrency(targetOutputs.maxAdSpend, symbol)}
                                 </div>
                             </div>
-                            <div style={{ padding: '12px', background: 'rgba(99,102,241,0.1)', borderRadius: '8px' }}>
-                                <div style={{ fontSize: '11px', color: '#94a3b8' }}>{labels.scalableSpend}</div>
-                                <div style={{ fontSize: '18px', fontWeight: 700, color: '#6366f1' }}>
-                                    {formatCurrency(inputs.adSpend, symbol)} → {formatCurrency(inputs.adSpend * 1.4, symbol)}
+                            <div style={{ padding: '12px', background: 'rgba(16,185,129,0.1)', borderRadius: '8px' }}>
+                                <div style={{ fontSize: '11px', color: '#94a3b8' }}>{labels.minGrossProfit}</div>
+                                <div style={{ fontSize: '18px', fontWeight: 700, color: '#10b981' }}>
+                                    {formatCurrency(targetOutputs.minGrossProfit, symbol)}
                                 </div>
                             </div>
                         </div>

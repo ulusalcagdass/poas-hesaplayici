@@ -952,29 +952,6 @@ export default function HesaplayiciPage() {
                                     </h3>
 
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                        {/* Metric 1: Required gross profit at current ad spend */}
-                                        <div
-                                            style={{
-                                                padding: '1rem',
-                                                background: 'rgba(16, 185, 129, 0.1)',
-                                                borderRadius: 'var(--radius-md)',
-                                            }}
-                                        >
-                                            <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
-                                                {language === 'tr'
-                                                    ? 'Hedef POAS ile bu reklam harcamasında ulaşılması gereken brüt kâr'
-                                                    : 'Gross profit required at target POAS with current ad spend'}
-                                            </div>
-                                            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem', opacity: 0.7 }}>
-                                                {language === 'tr'
-                                                    ? 'Mevcut reklam bütçesi korunursa'
-                                                    : 'Assuming current ad spend is maintained'}
-                                            </div>
-                                            <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--color-success)' }}>
-                                                {formatCurrency(targetOutputs.minGrossProfit, currencySymbol)}
-                                            </div>
-                                        </div>
-                                        {/* Metric 2: Scalable ad spend at target POAS */}
                                         <div
                                             style={{
                                                 padding: '1rem',
@@ -983,17 +960,24 @@ export default function HesaplayiciPage() {
                                             }}
                                         >
                                             <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
-                                                {language === 'tr'
-                                                    ? 'Hedef POAS korunursa ölçeklenebilir reklam bütçesi'
-                                                    : 'Scalable ad spend at target POAS'}
-                                            </div>
-                                            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem', opacity: 0.7 }}>
-                                                {language === 'tr'
-                                                    ? 'Aynı verimlilik devam ederse bütçe artışı mümkündür'
-                                                    : 'If efficiency is maintained'}
+                                                {language === 'tr' ? 'Bu brüt kâr için maksimum reklam harcaması' : 'Maximum ad spend for this gross profit'}
                                             </div>
                                             <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--color-primary-light)' }}>
-                                                {formatCurrency(inputs.adSpend, currencySymbol)} → {formatCurrency(inputs.adSpend * 1.4, currencySymbol)}
+                                                {formatCurrency(targetOutputs.maxAdSpend, currencySymbol)}
+                                            </div>
+                                        </div>
+                                        <div
+                                            style={{
+                                                padding: '1rem',
+                                                background: 'rgba(16, 185, 129, 0.1)',
+                                                borderRadius: 'var(--radius-md)',
+                                            }}
+                                        >
+                                            <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
+                                                {language === 'tr' ? 'Bu reklam harcamasıyla ulaşılması gereken minimum brüt kâr' : 'Minimum gross profit required for this ad spend'}
+                                            </div>
+                                            <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--color-success)' }}>
+                                                {formatCurrency(targetOutputs.minGrossProfit, currencySymbol)}
                                             </div>
                                         </div>
                                     </div>
