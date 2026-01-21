@@ -67,7 +67,7 @@ export default function ResultsExportPDF({
         costBreakdown: 'Maliyet Dağılımı',
         target: 'Hedef POAS',
         requiredProfit: 'Hedef Brüt Kâr',
-        scalableSpend: 'Ölçeklenebilir Bütçe',
+        requiredRevenue: 'Hedef Gelir',
         roasTargets: 'ROAS Hedefleri',
         breakeven: 'Başabaş',
         margin10: '%10 Marj',
@@ -95,7 +95,7 @@ export default function ResultsExportPDF({
         costBreakdown: 'Cost Breakdown',
         target: 'Target POAS',
         requiredProfit: 'Required Profit',
-        scalableSpend: 'Scalable Spend',
+        requiredRevenue: 'Required Revenue',
         roasTargets: 'ROAS Targets',
         breakeven: 'Breakeven',
         margin10: '10% Margin',
@@ -325,9 +325,9 @@ export default function ResultsExportPDF({
                                 </div>
                             </div>
                             <div style={{ padding: '12px', background: 'rgba(99,102,241,0.1)', borderRadius: '8px' }}>
-                                <div style={{ fontSize: '11px', color: '#94a3b8' }}>{labels.scalableSpend}</div>
+                                <div style={{ fontSize: '11px', color: '#94a3b8' }}>{labels.requiredRevenue}</div>
                                 <div style={{ fontSize: '16px', fontWeight: 700, color: '#6366f1' }}>
-                                    {formatCurrency(inputs.adSpend, symbol)} → {formatCurrency((outputs.poas / targetPoas) * inputs.adSpend, symbol)}
+                                    {formatCurrency((inputs.adSpend * targetPoas) + inputs.cogs + inputs.shippingCost + inputs.paymentFees + inputs.handlingCost, symbol)}
                                 </div>
                             </div>
                         </div>

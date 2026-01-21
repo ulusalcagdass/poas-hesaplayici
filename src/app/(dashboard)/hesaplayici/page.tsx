@@ -975,7 +975,7 @@ export default function HesaplayiciPage() {
                                                 {formatCurrency(inputs.adSpend * targetPoas, currencySymbol)}
                                             </div>
                                         </div>
-                                        {/* Metric 2: Scalable Ad Spend at Target POAS */}
+                                        {/* Metric 2: Revenue Required at Target POAS */}
                                         <div
                                             style={{
                                                 padding: '1rem',
@@ -985,26 +985,20 @@ export default function HesaplayiciPage() {
                                         >
                                             <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
                                                 {language === 'tr'
-                                                    ? 'Hedef POAS ile ölçeklenebilir reklam bütçesi'
-                                                    : 'Scalable ad spend at target POAS'}
+                                                    ? 'Hedef POAS ile bu bütçede ulaşılması gereken gelir'
+                                                    : 'Revenue required at target POAS with current ad spend'}
                                             </div>
                                             <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem', opacity: 0.7 }}>
                                                 {language === 'tr'
-                                                    ? 'Aynı verimlilik korunursa'
-                                                    : 'If the same efficiency is maintained'}
+                                                    ? 'Aynı maliyet yapısı korunursa'
+                                                    : 'Assuming the same cost structure'}
                                             </div>
                                             <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--color-primary-light)' }}>
-                                                {/* Formula: Scalable Ad Spend = (Current POAS / Target POAS) × Current Ad Spend */}
-                                                {(() => {
-                                                    const currentPoas = outputs.poas;
-                                                    const scalableSpend = (currentPoas / targetPoas) * inputs.adSpend;
-                                                    return `${formatCurrency(inputs.adSpend, currencySymbol)} → ${formatCurrency(scalableSpend, currencySymbol)}`;
-                                                })()}
-                                            </div>
-                                            <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '0.25rem', opacity: 0.7 }}>
-                                                {language === 'tr'
-                                                    ? 'reklam harcaması mümkün'
-                                                    : 'ad spend possible'}
+                                                {/* Formula: Required Revenue = (Ad Spend × Target POAS) + Variable Costs */}
+                                                {formatCurrency(
+                                                    (inputs.adSpend * targetPoas) + inputs.cogs + inputs.shippingCost + inputs.paymentFees + inputs.handlingCost,
+                                                    currencySymbol
+                                                )}
                                             </div>
                                         </div>
                                     </div>
