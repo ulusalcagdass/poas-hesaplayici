@@ -21,13 +21,14 @@ export interface Scenario {
     updatedAt: Date;
 }
 
-export type Channel = 'Google' | 'Meta' | 'TikTok' | 'Diğer';
+export type Channel = 'All' | 'Google' | 'Meta' | 'TikTok' | 'Diğer';
 
-export const CHANNELS: { value: Channel; label: string }[] = [
+export const CHANNELS: { value: Channel; label: string; labelEn?: string }[] = [
+    { value: 'All', label: 'Tüm Kanallar', labelEn: 'All Channels' },
     { value: 'Google', label: 'Google Ads' },
     { value: 'Meta', label: 'Meta (Facebook/Instagram)' },
     { value: 'TikTok', label: 'TikTok Ads' },
-    { value: 'Diğer', label: 'Diğer' },
+    { value: 'Diğer', label: 'Diğer', labelEn: 'Other' },
 ];
 
 export const CURRENCIES = [
