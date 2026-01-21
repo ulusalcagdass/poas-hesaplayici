@@ -12,7 +12,8 @@ import {
     AlertTriangle,
     ChevronDown,
     ChevronUp,
-    LogIn
+    LogIn,
+    FileText
 } from 'lucide-react';
 import {
     calculateAll,
@@ -498,11 +499,19 @@ export default function HesaplayiciPage() {
                     <button
                         onClick={applyGoldenTestCase}
                         className="btn btn-secondary btn-sm"
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0.75rem' }}
                     >
                         <Lightbulb size={16} />
-                        {labels.fillExample}
+                        <span className="hide-mobile">{labels.fillExample}</span>
                     </button>
+                    <Link
+                        href={language === 'tr' ? '/senaryolar' : '/scenarios'}
+                        className="btn btn-secondary btn-sm"
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 0.75rem' }}
+                    >
+                        <FileText size={16} />
+                        <span className="hide-mobile">{language === 'tr' ? 'Senaryolar' : 'Scenarios'}</span>
+                    </Link>
                 </div>
             </div>
 
