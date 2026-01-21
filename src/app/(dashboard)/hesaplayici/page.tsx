@@ -384,8 +384,9 @@ export default function HesaplayiciPage() {
                     </p>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-                    {/* Language Toggle */}
+                    {/* Language Toggle - Hide on mobile */}
                     <div
+                        className="hide-mobile"
                         style={{
                             display: 'flex',
                             background: 'var(--color-bg-tertiary)',
@@ -621,13 +622,16 @@ export default function HesaplayiciPage() {
                                     {labels.cogs}
                                     <Tooltip content={language === 'tr' ? 'Ürünün tedarik veya üretim maliyeti.' : 'Product procurement or production cost.'} />
                                 </label>
-                                <input
-                                    type="number"
-                                    className="input"
-                                    placeholder={`≈ ${language === 'tr' ? '₺' : '$'} ${formatNumber(inputs.revenue * DEFAULT_VALUES.cogsRatio, 0)}`}
-                                    value={inputs.cogs || ''}
-                                    onChange={(e) => handleInputChange('cogs', e.target.value)}
-                                />
+                                <div className="input-with-prefix">
+                                    <span className="input-prefix">{currencySymbol}</span>
+                                    <input
+                                        type="number"
+                                        className="input"
+                                        placeholder={`≈ ${formatNumber(inputs.revenue * DEFAULT_VALUES.cogsRatio, 0)}`}
+                                        value={inputs.cogs || ''}
+                                        onChange={(e) => handleInputChange('cogs', e.target.value)}
+                                    />
+                                </div>
                             </div>
 
                             <div className="input-group">
@@ -635,13 +639,16 @@ export default function HesaplayiciPage() {
                                     {labels.shipping}
                                     <Tooltip content={language === 'tr' ? 'Firmaya ait kargo bedelleri (müşteriden alınan hariç).' : 'Company shipping costs (excluding customer-paid).'} />
                                 </label>
-                                <input
-                                    type="number"
-                                    className="input"
-                                    placeholder={`≈ ${language === 'tr' ? '₺' : '$'} ${DEFAULT_VALUES.shippingCost}`}
-                                    value={inputs.shippingCost || ''}
-                                    onChange={(e) => handleInputChange('shippingCost', e.target.value)}
-                                />
+                                <div className="input-with-prefix">
+                                    <span className="input-prefix">{currencySymbol}</span>
+                                    <input
+                                        type="number"
+                                        className="input"
+                                        placeholder={`≈ ${DEFAULT_VALUES.shippingCost}`}
+                                        value={inputs.shippingCost || ''}
+                                        onChange={(e) => handleInputChange('shippingCost', e.target.value)}
+                                    />
+                                </div>
                             </div>
 
                             <div className="input-group">
@@ -649,13 +656,16 @@ export default function HesaplayiciPage() {
                                     {labels.paymentFees}
                                     <Tooltip content={language === 'tr' ? 'Sanal POS komisyonları, taksit farkları, ödeme sağlayıcı kesintileri.' : 'Virtual POS fees, installment fees, payment provider commissions.'} />
                                 </label>
-                                <input
-                                    type="number"
-                                    className="input"
-                                    placeholder={`≈ ${language === 'tr' ? '₺' : '$'} ${formatNumber(inputs.revenue * DEFAULT_VALUES.paymentFees, 0)}`}
-                                    value={inputs.paymentFees || ''}
-                                    onChange={(e) => handleInputChange('paymentFees', e.target.value)}
-                                />
+                                <div className="input-with-prefix">
+                                    <span className="input-prefix">{currencySymbol}</span>
+                                    <input
+                                        type="number"
+                                        className="input"
+                                        placeholder={`≈ ${formatNumber(inputs.revenue * DEFAULT_VALUES.paymentFees, 0)}`}
+                                        value={inputs.paymentFees || ''}
+                                        onChange={(e) => handleInputChange('paymentFees', e.target.value)}
+                                    />
+                                </div>
                             </div>
 
                             <div className="input-group">
@@ -663,13 +673,16 @@ export default function HesaplayiciPage() {
                                     {labels.handling}
                                     <Tooltip content={language === 'tr' ? 'Kutu, ambalaj, işçilik, depo/fulfillment giderleri.' : 'Box, packaging, labor, warehouse/fulfillment costs.'} />
                                 </label>
-                                <input
-                                    type="number"
-                                    className="input"
-                                    placeholder={`≈ ${language === 'tr' ? '₺' : '$'} ${DEFAULT_VALUES.handlingCost}`}
-                                    value={inputs.handlingCost || ''}
-                                    onChange={(e) => handleInputChange('handlingCost', e.target.value)}
-                                />
+                                <div className="input-with-prefix">
+                                    <span className="input-prefix">{currencySymbol}</span>
+                                    <input
+                                        type="number"
+                                        className="input"
+                                        placeholder={`≈ ${DEFAULT_VALUES.handlingCost}`}
+                                        value={inputs.handlingCost || ''}
+                                        onChange={(e) => handleInputChange('handlingCost', e.target.value)}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

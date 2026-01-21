@@ -836,6 +836,28 @@ input[type="number"]::-webkit-inner-spin-button {
   }
 }
 
+/* Input with currency prefix */
+.input-with-prefix {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-prefix .input-prefix {
+  position: absolute;
+  left: 1rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.input-with-prefix .input {
+  padding-left: 2.25rem;
+  width: 100%;
+}
+
 @supports (padding: max(0px)) {
   .sticky-bottom-cta {
     padding-bottom: max(1rem, env(safe-area-inset-bottom));
