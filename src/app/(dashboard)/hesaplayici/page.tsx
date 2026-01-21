@@ -912,7 +912,7 @@ export default function HesaplayiciPage() {
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid var(--color-border)' }}>
                                         <span style={{ color: 'var(--color-text-secondary)' }}>
-                                            {language === 'tr' ? 'Gelir' : 'Revenue'}
+                                            {language === 'tr' ? 'Toplam Gelir' : 'Total Revenue'}
                                         </span>
                                         <span style={{ fontWeight: 600 }}>{formatCurrency(inputs.revenue, currencySymbol)}</span>
                                     </div>
@@ -975,8 +975,8 @@ export default function HesaplayiciPage() {
                                         >
                                             <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
                                                 {language === 'tr'
-                                                    ? 'Hedef POAS ile bu reklam harcamasında ulaşılması gereken brüt kâr'
-                                                    : 'Gross profit required at target POAS with current ad spend'}
+                                                    ? 'Hedef POAS ile bu toplam reklam harcamasında ulaşılması gereken brüt kâr'
+                                                    : 'Gross profit required at target POAS with this total ad spend'}
                                             </div>
                                             <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem', opacity: 0.7 }}>
                                                 {language === 'tr'
@@ -998,8 +998,8 @@ export default function HesaplayiciPage() {
                                         >
                                             <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>
                                                 {language === 'tr'
-                                                    ? 'Hedef POAS ile bu bütçede ulaşılması gereken gelir'
-                                                    : 'Revenue required at target POAS with current ad spend'}
+                                                    ? 'Hedef POAS ile bu toplam reklam harcamasıyla ulaşılması gereken gelir'
+                                                    : 'Revenue required at target POAS with this total ad spend'}
                                             </div>
                                             <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem', opacity: 0.7 }}>
                                                 {language === 'tr'
