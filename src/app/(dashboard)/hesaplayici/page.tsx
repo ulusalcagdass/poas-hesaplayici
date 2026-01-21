@@ -384,6 +384,55 @@ export default function HesaplayiciPage() {
                     </p>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                    {/* Language Toggle */}
+                    <div
+                        style={{
+                            display: 'flex',
+                            background: 'var(--color-bg-tertiary)',
+                            borderRadius: 'var(--radius-md)',
+                            padding: '0.25rem',
+                            gap: '0.25rem',
+                        }}
+                    >
+                        <button
+                            onClick={() => {
+                                setLanguage('tr');
+                                if (pathname === '/calculator') router.push('/hesaplayici');
+                            }}
+                            style={{
+                                padding: '0.5rem 1rem',
+                                borderRadius: 'var(--radius-sm)',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '0.875rem',
+                                fontWeight: 600,
+                                transition: 'all 0.2s ease',
+                                background: language === 'tr' ? 'var(--color-primary)' : 'transparent',
+                                color: language === 'tr' ? 'white' : 'var(--color-text-muted)',
+                            }}
+                        >
+                            TR
+                        </button>
+                        <button
+                            onClick={() => {
+                                setLanguage('en');
+                                if (pathname === '/hesaplayici') router.push('/calculator');
+                            }}
+                            style={{
+                                padding: '0.5rem 1rem',
+                                borderRadius: 'var(--radius-sm)',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '0.875rem',
+                                fontWeight: 600,
+                                transition: 'all 0.2s ease',
+                                background: language === 'en' ? 'var(--color-primary)' : 'transparent',
+                                color: language === 'en' ? 'white' : 'var(--color-text-muted)',
+                            }}
+                        >
+                            EN
+                        </button>
+                    </div>
                     <button
                         onClick={applyGoldenTestCase}
                         className="btn btn-secondary btn-sm"
