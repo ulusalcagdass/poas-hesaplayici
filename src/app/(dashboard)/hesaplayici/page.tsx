@@ -270,10 +270,15 @@ export default function HesaplayiciPage() {
 
     const interpretation = outputs ? interpretPOAS(outputs.poas) : null;
 
-    // PDF Export Function - Using dedicated PDF Capture View
+    // PDF Export Function - Clone actual results, fixed width, A4 landscape
     const handleExportPDF = async () => {
         if (!outputs) {
             alert(language === 'tr' ? 'Önce hesaplama yapın.' : 'Please calculate first.');
+            return;
+        }
+
+        if (!resultsRef.current) {
+            alert(language === 'tr' ? 'Sonuç bölümü bulunamadı.' : 'Results section not found.');
             return;
         }
 
@@ -281,63 +286,51 @@ export default function HesaplayiciPage() {
             // Dynamic imports
             const html2canvas = (await import('html2canvas')).default;
             const { jsPDF } = await import('jspdf');
-            const { default: PdfCaptureView, PDF_WIDTH, PDF_HEIGHT } = await import('@/components/calculator/PdfCaptureView');
-            const { createRoot } = await import('react-dom/client');
 
-            // Create offscreen container
+            // Clone the actual results element
+            const originalElement = resultsRef.current;
+            const clone = originalElement.cloneNode(true) as HTMLElement;
+
+            // Create offscreen container for the clone
             const offscreenContainer = document.createElement('div');
             offscreenContainer.style.position = 'fixed';
             offscreenContainer.style.left = '-9999px';
             offscreenContainer.style.top = '0';
-            offscreenContainer.style.width = `${PDF_WIDTH}px`;
-            offscreenContainer.style.height = `${PDF_HEIGHT}px`;
-            offscreenContainer.style.overflow = 'hidden';
             offscreenContainer.style.zIndex = '-9999';
+            offscreenContainer.style.backgroundColor = '#0f172a';
             document.body.appendChild(offscreenContainer);
 
-            // Render PDF Capture View
-            const root = createRoot(offscreenContainer);
+            // Apply fixed width to clone (disable responsive behavior)
+            clone.style.width = '1200px';
+            clone.style.maxWidth = '1200px';
+            clone.style.minWidth = '1200px';
+            clone.style.padding = '24px';
+            clone.style.boxSizing = 'border-box';
+            clone.style.backgroundColor = '#0f172a';
 
-            await new Promise<void>((resolve) => {
-                root.render(
-                    <PdfCaptureView
-                        inputs={inputs}
-                        outputs={outputs}
-                        targetOutputs={targetOutputs}
-                        roasTargets={roasTargets}
-                        channel={channel}
-                        currency={currency}
-                        language={language}
-                    />
-                );
-                // Wait for render to complete
-                setTimeout(resolve, 100);
-            });
+            // Append clone to offscreen container
+            offscreenContainer.appendChild(clone);
 
-            // Get the rendered PDF node
-            const pdfNode = offscreenContainer.querySelector('#pdf-capture-container') as HTMLElement;
+            // Force reflow
+            clone.offsetHeight;
 
-            if (!pdfNode) {
-                throw new Error('PDF capture container not found');
-            }
+            // Wait for render
+            await new Promise(resolve => setTimeout(resolve, 100));
 
-            // Capture with html2canvas
-            const canvas = await html2canvas(pdfNode, {
-                scale: 2, // Good quality without being too heavy
+            // Capture the clone with html2canvas
+            const canvas = await html2canvas(clone, {
+                scale: 2,
                 backgroundColor: '#0f172a',
                 useCORS: true,
                 logging: false,
-                width: PDF_WIDTH,
-                height: PDF_HEIGHT,
-                windowWidth: PDF_WIDTH,
-                windowHeight: PDF_HEIGHT,
+                width: 1200,
+                windowWidth: 1200,
             });
 
             // Cleanup
-            root.unmount();
             document.body.removeChild(offscreenContainer);
 
-            // Create PDF - A4 Landscape, FULL PAGE, 0 MARGIN
+            // Create PDF - A4 Landscape
             const pdf = new jsPDF({
                 orientation: 'landscape',
                 unit: 'mm',
@@ -347,12 +340,40 @@ export default function HesaplayiciPage() {
             // A4 landscape: 297mm x 210mm
             const pdfWidth = 297;
             const pdfHeight = 210;
+            const margin = 6; // 6mm margin
+
+            // Available area
+            const availableWidth = pdfWidth - (margin * 2); // 285mm
+            const availableHeight = pdfHeight - (margin * 2); // 198mm
 
             // Get image data
             const imgData = canvas.toDataURL('image/png', 1.0);
 
-            // Add image to fill entire page - NO margin, NO offset
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
+            // Calculate image dimensions to fill available area
+            // Canvas is at scale 2, so actual content is 1200px wide
+            const canvasWidthMM = 1200 / 3.78; // ~317mm at 96dpi
+            const canvasHeightMM = canvas.height / 2 / 3.78; // Account for scale 2
+
+            // Scale to fit available width (priority) while maintaining aspect ratio
+            const scaleToFitWidth = availableWidth / canvasWidthMM;
+            const scaledHeight = canvasHeightMM * scaleToFitWidth;
+
+            // If scaled height exceeds available height, scale to fit height instead
+            let finalWidth = availableWidth;
+            let finalHeight = scaledHeight;
+
+            if (scaledHeight > availableHeight) {
+                const scaleToFitHeight = availableHeight / canvasHeightMM;
+                finalHeight = availableHeight;
+                finalWidth = canvasWidthMM * scaleToFitHeight;
+            }
+
+            // Center on page
+            const xOffset = margin + (availableWidth - finalWidth) / 2;
+            const yOffset = margin + (availableHeight - finalHeight) / 2;
+
+            // Add image
+            pdf.addImage(imgData, 'PNG', xOffset, yOffset, finalWidth, finalHeight, undefined, 'FAST');
 
             // Save
             pdf.save(`poas-${language === 'tr' ? 'rapor' : 'report'}-${new Date().toISOString().split('T')[0]}.pdf`);
