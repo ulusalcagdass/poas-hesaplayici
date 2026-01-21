@@ -89,11 +89,11 @@ export default function HesaplayiciPage() {
         calculate: 'Hesapla',
         useSuggested: 'Önerilen Değerleri Kullan',
         results: 'Sonuçlar',
-        grossProfit: 'Brüt Kâr',
+        grossProfit: 'Toplam Brüt Kâr',
         poas: 'POAS',
         roas: 'ROAS',
-        contributionMargin: 'Katkı Marjı',
-        variableCosts: 'Değişken Maliyetler',
+        contributionMargin: 'Toplam Katkı Marjı',
+        variableCosts: 'Toplam Değişken Maliyetler',
         roasTargets: 'ROAS Hedefleri',
         breakeven: 'Başa Baş ROAS',
         margin10: '%10 Kar Marjı için ROAS',
@@ -121,11 +121,11 @@ export default function HesaplayiciPage() {
         calculate: 'Calculate',
         useSuggested: 'Use Suggested Values',
         results: 'Results',
-        grossProfit: 'Gross Profit',
+        grossProfit: 'Total Gross Profit',
         poas: 'POAS',
         roas: 'ROAS',
-        contributionMargin: 'Contribution Margin',
-        variableCosts: 'Variable Costs',
+        contributionMargin: 'Total Contribution Margin',
+        variableCosts: 'Total Variable Costs',
         roasTargets: 'ROAS Targets',
         breakeven: 'Break-even ROAS',
         margin10: 'ROAS for 10% Margin',
@@ -712,7 +712,7 @@ export default function HesaplayiciPage() {
                         {showNetProfit && (
                             <div className="input-group">
                                 <label className="input-label">
-                                    {language === 'tr' ? 'Sabit Giderler (Maaş, Kira, Yazılım vb.)' : 'Fixed Costs (Salary, Rent, Software, etc.)'}
+                                    {language === 'tr' ? 'Toplam Sabit Giderler (Maaş, Kira, Yazılım vb.)' : 'Total Fixed Costs (Salary, Rent, Software, etc.)'}
                                 </label>
                                 <input
                                     type="number"
