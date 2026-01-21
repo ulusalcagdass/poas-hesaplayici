@@ -8,7 +8,7 @@ import {
     Plus,
     Trash2,
     Copy,
-    Download,
+
     Search,
     Filter,
     Calendar,
@@ -39,7 +39,7 @@ const labels = {
         newCalculation: 'Yeni Hesaplama',
         searchPlaceholder: 'Senaryo ara...',
         allChannels: 'Tüm Kanallar',
-        downloadPdf: 'PDF İndir',
+
         noScenarios: 'Henüz Senaryo Yok',
         noScenariosDesc: 'İlk POAS hesaplamanızı yapın ve senaryolarınızı kaydedin.',
         firstCalculation: 'İlk Hesaplamanı Yap',
@@ -69,7 +69,7 @@ const labels = {
         newCalculation: 'New Calculation',
         searchPlaceholder: 'Search scenarios...',
         allChannels: 'All Channels',
-        downloadPdf: 'Download PDF',
+
         noScenarios: 'No Scenarios Yet',
         noScenariosDesc: 'Create your first POAS calculation and save your scenarios.',
         firstCalculation: 'Create First Calculation',
@@ -190,89 +190,7 @@ ROAS: ${scenario.outputs.roas.toFixed(2)}x`;
         }
     };
 
-    // Export to PDF
-    const exportToPDF = async () => {
-        try {
-            const { jsPDF } = await import('jspdf');
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'mm',
-                format: 'a4',
-            });
 
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const margin = 15;
-            let yPos = 20;
-
-            // Title
-            pdf.setFontSize(18);
-            pdf.setTextColor(99, 102, 241);
-            pdf.text(t.pageTitle, pageWidth / 2, yPos, { align: 'center' });
-            yPos += 8;
-
-            // Date
-            pdf.setFontSize(10);
-            pdf.setTextColor(150, 150, 150);
-            pdf.text(
-                `${language === 'tr' ? 'Tarih' : 'Date'}: ${new Date().toLocaleDateString(language === 'tr' ? 'tr-TR' : 'en-US')}`,
-                pageWidth / 2,
-                yPos,
-                { align: 'center' }
-            );
-            yPos += 15;
-
-            // Scenarios
-            filteredScenarios.forEach((scenario, index) => {
-                // Check if we need a new page
-                if (yPos > 260) {
-                    pdf.addPage();
-                    yPos = 20;
-                }
-
-                const symbol = getCurrencySymbol(scenario.currency);
-
-                // Scenario header
-                pdf.setFontSize(12);
-                pdf.setTextColor(30, 30, 30);
-                pdf.text(`${index + 1}. ${scenario.name}`, margin, yPos);
-                yPos += 6;
-
-                // Channel and date
-                pdf.setFontSize(9);
-                pdf.setTextColor(100, 100, 100);
-                pdf.text(`${scenario.channel} | ${formatDate(scenario.createdAt)}`, margin, yPos);
-                yPos += 8;
-
-                // Metrics
-                pdf.setFontSize(10);
-                pdf.setTextColor(50, 50, 50);
-                const metrics = [
-                    `POAS: ${scenario.outputs.poas.toFixed(2)}x`,
-                    `${t.grossProfit}: ${scenario.outputs.grossProfit.toLocaleString(language === 'tr' ? 'tr-TR' : 'en-US')} ${symbol}`,
-                    `${t.contributionMargin}: ${scenario.outputs.contributionMargin.toLocaleString(language === 'tr' ? 'tr-TR' : 'en-US')} ${symbol}`,
-                ];
-                pdf.text(metrics.join('  |  '), margin, yPos);
-                yPos += 6;
-
-                const details = [
-                    `${t.revenue}: ${scenario.inputs.revenue.toLocaleString(language === 'tr' ? 'tr-TR' : 'en-US')} ${symbol}`,
-                    `${t.adSpend}: ${scenario.inputs.adSpend.toLocaleString(language === 'tr' ? 'tr-TR' : 'en-US')} ${symbol}`,
-                    `${t.cogs}: ${scenario.inputs.cogs.toLocaleString(language === 'tr' ? 'tr-TR' : 'en-US')} ${symbol}`,
-                ];
-                pdf.text(details.join('  |  '), margin, yPos);
-                yPos += 12;
-
-                // Separator line
-                pdf.setDrawColor(200, 200, 200);
-                pdf.line(margin, yPos - 4, pageWidth - margin, yPos - 4);
-            });
-
-            // Save
-            pdf.save(`poas-${language === 'tr' ? 'senaryolar' : 'scenarios'}-${new Date().toISOString().split('T')[0]}.pdf`);
-        } catch (error) {
-            console.error('PDF export error:', error);
-        }
-    };
 
     // Filter scenarios
     const filteredScenarios = scenarios.filter(s => {
@@ -482,11 +400,7 @@ ROAS: ${scenario.outputs.roas.toFixed(2)}x`;
                                 </select>
                             </div>
 
-                            {/* Export PDF */}
-                            <button onClick={exportToPDF} className="btn btn-secondary btn-sm">
-                                <Download size={16} />
-                                {t.downloadPdf}
-                            </button>
+
                         </div>
                     </div>
 
