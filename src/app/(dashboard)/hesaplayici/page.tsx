@@ -270,15 +270,10 @@ export default function HesaplayiciPage() {
 
     const interpretation = outputs ? interpretPOAS(outputs.poas) : null;
 
-    // PDF Export Function - Single Page A4 Landscape, Scale-to-Fit
+    // PDF Export Function - Using dedicated PDF Capture View
     const handleExportPDF = async () => {
         if (!outputs) {
             alert(language === 'tr' ? 'Önce hesaplama yapın.' : 'Please calculate first.');
-            return;
-        }
-
-        if (!resultsRef.current) {
-            alert(language === 'tr' ? 'Sonuç bölümü bulunamadı.' : 'Results section not found.');
             return;
         }
 
@@ -286,57 +281,78 @@ export default function HesaplayiciPage() {
             // Dynamic imports
             const html2canvas = (await import('html2canvas')).default;
             const { jsPDF } = await import('jspdf');
+            const { default: PdfCaptureView, PDF_WIDTH, PDF_HEIGHT } = await import('@/components/calculator/PdfCaptureView');
+            const { createRoot } = await import('react-dom/client');
 
-            const element = resultsRef.current;
+            // Create offscreen container
+            const offscreenContainer = document.createElement('div');
+            offscreenContainer.style.position = 'fixed';
+            offscreenContainer.style.left = '-9999px';
+            offscreenContainer.style.top = '0';
+            offscreenContainer.style.width = `${PDF_WIDTH}px`;
+            offscreenContainer.style.height = `${PDF_HEIGHT}px`;
+            offscreenContainer.style.overflow = 'hidden';
+            offscreenContainer.style.zIndex = '-9999';
+            document.body.appendChild(offscreenContainer);
 
-            // Capture the results section at high quality
-            const canvas = await html2canvas(element, {
-                scale: 3, // High quality for sharp text
-                backgroundColor: '#0f172a', // Match dark background
-                logging: false,
-                useCORS: true,
-                allowTaint: true,
+            // Render PDF Capture View
+            const root = createRoot(offscreenContainer);
+
+            await new Promise<void>((resolve) => {
+                root.render(
+                    <PdfCaptureView
+                        inputs={inputs}
+                        outputs={outputs}
+                        targetOutputs={targetOutputs}
+                        roasTargets={roasTargets}
+                        channel={channel}
+                        currency={currency}
+                        language={language}
+                    />
+                );
+                // Wait for render to complete
+                setTimeout(resolve, 100);
             });
 
-            // A4 Landscape dimensions in mm: 297mm x 210mm
+            // Get the rendered PDF node
+            const pdfNode = offscreenContainer.querySelector('#pdf-capture-container') as HTMLElement;
+
+            if (!pdfNode) {
+                throw new Error('PDF capture container not found');
+            }
+
+            // Capture with html2canvas
+            const canvas = await html2canvas(pdfNode, {
+                scale: 2, // Good quality without being too heavy
+                backgroundColor: '#0f172a',
+                useCORS: true,
+                logging: false,
+                width: PDF_WIDTH,
+                height: PDF_HEIGHT,
+                windowWidth: PDF_WIDTH,
+                windowHeight: PDF_HEIGHT,
+            });
+
+            // Cleanup
+            root.unmount();
+            document.body.removeChild(offscreenContainer);
+
+            // Create PDF - A4 Landscape, FULL PAGE, 0 MARGIN
             const pdf = new jsPDF({
                 orientation: 'landscape',
                 unit: 'mm',
                 format: 'a4',
             });
 
-            // PDF dimensions
-            const pdfWidth = 297; // A4 landscape width in mm
-            const pdfHeight = 210; // A4 landscape height in mm
-            const margin = 8; // 8mm margin on all sides
+            // A4 landscape: 297mm x 210mm
+            const pdfWidth = 297;
+            const pdfHeight = 210;
 
-            // Available area for content
-            const availableWidth = pdfWidth - (margin * 2); // 281mm
-            const availableHeight = pdfHeight - (margin * 2); // 194mm
-
-            // Canvas dimensions in pixels
-            const canvasWidth = canvas.width;
-            const canvasHeight = canvas.height;
-
-            // Calculate scale factor to fit entire content on single page
-            // Scale = min(availableWidth / canvasWidth, availableHeight / canvasHeight)
-            const scaleX = availableWidth / (canvasWidth / 3.779527559); // Convert px to mm (1mm = 3.779px at 96dpi)
-            const scaleY = availableHeight / (canvasHeight / 3.779527559);
-            const scale = Math.min(scaleX, scaleY);
-
-            // Final dimensions in mm
-            const imgWidthMM = (canvasWidth / 3.779527559) * scale;
-            const imgHeightMM = (canvasHeight / 3.779527559) * scale;
-
-            // Center the image on the page
-            const xOffset = margin + (availableWidth - imgWidthMM) / 2;
-            const yOffset = margin + (availableHeight - imgHeightMM) / 2;
-
-            // Get image data as PNG for best quality
+            // Get image data
             const imgData = canvas.toDataURL('image/png', 1.0);
 
-            // Add single image to single page - NO headers, NO footers, NO page numbers
-            pdf.addImage(imgData, 'PNG', xOffset, yOffset, imgWidthMM, imgHeightMM);
+            // Add image to fill entire page - NO margin, NO offset
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
 
             // Save
             pdf.save(`poas-${language === 'tr' ? 'rapor' : 'report'}-${new Date().toISOString().split('T')[0]}.pdf`);
