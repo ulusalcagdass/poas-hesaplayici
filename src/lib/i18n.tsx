@@ -51,7 +51,7 @@ export const translations = {
         tr: {
             title1: 'ROAS değil,',
             title2: 'POAS',
-            title3: 'ile gerçek kârlılığı ölç.',
+            title3: 'ile gerçek kârlılığı ölçümle.',
             subtitle: 'Kargo, komisyon ve operasyon maliyetlerini yok sayan ROAS yerine gerçek kârlılığa odaklan.',
             cta: 'Ücretsiz Hesapla',
             howItWorks: 'Nasıl Çalışır?',
@@ -283,10 +283,12 @@ export const translations = {
         tr: {
             text: 'POAS\'ınızı artırmak için işletmenize özel bir yol haritası istiyorsanız:',
             link: 'Ulusal Çağdaş Çalım ile iletişime geçin.',
+            email: 'ulusalcagdass@gmail.com',
         },
         en: {
             text: 'If you want a custom roadmap to improve your POAS:',
             link: 'Contact Ulusal Çağdaş Çalım.',
+            email: 'ulusalcagdass@gmail.com',
         },
     },
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { Linkedin } from 'lucide-react';
+import { Linkedin, Mail } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 
 export default function SoftCTA() {
@@ -41,6 +41,22 @@ export default function SoftCTA() {
             >
                 <Linkedin size={16} />
                 {t('softCta', 'link')}
+            </a>
+            <a
+                href="mailto:ulusalcagdass@gmail.com"
+                style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    color: 'var(--color-text-secondary)',
+                    textDecoration: 'none',
+                    fontSize: '0.8125rem',
+                    marginTop: '0.5rem',
+                    transition: 'opacity 0.2s ease',
+                }}
+            >
+                <Mail size={14} />
+                {t('softCta', 'email')}
             </a>
         </div>
     );
