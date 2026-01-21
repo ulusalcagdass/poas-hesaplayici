@@ -269,7 +269,7 @@ export default function HesaplayiciPage() {
 
     const interpretation = outputs ? interpretPOAS(outputs.poas) : null;
 
-    // PDF Export Function - Visual Capture
+    // PDF Export Function - Visual Capture with PDF Mode
     const handleExportPDF = async () => {
         if (!outputs) {
             alert('Önce hesaplama yapın.');
@@ -286,12 +286,61 @@ export default function HesaplayiciPage() {
             const html2canvas = (await import('html2canvas')).default;
             const { jsPDF } = await import('jspdf');
 
+            const element = resultsRef.current;
+
+            // Store original styles to restore later
+            const originalStyles = {
+                width: element.style.width,
+                maxWidth: element.style.maxWidth,
+                padding: element.style.padding,
+                margin: element.style.margin,
+            };
+
+            // Apply PDF mode styles for A4 optimization
+            element.style.width = '794px';
+            element.style.maxWidth = '794px';
+            element.style.padding = '32px';
+            element.style.margin = '0 auto';
+
+            // Convert all 2-column grids to single column for PDF
+            const gridElements = element.querySelectorAll('[style*="grid"]');
+            const originalGridStyles: { el: HTMLElement; gridTemplateColumns: string }[] = [];
+
+            gridElements.forEach((el) => {
+                const htmlEl = el as HTMLElement;
+                if (htmlEl.style.gridTemplateColumns && htmlEl.style.gridTemplateColumns.includes('1fr 1fr')) {
+                    originalGridStyles.push({
+                        el: htmlEl,
+                        gridTemplateColumns: htmlEl.style.gridTemplateColumns,
+                    });
+                    htmlEl.style.gridTemplateColumns = '1fr';
+                    htmlEl.style.gap = '1rem';
+                }
+            });
+
+            // Force reflow before capture
+            element.offsetHeight;
+
             // Capture the results section as canvas
-            const canvas = await html2canvas(resultsRef.current, {
+            const canvas = await html2canvas(element, {
                 scale: 2, // Higher quality
                 backgroundColor: '#0f172a', // Match dark background
                 logging: false,
                 useCORS: true,
+                width: 794,
+                windowWidth: 794,
+            });
+
+            // Restore original styles
+            element.style.width = originalStyles.width;
+            element.style.maxWidth = originalStyles.maxWidth;
+            element.style.padding = originalStyles.padding;
+            element.style.margin = originalStyles.margin;
+
+            // Restore grid styles
+            originalGridStyles.forEach(({ el, gridTemplateColumns }) => {
+                el.style.gridTemplateColumns = gridTemplateColumns;
+                el.style.gap = '';
             });
 
             // Create PDF
@@ -302,11 +351,11 @@ export default function HesaplayiciPage() {
                 format: 'a4',
             });
 
-            // Calculate dimensions
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
+            // Calculate dimensions - A4 is 210mm x 297mm
+            const pdfWidth = pdf.internal.pageSize.getWidth(); // 210mm
+            const pdfHeight = pdf.internal.pageSize.getHeight(); // 297mm
             const margin = 10;
-            const availableWidth = pdfWidth - (margin * 2);
+            const availableWidth = pdfWidth - (margin * 2); // 190mm
             const headerHeight = 20; // Space for title
             const footerHeight = 15; // Space for footer
             const availableHeight = pdfHeight - headerHeight - footerHeight;
@@ -332,7 +381,7 @@ export default function HesaplayiciPage() {
                 if (page === 0) {
                     pdf.setFontSize(14);
                     pdf.setTextColor(99, 102, 241);
-                    pdf.text('POAS Hesaplayıcı - Senaryo Raporu', pdfWidth / 2, 12, { align: 'center' });
+                    pdf.text(language === 'tr' ? 'POAS Hesaplayıcı - Senaryo Raporu' : 'POAS Calculator - Scenario Report', pdfWidth / 2, 12, { align: 'center' });
                 }
 
                 // Calculate the portion of image to show on this page
@@ -362,7 +411,7 @@ export default function HesaplayiciPage() {
                 pdf.setFontSize(8);
                 pdf.setTextColor(150, 150, 150);
                 pdf.text(
-                    `Tarih: ${new Date().toLocaleDateString('tr-TR')} | Kanal: ${channel} | Sayfa ${page + 1}/${totalPages}`,
+                    `${language === 'tr' ? 'Tarih' : 'Date'}: ${new Date().toLocaleDateString(language === 'tr' ? 'tr-TR' : 'en-US')} | ${language === 'tr' ? 'Kanal' : 'Channel'}: ${channel} | ${language === 'tr' ? 'Sayfa' : 'Page'} ${page + 1}/${totalPages}`,
                     pdfWidth / 2,
                     pdfHeight - 8,
                     { align: 'center' }
@@ -370,10 +419,10 @@ export default function HesaplayiciPage() {
             }
 
             // Save
-            pdf.save(`poas-rapor-${new Date().toISOString().split('T')[0]}.pdf`);
+            pdf.save(`poas-${language === 'tr' ? 'rapor' : 'report'}-${new Date().toISOString().split('T')[0]}.pdf`);
         } catch (error) {
             console.error('PDF export error:', error);
-            alert('PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.');
+            alert(language === 'tr' ? 'PDF oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.' : 'An error occurred while creating PDF. Please try again.');
         }
     };
 
