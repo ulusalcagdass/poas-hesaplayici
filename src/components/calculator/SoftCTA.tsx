@@ -45,8 +45,9 @@ export default function SoftCTA() {
             <a
                 href="mailto:ulusalcagdass@gmail.com"
                 style={{
-                    display: 'inline-flex',
+                    display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'center',
                     gap: '0.4rem',
                     color: 'var(--color-text-secondary)',
                     textDecoration: 'none',

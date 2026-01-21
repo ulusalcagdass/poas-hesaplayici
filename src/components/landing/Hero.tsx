@@ -88,7 +88,7 @@ export default function Hero() {
                             <span className="text-gradient">POAS</span>
                             <br />
                             <span style={{ color: 'var(--color-text-primary)' }}>
-                                {language === 'tr' ? 'ile gerçek kârlılığı ölç.' : 'measures true profitability.'}
+                                {language === 'tr' ? 'ile gerçek kârlılığı ölçümle.' : 'measures true profitability.'}
                             </span>
                         </h1>
 
@@ -310,6 +310,6 @@ export default function Hero() {
           }
         }
       `}</style>
-        </section>
+        </section >
     );
 }
