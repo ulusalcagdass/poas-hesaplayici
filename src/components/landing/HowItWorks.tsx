@@ -124,7 +124,7 @@ export default function HowItWorks() {
                     <div style={{ fontSize: '0.875rem', opacity: 0.8, marginTop: '0.5rem' }}>
                         {language === 'tr'
                             ? 'Brüt Kâr = Gelir − (Ürün Maliyeti + Kargo + Komisyon + Operasyon)'
-                            : 'Gross Profit = Revenue − (Product Cost + Shipping + Fees + Ops)'}
+                            : 'Gross Profit = Revenue − (Product Cost + Shipping + Fees + Operations)'}
                     </div>
                 </div>
 
