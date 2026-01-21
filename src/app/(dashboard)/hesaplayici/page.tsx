@@ -620,7 +620,7 @@ export default function HesaplayiciPage() {
                                 <input
                                     type="number"
                                     className="input"
-                                    placeholder={`≈ ${formatNumber(inputs.revenue * DEFAULT_VALUES.cogsRatio, 0)}`}
+                                    placeholder={`≈ ${language === 'tr' ? '₺' : '$'} ${formatNumber(inputs.revenue * DEFAULT_VALUES.cogsRatio, 0)}`}
                                     value={inputs.cogs || ''}
                                     onChange={(e) => handleInputChange('cogs', e.target.value)}
                                 />
@@ -634,7 +634,7 @@ export default function HesaplayiciPage() {
                                 <input
                                     type="number"
                                     className="input"
-                                    placeholder={`≈ ${DEFAULT_VALUES.shippingCost}`}
+                                    placeholder={`≈ ${language === 'tr' ? '₺' : '$'} ${DEFAULT_VALUES.shippingCost}`}
                                     value={inputs.shippingCost || ''}
                                     onChange={(e) => handleInputChange('shippingCost', e.target.value)}
                                 />
@@ -648,7 +648,7 @@ export default function HesaplayiciPage() {
                                 <input
                                     type="number"
                                     className="input"
-                                    placeholder={`≈ ${formatNumber(inputs.revenue * DEFAULT_VALUES.paymentFees, 0)}`}
+                                    placeholder={`≈ ${language === 'tr' ? '₺' : '$'} ${formatNumber(inputs.revenue * DEFAULT_VALUES.paymentFees, 0)}`}
                                     value={inputs.paymentFees || ''}
                                     onChange={(e) => handleInputChange('paymentFees', e.target.value)}
                                 />
@@ -662,7 +662,7 @@ export default function HesaplayiciPage() {
                                 <input
                                     type="number"
                                     className="input"
-                                    placeholder={`≈ ${DEFAULT_VALUES.handlingCost}`}
+                                    placeholder={`≈ ${language === 'tr' ? '₺' : '$'} ${DEFAULT_VALUES.handlingCost}`}
                                     value={inputs.handlingCost || ''}
                                     onChange={(e) => handleInputChange('handlingCost', e.target.value)}
                                 />
@@ -700,7 +700,7 @@ export default function HesaplayiciPage() {
                                 <input
                                     type="number"
                                     className="input"
-                                    placeholder="0"
+                                    placeholder={`${language === 'tr' ? '₺' : '$'} 0`}
                                     value={inputs.fixedCosts || ''}
                                     onChange={(e) => handleInputChange('fixedCosts', e.target.value)}
                                 />
