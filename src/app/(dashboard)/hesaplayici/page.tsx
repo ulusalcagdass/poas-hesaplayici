@@ -270,15 +270,15 @@ export default function HesaplayiciPage() {
 
     const interpretation = outputs ? interpretPOAS(outputs.poas) : null;
 
-    // PDF Export Function - Visual Capture with PDF Mode
+    // PDF Export Function - Single Page A4 Landscape, Scale-to-Fit
     const handleExportPDF = async () => {
         if (!outputs) {
-            alert('Önce hesaplama yapın.');
+            alert(language === 'tr' ? 'Önce hesaplama yapın.' : 'Please calculate first.');
             return;
         }
 
         if (!resultsRef.current) {
-            alert('Sonuç bölümü bulunamadı.');
+            alert(language === 'tr' ? 'Sonuç bölümü bulunamadı.' : 'Results section not found.');
             return;
         }
 
@@ -289,135 +289,54 @@ export default function HesaplayiciPage() {
 
             const element = resultsRef.current;
 
-            // Store original styles to restore later
-            const originalStyles = {
-                width: element.style.width,
-                maxWidth: element.style.maxWidth,
-                padding: element.style.padding,
-                margin: element.style.margin,
-            };
-
-            // Apply PDF mode styles for A4 optimization
-            element.style.width = '794px';
-            element.style.maxWidth = '794px';
-            element.style.padding = '32px';
-            element.style.margin = '0 auto';
-
-            // Convert all 2-column grids to single column for PDF
-            const gridElements = element.querySelectorAll('[style*="grid"]');
-            const originalGridStyles: { el: HTMLElement; gridTemplateColumns: string }[] = [];
-
-            gridElements.forEach((el) => {
-                const htmlEl = el as HTMLElement;
-                if (htmlEl.style.gridTemplateColumns && htmlEl.style.gridTemplateColumns.includes('1fr 1fr')) {
-                    originalGridStyles.push({
-                        el: htmlEl,
-                        gridTemplateColumns: htmlEl.style.gridTemplateColumns,
-                    });
-                    htmlEl.style.gridTemplateColumns = '1fr';
-                    htmlEl.style.gap = '1rem';
-                }
-            });
-
-            // Force reflow before capture
-            element.offsetHeight;
-
-            // Capture the results section as canvas
+            // Capture the results section at high quality
             const canvas = await html2canvas(element, {
-                scale: 2, // Higher quality
+                scale: 3, // High quality for sharp text
                 backgroundColor: '#0f172a', // Match dark background
                 logging: false,
                 useCORS: true,
-                width: 794,
-                windowWidth: 794,
+                allowTaint: true,
             });
 
-            // Restore original styles
-            element.style.width = originalStyles.width;
-            element.style.maxWidth = originalStyles.maxWidth;
-            element.style.padding = originalStyles.padding;
-            element.style.margin = originalStyles.margin;
-
-            // Restore grid styles
-            originalGridStyles.forEach(({ el, gridTemplateColumns }) => {
-                el.style.gridTemplateColumns = gridTemplateColumns;
-                el.style.gap = '';
-            });
-
-            // Create PDF
-            const imgData = canvas.toDataURL('image/png');
+            // A4 Landscape dimensions in mm: 297mm x 210mm
             const pdf = new jsPDF({
-                orientation: 'portrait',
+                orientation: 'landscape',
                 unit: 'mm',
                 format: 'a4',
             });
 
-            // Calculate dimensions - A4 is 210mm x 297mm
-            const pdfWidth = pdf.internal.pageSize.getWidth(); // 210mm
-            const pdfHeight = pdf.internal.pageSize.getHeight(); // 297mm
-            const margin = 10;
-            const availableWidth = pdfWidth - (margin * 2); // 190mm
-            const headerHeight = 20; // Space for title
-            const footerHeight = 15; // Space for footer
-            const availableHeight = pdfHeight - headerHeight - footerHeight;
+            // PDF dimensions
+            const pdfWidth = 297; // A4 landscape width in mm
+            const pdfHeight = 210; // A4 landscape height in mm
+            const margin = 8; // 8mm margin on all sides
 
-            const imgWidth = canvas.width;
-            const imgHeight = canvas.height;
+            // Available area for content
+            const availableWidth = pdfWidth - (margin * 2); // 281mm
+            const availableHeight = pdfHeight - (margin * 2); // 194mm
 
-            // Scale to fit width
-            const ratio = availableWidth / imgWidth;
-            const scaledHeight = imgHeight * ratio;
+            // Canvas dimensions in pixels
+            const canvasWidth = canvas.width;
+            const canvasHeight = canvas.height;
 
-            // Calculate number of pages needed
-            const pageContentHeight = availableHeight;
-            const totalPages = Math.ceil(scaledHeight / pageContentHeight);
+            // Calculate scale factor to fit entire content on single page
+            // Scale = min(availableWidth / canvasWidth, availableHeight / canvasHeight)
+            const scaleX = availableWidth / (canvasWidth / 3.779527559); // Convert px to mm (1mm = 3.779px at 96dpi)
+            const scaleY = availableHeight / (canvasHeight / 3.779527559);
+            const scale = Math.min(scaleX, scaleY);
 
-            // Add content across pages
-            for (let page = 0; page < totalPages; page++) {
-                if (page > 0) {
-                    pdf.addPage();
-                }
+            // Final dimensions in mm
+            const imgWidthMM = (canvasWidth / 3.779527559) * scale;
+            const imgHeightMM = (canvasHeight / 3.779527559) * scale;
 
-                // Add title on first page
-                if (page === 0) {
-                    pdf.setFontSize(14);
-                    pdf.setTextColor(99, 102, 241);
-                    pdf.text(language === 'tr' ? 'POAS Hesaplayıcı - Senaryo Raporu' : 'POAS Calculator - Scenario Report', pdfWidth / 2, 12, { align: 'center' });
-                }
+            // Center the image on the page
+            const xOffset = margin + (availableWidth - imgWidthMM) / 2;
+            const yOffset = margin + (availableHeight - imgHeightMM) / 2;
 
-                // Calculate the portion of image to show on this page
-                const sourceY = (page * pageContentHeight) / ratio;
-                const sourceHeight = Math.min(pageContentHeight / ratio, imgHeight - sourceY);
-                const destHeight = sourceHeight * ratio;
+            // Get image data as PNG for best quality
+            const imgData = canvas.toDataURL('image/png', 1.0);
 
-                // Create a temporary canvas for this page's portion
-                const pageCanvas = document.createElement('canvas');
-                pageCanvas.width = imgWidth;
-                pageCanvas.height = sourceHeight;
-                const ctx = pageCanvas.getContext('2d');
-
-                if (ctx) {
-                    ctx.drawImage(
-                        canvas,
-                        0, sourceY, imgWidth, sourceHeight,
-                        0, 0, imgWidth, sourceHeight
-                    );
-
-                    const pageImgData = pageCanvas.toDataURL('image/png');
-                    const yPosition = page === 0 ? headerHeight : margin;
-                    pdf.addImage(pageImgData, 'PNG', margin, yPosition, availableWidth, destHeight);
-                }
-
-                // Add footer on each page
-                pdf.setFontSize(8);
-                pdf.setTextColor(150, 150, 150);
-                pdf.text(
-                    `${language === 'tr' ? 'Tarih' : 'Date'}: ${new Date().toLocaleDateString(language === 'tr' ? 'tr-TR' : 'en-US')} | ${language === 'tr' ? 'Kanal' : 'Channel'}: ${channel} | ${language === 'tr' ? 'Sayfa' : 'Page'} ${page + 1}/${totalPages}`,
-                    pdfWidth / 2,
-                    pdfHeight - 8,
-                    { align: 'center' }
-                );
-            }
+            // Add single image to single page - NO headers, NO footers, NO page numbers
+            pdf.addImage(imgData, 'PNG', xOffset, yOffset, imgWidthMM, imgHeightMM);
 
             // Save
             pdf.save(`poas-${language === 'tr' ? 'rapor' : 'report'}-${new Date().toISOString().split('T')[0]}.pdf`);
