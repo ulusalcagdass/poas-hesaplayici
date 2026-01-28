@@ -18,13 +18,20 @@ interface ResultsExportPDFProps {
 export const PDF_WIDTH = 794;
 export const PDF_HEIGHT = 1123;
 
-const formatNumber = (num: number, decimals: number = 2): string => {
+// Locale-aware formatting functions - accepts language parameter
+const formatNumber = (num: number, decimals: number = 2, language: 'tr' | 'en' = 'tr'): string => {
     if (!isFinite(num)) return '∞';
-    return num.toLocaleString('tr-TR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    // Round to avoid floating-point precision issues
+    const rounded = decimals === 0 ? Math.round(num) : Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
+    return rounded.toLocaleString(language === 'tr' ? 'tr-TR' : 'en-US', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+    });
 };
 
-const formatCurrency = (num: number, symbol: string): string => {
-    return `${num.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} ${symbol}`;
+const formatCurrency = (num: number, symbol: string, language: 'tr' | 'en' = 'tr'): string => {
+    const rounded = Math.round(num);
+    return `${rounded.toLocaleString(language === 'tr' ? 'tr-TR' : 'en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} ${symbol}`;
 };
 
 const getCurrencySymbol = (currency: string): string => {
@@ -158,7 +165,7 @@ export default function ResultsExportPDF({
                 }}>
                     <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '4px' }}>{labels.yourPoas}</div>
                     <div style={{ fontSize: '42px', fontWeight: 800, color: interpretation.color }}>
-                        {formatNumber(outputs.poas)}x
+                        {formatNumber(outputs.poas, 2, language)}x
                     </div>
                 </div>
             </div>
@@ -183,7 +190,7 @@ export default function ResultsExportPDF({
                     }}>
                         <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '4px' }}>{labels.roas}</div>
                         <div style={{ fontSize: '32px', fontWeight: 700, color: '#94a3b8' }}>
-                            {formatNumber(outputs.roas)}x
+                            {formatNumber(outputs.roas, 2, language)}x
                         </div>
                         <div style={{ fontSize: '11px', color: '#64748b', marginTop: '4px' }}>{labels.roasDesc}</div>
                     </div>
@@ -195,7 +202,7 @@ export default function ResultsExportPDF({
                     }}>
                         <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '4px' }}>{labels.poas}</div>
                         <div style={{ fontSize: '32px', fontWeight: 700, color: '#10b981' }}>
-                            {formatNumber(outputs.poas)}x
+                            {formatNumber(outputs.poas, 2, language)}x
                         </div>
                         <div style={{ fontSize: '11px', color: '#10b981', marginTop: '4px' }}>{labels.poasDesc}</div>
                     </div>
@@ -217,39 +224,39 @@ export default function ResultsExportPDF({
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <span style={{ color: '#94a3b8' }}>{labels.revenue}</span>
-                            <span style={{ fontWeight: 600 }}>{formatCurrency(inputs.revenue, symbol)}</span>
+                            <span style={{ fontWeight: 600 }}>{formatCurrency(inputs.revenue, symbol, language)}</span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <span style={{ color: '#94a3b8' }}>{labels.adSpend}</span>
-                            <span style={{ fontWeight: 600 }}>{formatCurrency(inputs.adSpend, symbol)}</span>
+                            <span style={{ fontWeight: 600 }}>{formatCurrency(inputs.adSpend, symbol, language)}</span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <span style={{ color: '#94a3b8' }}>{labels.cogs}</span>
-                            <span style={{ fontWeight: 600 }}>{formatCurrency(inputs.cogs, symbol)}</span>
+                            <span style={{ fontWeight: 600 }}>{formatCurrency(inputs.cogs, symbol, language)}</span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <span style={{ color: '#94a3b8' }}>{labels.shipping}</span>
-                            <span style={{ fontWeight: 600 }}>{formatCurrency(inputs.shippingCost, symbol)}</span>
+                            <span style={{ fontWeight: 600 }}>{formatCurrency(inputs.shippingCost, symbol, language)}</span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <span style={{ color: '#94a3b8' }}>{labels.commission}</span>
-                            <span style={{ fontWeight: 600 }}>{formatCurrency(inputs.paymentFees, symbol)}</span>
+                            <span style={{ fontWeight: 600 }}>{formatCurrency(inputs.paymentFees, symbol, language)}</span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <span style={{ color: '#94a3b8' }}>{labels.handling}</span>
-                            <span style={{ fontWeight: 600 }}>{formatCurrency(inputs.handlingCost, symbol)}</span>
+                            <span style={{ fontWeight: 600 }}>{formatCurrency(inputs.handlingCost, symbol, language)}</span>
                         </div>
                         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '10px', marginTop: '6px' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <span style={{ color: '#94a3b8', fontWeight: 600 }}>{labels.grossProfit}</span>
                                 <span style={{ fontWeight: 700, color: outputs.grossProfit >= 0 ? '#10b981' : '#ef4444' }}>
-                                    {formatCurrency(outputs.grossProfit, symbol)}
+                                    {formatCurrency(outputs.grossProfit, symbol, language)}
                                 </span>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
                                 <span style={{ color: '#94a3b8', fontWeight: 600 }}>{labels.contributionMargin}</span>
                                 <span style={{ fontWeight: 700, color: outputs.contributionMargin >= 0 ? '#10b981' : '#ef4444' }}>
-                                    {formatCurrency(outputs.contributionMargin, symbol)}
+                                    {formatCurrency(outputs.contributionMargin, symbol, language)}
                                 </span>
                             </div>
                         </div>
@@ -293,7 +300,7 @@ export default function ResultsExportPDF({
                                     <span style={{ color: '#94a3b8', fontSize: '13px' }}>{item.label}</span>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <span style={{ fontWeight: 500, fontSize: '13px' }}>{formatCurrency(item.value, symbol)}</span>
+                                    <span style={{ fontWeight: 500, fontSize: '13px' }}>{formatCurrency(item.value, symbol, language)}</span>
                                     <span style={{ color: '#64748b', fontSize: '12px' }}>
                                         ({((item.value / allCosts) * 100).toFixed(0)}%)
                                     </span>
@@ -315,19 +322,19 @@ export default function ResultsExportPDF({
                         border: '1px solid rgba(255,255,255,0.1)',
                     }}>
                         <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px', color: '#94a3b8' }}>
-                            {labels.target}: {formatNumber(targetPoas)}x
+                            {labels.target}: {formatNumber(targetPoas, 2, language)}x
                         </h3>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                             <div style={{ padding: '12px', background: 'rgba(16,185,129,0.1)', borderRadius: '8px' }}>
                                 <div style={{ fontSize: '11px', color: '#94a3b8' }}>{labels.requiredProfit}</div>
                                 <div style={{ fontSize: '18px', fontWeight: 700, color: '#10b981' }}>
-                                    {formatCurrency(inputs.adSpend * targetPoas, symbol)}
+                                    {formatCurrency(inputs.adSpend * targetPoas, symbol, language)}
                                 </div>
                             </div>
                             <div style={{ padding: '12px', background: 'rgba(99,102,241,0.1)', borderRadius: '8px' }}>
                                 <div style={{ fontSize: '11px', color: '#94a3b8' }}>{labels.requiredRevenue}</div>
                                 <div style={{ fontSize: '16px', fontWeight: 700, color: '#6366f1' }}>
-                                    {formatCurrency((inputs.adSpend * targetPoas) + inputs.cogs + inputs.shippingCost + inputs.paymentFees + inputs.handlingCost, symbol)}
+                                    {formatCurrency((inputs.adSpend * targetPoas) + inputs.cogs + inputs.shippingCost + inputs.paymentFees + inputs.handlingCost, symbol, language)}
                                 </div>
                             </div>
                         </div>
@@ -349,14 +356,14 @@ export default function ResultsExportPDF({
                             <div style={{ padding: '10px', background: 'rgba(239,68,68,0.1)', borderRadius: '8px', textAlign: 'center' }}>
                                 <div style={{ fontSize: '10px', color: '#94a3b8' }}>{labels.breakeven}</div>
                                 <div style={{ fontSize: '16px', fontWeight: 700, color: '#ef4444' }}>
-                                    {formatNumber(roasTargets.breakevenROAS)}x
+                                    {formatNumber(roasTargets.breakevenROAS, 2, language)}x
                                 </div>
                             </div>
                             {roasTargets.roas10 && (
                                 <div style={{ padding: '10px', background: 'rgba(245,158,11,0.1)', borderRadius: '8px', textAlign: 'center' }}>
                                     <div style={{ fontSize: '10px', color: '#94a3b8' }}>{labels.margin10}</div>
                                     <div style={{ fontSize: '16px', fontWeight: 700, color: '#f59e0b' }}>
-                                        {formatNumber(roasTargets.roas10)}x
+                                        {formatNumber(roasTargets.roas10, 2, language)}x
                                     </div>
                                 </div>
                             )}
@@ -364,7 +371,7 @@ export default function ResultsExportPDF({
                                 <div style={{ padding: '10px', background: 'rgba(16,185,129,0.1)', borderRadius: '8px', textAlign: 'center' }}>
                                     <div style={{ fontSize: '10px', color: '#94a3b8' }}>{labels.margin15}</div>
                                     <div style={{ fontSize: '16px', fontWeight: 700, color: '#10b981' }}>
-                                        {formatNumber(roasTargets.roas15)}x
+                                        {formatNumber(roasTargets.roas15, 2, language)}x
                                     </div>
                                 </div>
                             )}
@@ -372,7 +379,7 @@ export default function ResultsExportPDF({
                                 <div style={{ padding: '10px', background: 'rgba(99,102,241,0.1)', borderRadius: '8px', textAlign: 'center' }}>
                                     <div style={{ fontSize: '10px', color: '#94a3b8' }}>{labels.margin20}</div>
                                     <div style={{ fontSize: '16px', fontWeight: 700, color: '#6366f1' }}>
-                                        {formatNumber(roasTargets.roas20)}x
+                                        {formatNumber(roasTargets.roas20, 2, language)}x
                                     </div>
                                 </div>
                             )}

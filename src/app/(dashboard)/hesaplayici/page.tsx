@@ -47,17 +47,7 @@ const SECTOR_PRESETS = {
     leadgen: { paymentFees: 0.02, shippingCost: 0 },
 };
 
-const formatNumber = (num: number, decimals: number = 2): string => {
-    if (!isFinite(num)) return '∞';
-    return num.toLocaleString('tr-TR', {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals
-    });
-};
-
-const formatCurrency = (num: number, symbol: string = '₺'): string => {
-    return `${formatNumber(num, 0)} ${symbol}`;
-};
+// formatNumber and formatCurrency are defined inside the component for locale-awareness
 
 export default function HesaplayiciPage() {
     const { language, setLanguage } = useLanguage();
@@ -70,6 +60,23 @@ export default function HesaplayiciPage() {
     useEffect(() => {
         setCurrency(language === 'en' ? 'USD' : 'TRY');
     }, [language]);
+
+    // Locale-aware number formatting
+    // TR: 10.000,50 (dot for thousands, comma for decimal)
+    // EN: 10,000.50 (comma for thousands, dot for decimal)
+    const formatNumber = useCallback((num: number, decimals: number = 2): string => {
+        if (!isFinite(num)) return '∞';
+        // Round to avoid floating-point precision issues
+        const rounded = decimals === 0 ? Math.round(num) : Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
+        return rounded.toLocaleString(language === 'tr' ? 'tr-TR' : 'en-US', {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals
+        });
+    }, [language]);
+
+    const formatCurrency = useCallback((num: number, symbol: string = '₺'): string => {
+        return `${formatNumber(num, 0)} ${symbol}`;
+    }, [formatNumber]);
 
     // Labels for i18n
     const labels = language === 'tr' ? {
@@ -188,9 +195,13 @@ export default function HesaplayiciPage() {
     // Ref for results section (for PDF capture)
     const resultsRef = useRef<HTMLDivElement>(null);
 
-    // Handle input change
+    // Handle input change - uses Math.round to prevent floating-point precision issues
     const handleInputChange = (field: keyof CalculatorInputs, value: string) => {
-        const numValue = parseFloat(value) || 0;
+        // Parse the value, handling both dot and comma as decimal separators
+        const sanitized = value.replace(',', '.');
+        const parsed = parseFloat(sanitized);
+        // Round to 2 decimal places to avoid floating-point issues like 10000 -> 9997
+        const numValue = isNaN(parsed) ? 0 : Math.round(parsed * 100) / 100;
         setInputs(prev => ({ ...prev, [field]: numValue }));
         setIsGoldenTest(false);
         // Clear validation errors when user types
