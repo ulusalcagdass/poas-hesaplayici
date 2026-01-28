@@ -78,6 +78,38 @@ export default function HesaplayiciPage() {
         return `${formatNumber(num, 0)} ${symbol}`;
     }, [formatNumber]);
 
+    // Format input value for display (10000 → "10.000" for TR, "10,000" for EN)
+    const formatInputValue = useCallback((num: number | undefined): string => {
+        if (num === undefined || num === 0) return '';
+        // Round to avoid floating-point precision issues
+        const rounded = Math.round(num * 100) / 100;
+        // Check if it has decimals
+        const hasDecimals = rounded % 1 !== 0;
+        return rounded.toLocaleString(language === 'tr' ? 'tr-TR' : 'en-US', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: hasDecimals ? 2 : 0
+        });
+    }, [language]);
+
+    // Parse formatted input value back to number ("10.000" → 10000 for TR)
+    const parseInputValue = useCallback((value: string): number => {
+        if (!value || value.trim() === '') return 0;
+        // Remove thousand separators based on language
+        // TR uses . for thousands, , for decimal
+        // EN uses , for thousands, . for decimal
+        let cleaned = value;
+        if (language === 'tr') {
+            // Remove dots (thousand separators), replace comma with dot for decimal
+            cleaned = value.replace(/\./g, '').replace(',', '.');
+        } else {
+            // Remove commas (thousand separators)
+            cleaned = value.replace(/,/g, '');
+        }
+        const parsed = parseFloat(cleaned);
+        // Round to 2 decimal places to avoid floating-point issues
+        return isNaN(parsed) ? 0 : Math.round(parsed * 100) / 100;
+    }, [language]);
+
     // Labels for i18n
     const labels = language === 'tr' ? {
         pageTitle: 'POAS Hesaplayıcı',
@@ -195,13 +227,9 @@ export default function HesaplayiciPage() {
     // Ref for results section (for PDF capture)
     const resultsRef = useRef<HTMLDivElement>(null);
 
-    // Handle input change - uses Math.round to prevent floating-point precision issues
+    // Handle input change - parses formatted input and stores as number
     const handleInputChange = (field: keyof CalculatorInputs, value: string) => {
-        // Parse the value, handling both dot and comma as decimal separators
-        const sanitized = value.replace(',', '.');
-        const parsed = parseFloat(sanitized);
-        // Round to 2 decimal places to avoid floating-point issues like 10000 -> 9997
-        const numValue = isNaN(parsed) ? 0 : Math.round(parsed * 100) / 100;
+        const numValue = parseInputValue(value);
         setInputs(prev => ({ ...prev, [field]: numValue }));
         setIsGoldenTest(false);
         // Clear validation errors when user types
@@ -531,10 +559,11 @@ export default function HesaplayiciPage() {
                             </label>
                             <div style={{ position: 'relative' }}>
                                 <input
-                                    type="number"
+                                    type="text"
+                                    inputMode="numeric"
                                     className="input"
                                     placeholder="0"
-                                    value={inputs.revenue || ''}
+                                    value={formatInputValue(inputs.revenue)}
                                     onChange={(e) => handleInputChange('revenue', e.target.value)}
                                     style={{ paddingLeft: '2.5rem' }}
                                 />
@@ -554,10 +583,11 @@ export default function HesaplayiciPage() {
                             <label className="input-label">{labels.adSpend}</label>
                             <div style={{ position: 'relative' }}>
                                 <input
-                                    type="number"
+                                    type="text"
+                                    inputMode="numeric"
                                     className="input"
                                     placeholder="0"
-                                    value={inputs.adSpend || ''}
+                                    value={formatInputValue(inputs.adSpend)}
                                     onChange={(e) => handleInputChange('adSpend', e.target.value)}
                                     style={{
                                         paddingLeft: '2.5rem',
@@ -636,10 +666,11 @@ export default function HesaplayiciPage() {
                                 <div className="input-with-prefix">
                                     <span className="input-prefix">{currencySymbol}</span>
                                     <input
-                                        type="number"
+                                        type="text"
+                                        inputMode="numeric"
                                         className="input"
                                         placeholder={`≈ ${formatNumber(inputs.revenue * DEFAULT_VALUES.cogsRatio, 0)}`}
-                                        value={inputs.cogs || ''}
+                                        value={formatInputValue(inputs.cogs)}
                                         onChange={(e) => handleInputChange('cogs', e.target.value)}
                                     />
                                 </div>
@@ -653,10 +684,11 @@ export default function HesaplayiciPage() {
                                 <div className="input-with-prefix">
                                     <span className="input-prefix">{currencySymbol}</span>
                                     <input
-                                        type="number"
+                                        type="text"
+                                        inputMode="numeric"
                                         className="input"
                                         placeholder={`≈ ${DEFAULT_VALUES.shippingCost}`}
-                                        value={inputs.shippingCost || ''}
+                                        value={formatInputValue(inputs.shippingCost)}
                                         onChange={(e) => handleInputChange('shippingCost', e.target.value)}
                                     />
                                 </div>
@@ -670,10 +702,11 @@ export default function HesaplayiciPage() {
                                 <div className="input-with-prefix">
                                     <span className="input-prefix">{currencySymbol}</span>
                                     <input
-                                        type="number"
+                                        type="text"
+                                        inputMode="numeric"
                                         className="input"
                                         placeholder={`≈ ${formatNumber(inputs.revenue * DEFAULT_VALUES.paymentFees, 0)}`}
-                                        value={inputs.paymentFees || ''}
+                                        value={formatInputValue(inputs.paymentFees)}
                                         onChange={(e) => handleInputChange('paymentFees', e.target.value)}
                                     />
                                 </div>
@@ -687,10 +720,11 @@ export default function HesaplayiciPage() {
                                 <div className="input-with-prefix">
                                     <span className="input-prefix">{currencySymbol}</span>
                                     <input
-                                        type="number"
+                                        type="text"
+                                        inputMode="numeric"
                                         className="input"
                                         placeholder={`≈ ${DEFAULT_VALUES.handlingCost}`}
-                                        value={inputs.handlingCost || ''}
+                                        value={formatInputValue(inputs.handlingCost)}
                                         onChange={(e) => handleInputChange('handlingCost', e.target.value)}
                                     />
                                 </div>
@@ -726,10 +760,11 @@ export default function HesaplayiciPage() {
                                     {language === 'tr' ? 'Toplam Sabit Giderler (Maaş, Kira, Yazılım vb.)' : 'Total Fixed Costs (Salary, Rent, Software, etc.)'}
                                 </label>
                                 <input
-                                    type="number"
+                                    type="text"
+                                    inputMode="numeric"
                                     className="input"
                                     placeholder={`${language === 'tr' ? '₺' : '$'} 0`}
-                                    value={inputs.fixedCosts || ''}
+                                    value={formatInputValue(inputs.fixedCosts)}
                                     onChange={(e) => handleInputChange('fixedCosts', e.target.value)}
                                 />
                             </div>
