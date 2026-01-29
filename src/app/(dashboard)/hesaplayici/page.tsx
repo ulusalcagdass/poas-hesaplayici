@@ -141,7 +141,7 @@ export default function HesaplayiciPage() {
         save: 'Kaydet',
         exportPdf: 'PDF İndir',
         waitingCalc: 'Hesaplama Bekleniyor',
-        fillForm: 'Sol taraftaki formu doldurup "Hesapla" butonuna tıklayın.',
+        fillForm: 'Formu doldurup "Hesapla" butonuna tıklayın.',
         sharingNote: 'Bu hesaplama POAS (Profit on Ad Spend) mantığı ile yapılmıştır.',
     } : {
         pageTitle: 'POAS Calculator',
@@ -173,7 +173,7 @@ export default function HesaplayiciPage() {
         save: 'Save',
         exportPdf: 'Export PDF',
         waitingCalc: 'Waiting for Calculation',
-        fillForm: 'Fill out the form on the left and click "Calculate".',
+        fillForm: 'Fill out the form and click "Calculate".',
         sharingNote: 'This calculation uses POAS (Profit on Ad Spend) methodology.',
     };
 
