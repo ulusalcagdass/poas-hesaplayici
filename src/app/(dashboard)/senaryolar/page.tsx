@@ -245,6 +245,56 @@ ROAS: ${scenario.outputs.roas.toFixed(2)}x`;
                     </p>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    {/* Language Toggle - Hide on mobile */}
+                    <div
+                        className="hide-mobile"
+                        style={{
+                            display: 'flex',
+                            background: 'var(--color-bg-tertiary)',
+                            borderRadius: 'var(--radius-md)',
+                            padding: '0.25rem',
+                            gap: '0.25rem',
+                        }}
+                    >
+                        <button
+                            onClick={() => {
+                                setLanguage('tr');
+                                if (pathname === '/scenarios') router.push('/senaryolar');
+                            }}
+                            style={{
+                                padding: '0.5rem 1rem',
+                                borderRadius: 'var(--radius-sm)',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '0.875rem',
+                                fontWeight: 600,
+                                transition: 'all 0.2s ease',
+                                background: language === 'tr' ? 'var(--color-primary)' : 'transparent',
+                                color: language === 'tr' ? 'white' : 'var(--color-text-muted)',
+                            }}
+                        >
+                            TR
+                        </button>
+                        <button
+                            onClick={() => {
+                                setLanguage('en');
+                                if (pathname === '/senaryolar') router.push('/scenarios');
+                            }}
+                            style={{
+                                padding: '0.5rem 1rem',
+                                borderRadius: 'var(--radius-sm)',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: '0.875rem',
+                                fontWeight: 600,
+                                transition: 'all 0.2s ease',
+                                background: language === 'en' ? 'var(--color-primary)' : 'transparent',
+                                color: language === 'en' ? 'white' : 'var(--color-text-muted)',
+                            }}
+                        >
+                            EN
+                        </button>
+                    </div>
                     <Link href={t.calculatorLink} className="btn btn-primary">
                         <Plus size={18} />
                         {t.newCalculation}
